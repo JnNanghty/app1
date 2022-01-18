@@ -1,0 +1,68 @@
+/**
+ * 可设置过期时间的Storage
+ * 如果有过期时间就额外保存一个超时时间值，每次get判断是否超时， 如果超时就删除并返回null
+ * */
+class storage {
+  constructor() {
+    this.props = props || {}
+    this.source = this.props.source || window.localStorage
+    this.init()
+  }
+
+  init() {
+    const reg = new RegExp('__expire__');
+    let data = this.source;
+    let list = Object.keys(data);
+
+    if (list.length > 0) {
+      list.map((key, v) => {
+        if (!reg.test(key)) {
+          let now = Date.now();
+          let expires = data[`${key}__expires__`] || Date.now + 1;
+          if (now >= expires) {
+            this.remove(key);
+          }
+        }
+        return key;
+      });
+    }
+  }
+
+  /**
+   * @param key {String}
+   * @param value {String, Number, Object}
+   * @param {Number, Boolean} [expire]  超时时间(可选)
+   * */
+  async set(key, value, expire) {
+    let source = this.source;
+    source[key] = JSON.stringify(value);
+    if (expire) {
+      source[`${key}__expires__`] = Date.now() + expire
+    }
+  }
+
+  /**
+   * @param key {String}
+   * */
+  async get(key) {
+    const source = this.source,
+      expired = source[`${key}__expires__`] || Date.now + 1;
+    const now = Date.now();
+
+    if (now >= expired) {
+      this.remove(key);
+      return null;
+    }
+    return source[key] ? JSON.parse(source[key]) : source[key];
+  }
+
+  remove(key) {
+    const data = this.source,
+      value = data[key];
+    delete data[key];
+    delete data[`${key}__expires__`];
+  }
+}
+
+const ls = new storage();
+export default ls;
