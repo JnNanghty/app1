@@ -76,6 +76,9 @@
 .row2 {
   height: 65%;
 }
+.row1,.row2{
+  display: flex;
+}
 
 .video, .qrcode {
   width: 80%;
@@ -91,6 +94,14 @@
   background: #0024fd;
   margin: .5rem;
   border-radius: 10px;
+}
+.course-info-content,
+.people-name-content{
+  flex: 4
+}
+.time-info-content,
+.sign-in-content{
+  flex: 7
 }
 
 .people-name-content {
@@ -123,10 +134,10 @@
 
 </style>
 <template>
-  <div class="main" :style="{background: deviceConfig.background}">
+  <div class="main" :style="{background: deviceConfig.background, backgroundSize: 'cover'}">
     <div class="grid-content">
       <div class="row1">
-        <div size="4" class="course-info-content">
+        <div class="course-info-content">
           <div class="course-info">
             <i>课程名称</i>
             <span>{{ currentCourse.courseName }}</span>
@@ -136,12 +147,12 @@
             <span>{{ currentCourse.teacherName }}</span>
           </div>
         </div>
-        <div size="7" class="time-info-content">
+        <div class="time-info-content">
           <div class="time-info">
             <div>考勤倒计时</div>
             <div class="attendance-time">不在考勤时间</div>
-            <div>（考勤时间：{{ timeUtil.formatTime(attendanceInfo.lesson && attendanceInfo.lesson.start) || '-' }} -
-              {{ timeUtil.formatTime(attendanceInfo.lesson && attendanceInfo.lesson.end) || '-' }}）
+            <div>（考勤时间：{{ formatTime(attendanceInfo.lesson && attendanceInfo.lesson.start) || '-' }} -
+              {{ formatTime(attendanceInfo.lesson && attendanceInfo.lesson.end) || '-' }}）
             </div>
           </div>
           <div class="qiandao-info">
@@ -154,7 +165,7 @@
         </div>
       </div>
       <div class="row2">
-        <div size="4" class="people-name-content">
+        <div class="people-name-content">
           <div class="people-name">
             已到：{{ mergeText(arrived) }}
           </div>
@@ -162,7 +173,7 @@
             未到：{{ mergeText(notArrived) }}
           </div>
         </div>
-        <div size="7" class="sign-in-content">
+        <div class="sign-in-content">
           <div class="qrcode-content">
             <p>微信扫码签到</p>
             <div class="qrcode">
@@ -190,6 +201,7 @@
 import ls from "@/store/ls";
 import service from "@/api/services";
 import {msg} from "@/components/message";
+import timeUtil from '@/util/timeUtil';
 
 export default {
   data() {
@@ -208,7 +220,7 @@ export default {
     const config = ls.get('deviceConfig');
     const serviceUrl = ls.get('serviceUrl') || '';
     if (config.background) {
-      this.deviceConfig.background = 'url(' + serviceUrl + this.config.background + ')';
+      this.deviceConfig.background = 'url(' + serviceUrl + config.background + ')';
     }
     if (this.terminalId && (this.currentCourse && this.currentCourse.courseId)) {
       this.startSign();
@@ -239,6 +251,9 @@ export default {
       this.$router.push({
         name: 'Home'
       })
+    },
+    formatTime(time) {
+      return timeUtil.formatTime(time);
     }
   }
 }

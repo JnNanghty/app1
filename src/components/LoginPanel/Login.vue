@@ -54,6 +54,9 @@
   </div>
 </template>
 <script>
+import service from "@/api/services";
+import {setToken} from "@/util/auth";
+
 export default {
   name: 'Login',
   emits: ['loginSuccess'],
@@ -72,6 +75,13 @@ export default {
     loginSuccess() {
       this.$emit('loginSuccess');
       this.close();
+    },
+    icLogin() {
+      service.post('auth/icLogin', {
+        ic: ''
+      }).then(res => {
+        setToken('');
+      })
     }
   },
   watch: {

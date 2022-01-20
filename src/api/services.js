@@ -3,7 +3,7 @@ import {getToken} from "@/util/auth";
 // import {msg} from "@/components/message";
 import forge from 'node-forge';
 import ls from "@/store/ls";
-
+//
 const serverUrl = '';
 
 let service = axios.create({
@@ -12,7 +12,7 @@ let service = axios.create({
 });
 
 service.interceptors.request.use(config => {
-  let serviceUrl = ls.get('serviceUrl');
+  let serviceUrl = ls.get('serviceUrl') || '';
   if (process.env.NODE_ENV === 'development') {
     serviceUrl = ''
   }
@@ -20,13 +20,15 @@ service.interceptors.request.use(config => {
 
   const token = getToken();
   if (token) {
-    config.headers['token'] = value;
+    config.headers['token'] = token;
   }
 
   const companyId = ls.get('companyId') || 0;
 
   const extraData = {
-    companyId, timestamp: Math.floor(Date.now() / 1000), key: ''
+    companyId,
+    timestamp: Math.floor(Date.now() / 1000),
+    key: ''
   };
 
   const md5 = forge.md.md5.create();

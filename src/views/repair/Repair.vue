@@ -2,16 +2,22 @@
 
 </style>
 <template>
-  <div>维修</div>
+  <div>
+    <div>{{ info }}</div>
+    <div></div>
+  </div>
 </template>
 
 <script>
 
 export default {
   data() {
-    return {}
+    return {
+      info: '没有info'
+    }
   },
   mounted() {
+
   }
 }
 </script>

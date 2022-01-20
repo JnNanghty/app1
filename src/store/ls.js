@@ -10,7 +10,7 @@ class storage {
   }
 
   init() {
-    const reg = new RegExp('__expire__');
+    const reg = new RegExp('__expires__');
     let data = this.source;
     let list = Object.keys(data);
 

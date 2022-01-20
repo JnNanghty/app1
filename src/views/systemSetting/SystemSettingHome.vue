@@ -68,6 +68,11 @@
   display: block;
   margin: 10px auto 0;
 }
+
+.check-button {
+  width: 50px;
+  height: 50px;
+}
 </style>
 <template>
   <div class="main">
@@ -78,7 +83,7 @@
       </div>
       <div>
         <div>服务器地址</div>
-        <button @click="checkConnect">检查</button>
+        <button class="check-button" @click="checkConnect">检查</button>
         <input v-model="serviceUrl" type="text"/>
       </div>
       <div @click="exitApp">
@@ -111,6 +116,7 @@
         </div>
       </div>
     </div>
+    <Login @loginSuccess="handleLoginSuccess" ref="login"></Login>
   </div>
 </template>
 
@@ -121,12 +127,20 @@ import service from "@/api/services";
 import {msg} from "@/components/message";
 import mitt from "@/util/mitt";
 import {Cascader as VanCascader} from 'vant';
+import 'vant/lib/cascader/style';
+import Login from "@/components/LoginPanel/Login";
+import {getToken, setToken} from "@/util/auth";
 
 export default {
   components: {
-    VanCascader
+    VanCascader,
+    Login
   },
   data() {
+    let mac = 'xxxxxx'
+    if (window.device) {
+      mac = window.device.uuid;
+    }
     return {
       showPassword: false,
       serviceConnect: false,
@@ -135,15 +149,14 @@ export default {
       cascaderValue: '',
       classroom: '',
       showPicker: false,
-      mac: 'xxxxxx',
+      mac: mac,
       managerAccount: {
-        account: '',
-        password: ''
+        account: 'admin',
+        password: 'admin'
       }
     }
   },
   mounted() {
-    // ls.set('terminalId', 6669999);
     this.showPassword = true;
     const serviceUrl = ls.get('serviceUrl');
     if (serviceUrl) {
@@ -152,9 +165,46 @@ export default {
   },
   methods: {
     getTerminal() {
-      service.post('classCard/testLink', {}).then(res => {
-        this.options = this.initData(res.data);
-      })
+      return service.post('model/getEntityTree', {
+        nodes: [{
+          subnodes: [{
+            type: 'terminal',
+            filter: {
+              field: 'parent',
+              match: 'EQ',
+              value: null
+            }
+          }, {
+            type: 'terminalCategory',
+            filter: {
+              field: 'parent',
+              match: 'EQ',
+              value: null
+            }
+          }]
+        }, {
+          type: 'terminal'
+        }, {
+          type: 'terminalCategory',
+          subnodes: [{
+            type: 'terminal',
+            filter: {
+              field: 'parent',
+              match: 'EQ',
+              value: '$parentId'
+            }
+          }, {
+            type: 'terminalCategory',
+            filter: {
+              field: 'parent',
+              match: 'EQ',
+              value: '$parentId'
+            }
+          }]
+        }]
+      }).then(res => {
+        this.options = this.initData(res.list);
+      });
     },
     initData(list) {
       if (list) {
@@ -168,17 +218,24 @@ export default {
       } else return undefined
     },
     checkConnect() {
+      ls.set('serviceUrl', this.serviceUrl);
       service.post('classCard/testLink', {}).then(res => {
         if (res.message === 'success') {
           this.serviceConnect = true;
-          ls.set('serviceUrl', this.serviceUrl);
-          this.getTerminal()
+          // this.getTerminal()
         }
+      }, err => {
+        ls.remove('serviceUrl')
       })
     },
     openPicker() {
       if (this.serviceConnect) {
-        this.showPicker = true;
+        const token = getToken();
+        if (token) {
+          this.showPicker = true;
+        } else {
+          this.$refs.login.visible = true;
+        }
       } else {
         msg({
           message: '请先填写服务器地址并连接！'
@@ -249,6 +306,13 @@ export default {
           message: '账号或密码错误！'
         });
       }
+    },
+    // 选择教室前 必须登录
+    handleLoginSuccess() {
+      setToken('6669282:61646D696E36363639323130:1647679075040:24AC842388F6952412B49B8BB74E47BD');
+      this.getTerminal().then(() => {
+        this.openPicker();
+      });
     }
   }
 }

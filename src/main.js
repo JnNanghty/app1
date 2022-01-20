@@ -8,7 +8,7 @@ import './theme/main.css';
 
 import './util/adaptive';
 import 'qweather-icons/font/qweather-icons.css';
-
+import './util/mqttUtil';
 
 Vue.config.productionTip = false
 

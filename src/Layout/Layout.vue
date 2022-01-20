@@ -104,7 +104,7 @@
 </style>
 <template>
   <div>
-    <div class="app-main-content" :style="{background: config.background}">
+    <div class="app-main-content" :style="{background: config.background, backgroundSize: 'cover'}">
       <header class="header">
         <div class="logo">
           <img style="height: 100%;" :src="config.logo" alt="">
@@ -119,10 +119,10 @@
             {{ weatherInfo.weather }} <br> {{ weatherInfo.temperature }}℃
           </div>
           <div class="header-date">
-            <div class="header-date-up">{{ currentDay }}</div>
-            <div class="header-date-down">{{ currentDate }}</div>
+            <div class="header-date-up">{{ timeInfo.currentDay }}</div>
+            <div class="header-date-down">{{ timeInfo.currentDate }}</div>
           </div>
-          <div class="header-time">{{ currentTime }}</div>
+          <div class="header-time">{{ timeInfo.currentTime }}</div>
         </div>
       </header>
       <main class="main-content">
@@ -131,16 +131,13 @@
       <footer class="footer">
         <!--    应用图标   -->
         <div class="app-icon" v-for="item in appList" :key="item.path" @click="goItem(item)" v-show="item.visible">
-          <i :style="item.style">{{item.icon}}</i>
+          <i :style="item.style">{{ item.icon }}</i>
           <br>
           <span>{{ item.label }}</span>
         </div>
       </footer>
       <div class="notice" v-show="showNotice">
-        <div ref="scrollText" class="notice-text">
-          通知通知通知通知通知通知通知通知通知通知通知通知通知
-          通知通知通知通知通知通知通知通知通知通知通知通知通知
-        </div>
+        <div ref="scrollText" class="notice-text">{{ noticeText }}</div>
       </div>
     </div>
     <Login ref="login" @loginSuccess="handleLoginSuccess"></Login>
@@ -154,6 +151,7 @@ import service from "@/api/services";
 import {msg} from "@/components/message";
 import timeUtil from "@/util/timeUtil";
 import Login from "@/components/LoginPanel/Login";
+
 export default {
   name: 'Layout-view',
   components: {
@@ -163,6 +161,7 @@ export default {
     let time = Date.now();
     return {
       showNotice: false,
+      noticeText: '',
       loginToPath: null,
       terminalId: null,
       config: {
@@ -232,7 +231,7 @@ export default {
           name: 'home',
           path: 'Repair',
           needLogin: false,
-          visible: false
+          visible: true
         },
       ],
       terminalInfo: {},
@@ -254,18 +253,15 @@ export default {
     // this.scroll();
     mitt.on('refresh', this.refresh);
 
-    this.terminalId = ls.get('terminalId');
-    if (this.terminalId) {
-      this.getTerminalInfo();
-    }
-    this.getConfig()
-    this.getPosition()
+    this.refresh();
+
+
     let time = Date.now();
     this.timeInterval = setInterval(() => {
       time = Date.now();
-      this.currentTime = timeUtil.formatTime(time);
-      this.currentDate = timeUtil.formatDate(time);
-      this.currentDay = timeUtil.getCurrentDay(time);
+      this.timeInfo.currentTime = timeUtil.formatTime(time);
+      this.timeInfo.currentDate = timeUtil.formatDate(time);
+      this.timeInfo.currentDay = timeUtil.getCurrentDay(time);
     }, 1e3);
   },
   beforeDestroy() {
@@ -313,8 +309,11 @@ export default {
       if (this.terminalId) {
         this.getTerminalInfo()
       }
-      this.getConfig()
-      this.getPosition()
+      const serviceUrl = ls.get('serviceUrl');
+      if (serviceUrl) {
+        this.getConfig();
+        this.getPosition();
+      }
     },
     getTerminalInfo() {
       service.post('classCard/terminalInfo', {
