@@ -18,12 +18,8 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/app'
-  },
-  {
-    path: '/app',
     name: 'App',
-    redirect: '/app/home',
+    redirect: '/home',
     component: Layout,
     children: [{
       path: 'home',
@@ -71,8 +67,6 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
   routes
 })
 

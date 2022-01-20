@@ -883,7 +883,7 @@
     "@babel/types" "^7.4.4"
     esutils "^2.0.2"
 
-"@babel/runtime@^7.11.0", "@babel/runtime@^7.8.4":
+"@babel/runtime@7.x", "@babel/runtime@^7.11.0", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.4":
   version "7.16.7"
   resolved "https://registry.npmmirror.com/@babel/runtime/download/@babel/runtime-7.16.7.tgz#03ff99f64106588c9c403c6ecb8c3bafbbdff1fa"
   integrity sha512-9E9FJowqAsytyOY6LG+1KuueckRL+aQW+mKvXRXnuFGyRAyepJPmEo9vgMfXUA6O9u3IeEdv9MAkppFcaQwogQ==
@@ -976,6 +976,11 @@
   version "1.1.3"
   resolved "https://registry.npmmirror.com/@nodelib/fs.stat/download/@nodelib/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
   integrity sha1-K1o6s/kYzKSKjHVMCBaOPwPrphs=
+
+"@popperjs/core@^2.9.2":
+  version "2.11.2"
+  resolved "https://registry.npmmirror.com/@popperjs/core/download/@popperjs/core-2.11.2.tgz#830beaec4b4091a9e9398ac50f865ddea52186b9"
+  integrity sha512-92FRmppjjqz29VMJ2dn+xdyXZBrMlE42AV6Kq6BwjWV7CNUW1hs2FtxSNLQE+gJhaZ6AAmYuO9y8dshhcBl7vA==
 
 "@soda/friendly-errors-webpack-plugin@^1.7.1":
   version "1.8.1"
@@ -1151,7 +1156,51 @@
     anymatch "^3.0.0"
     source-map "^0.6.0"
 
-"@vue/babel-helper-vue-jsx-merge-props@^1.2.1":
+"@vant/icons@^1.7.1":
+  version "1.7.3"
+  resolved "https://registry.npmmirror.com/@vant/icons/download/@vant/icons-1.7.3.tgz#e51b46065cfde445617401ebe309a33b62a29725"
+  integrity sha512-tW4EqzxN4kXw1rnlnQJQHofEifPbt/gECOWiibomht8QLyvoGuE4iUmDFS288dJ07ZjuTy0bhdABj0SENo2fmQ==
+
+"@vant/popperjs@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.nlark.com/@vant/popperjs/download/@vant/popperjs-1.1.0.tgz#b4edee5bbfa6fb18705986e313d4fd5f17942a0f"
+  integrity sha1-tO3uW7+m+xhwWYbjE9T9XxeUKg8=
+  dependencies:
+    "@popperjs/core" "^2.9.2"
+
+"@videojs/http-streaming@2.12.0":
+  version "2.12.0"
+  resolved "https://registry.npmmirror.com/@videojs/http-streaming/download/@videojs/http-streaming-2.12.0.tgz#850069e063e26cf2fa5ed9bb3addfc92fa899f78"
+  integrity sha512-vdQA0lDYBXGJqV2T02AGqg1w4dcgyRoN+bYG+G8uF4DpCEMhEtUI0BA4tRu4/Njar8w/9D5k0a1KX40pcvM3fA==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@videojs/vhs-utils" "3.0.4"
+    aes-decrypter "3.1.2"
+    global "^4.4.0"
+    m3u8-parser "4.7.0"
+    mpd-parser "0.19.2"
+    mux.js "5.14.1"
+    video.js "^6 || ^7"
+
+"@videojs/vhs-utils@3.0.4", "@videojs/vhs-utils@^3.0.0", "@videojs/vhs-utils@^3.0.2", "@videojs/vhs-utils@^3.0.3":
+  version "3.0.4"
+  resolved "https://registry.npmmirror.com/@videojs/vhs-utils/download/@videojs/vhs-utils-3.0.4.tgz#e253eecd8e9318f767e752010d213587f94bb03a"
+  integrity sha1-4lPuzY6TGPdn51IBDSE1h/lLsDo=
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    global "^4.4.0"
+    url-toolkit "^2.2.1"
+
+"@videojs/xhr@2.6.0":
+  version "2.6.0"
+  resolved "https://registry.nlark.com/@videojs/xhr/download/@videojs/xhr-2.6.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40videojs%2Fxhr%2Fdownload%2F%40videojs%2Fxhr-2.6.0.tgz#cd897e0ad54faf497961bcce3fa16dc15a26bb80"
+  integrity sha1-zYl+CtVPr0l5YbzOP6FtwVomu4A=
+  dependencies:
+    "@babel/runtime" "^7.5.5"
+    global "~4.4.0"
+    is-function "^1.0.1"
+
+"@vue/babel-helper-vue-jsx-merge-props@^1.0.0", "@vue/babel-helper-vue-jsx-merge-props@^1.2.1":
   version "1.2.1"
   resolved "https://registry.nlark.com/@vue/babel-helper-vue-jsx-merge-props/download/@vue/babel-helper-vue-jsx-merge-props-1.2.1.tgz#31624a7a505fb14da1d58023725a4c5f270e6a81"
   integrity sha1-MWJKelBfsU2h1YAjclpMXycOaoE=
@@ -1555,6 +1604,11 @@
     "@webassemblyjs/wast-parser" "1.9.0"
     "@xtuc/long" "4.2.2"
 
+"@xmldom/xmldom@^0.7.2":
+  version "0.7.5"
+  resolved "https://registry.npmmirror.com/@xmldom/xmldom/download/@xmldom/xmldom-0.7.5.tgz#09fa51e356d07d0be200642b0e4f91d8e6dd408d"
+  integrity sha1-CfpR41bQfQviAGQrDk+R2ObdQI0=
+
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
   resolved "https://registry.nlark.com/@xtuc/ieee754/download/@xtuc/ieee754-1.2.0.tgz#eef014a3145ae477a1cbc00cd1e552336dceb790"
@@ -1592,6 +1646,16 @@ address@^1.1.2:
   version "1.1.2"
   resolved "https://registry.npm.taobao.org/address/download/address-1.1.2.tgz#bf1116c9c758c51b7a933d296b72c221ed9428b6"
   integrity sha1-vxEWycdYxRt6kz0pa3LCIe2UKLY=
+
+aes-decrypter@3.1.2:
+  version "3.1.2"
+  resolved "https://registry.npm.taobao.org/aes-decrypter/download/aes-decrypter-3.1.2.tgz#3545546f8e9f6b878640339a242efe221ba7a7cb"
+  integrity sha1-NUVUb46fa4eGQDOaJC7+Ihunp8s=
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@videojs/vhs-utils" "^3.0.0"
+    global "^4.4.0"
+    pkcs7 "^1.0.4"
 
 ajv-errors@^1.0.0:
   version "1.0.1"
@@ -1821,6 +1885,13 @@ aws4@^1.8.0:
   version "1.11.0"
   resolved "https://registry.nlark.com/aws4/download/aws4-1.11.0.tgz#d61f46d83b2519250e2784daf5b09479a8b41c59"
   integrity sha1-1h9G2DslGSUOJ4Ta9bCUeai0HFk=
+
+axios@^0.25.0:
+  version "0.25.0"
+  resolved "https://registry.npmmirror.com/axios/download/axios-0.25.0.tgz#349cfbb31331a9b4453190791760a8d35b093e0a"
+  integrity sha512-cD8FOb0tRH3uuEe6+evtAbgJtfxr7ly3fQjYcMcuPlgkwVS9xboaVIpcDV+cYQe+yGykgwZCs1pzjntcGa6l5g==
+  dependencies:
+    follow-redirects "^1.14.7"
 
 babel-loader@^8.1.0:
   version "8.2.3"
@@ -3114,6 +3185,11 @@ dom-serializer@^1.0.1:
     domhandler "^4.2.0"
     entities "^2.0.0"
 
+dom-walk@^0.1.0:
+  version "0.1.2"
+  resolved "https://registry.npm.taobao.org/dom-walk/download/dom-walk-0.1.2.tgz#0c548bef048f4d1f2a97249002236060daa3fd84"
+  integrity sha1-DFSL7wSPTR8qlySQAiNgYNqj/YQ=
+
 domain-browser@^1.1.1:
   version "1.2.0"
   resolved "https://registry.nlark.com/domain-browser/download/domain-browser-1.2.0.tgz?cache=0&sync_timestamp=1627591659555&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fdomain-browser%2Fdownload%2Fdomain-browser-1.2.0.tgz#3d31f50191a6749dd1375a7f522e823d42e54eda"
@@ -3658,7 +3734,7 @@ flush-write-stream@^1.0.0:
     inherits "^2.0.3"
     readable-stream "^2.3.6"
 
-follow-redirects@^1.0.0:
+follow-redirects@^1.0.0, follow-redirects@^1.14.7:
   version "1.14.7"
   resolved "https://registry.npmmirror.com/follow-redirects/download/follow-redirects-1.14.7.tgz#2004c02eb9436eee9a21446a6477debf17e81685"
   integrity sha512-+hbxoLbFMbRKDwohX8GkTataGqO6Jb7jGwpAlwgy2bIz25XtRm7KEzJM76R1WiNT5SwZkX4Y75SwBolkpmE7iQ==
@@ -3833,6 +3909,14 @@ glob@^7.0.3, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4:
     minimatch "^3.0.4"
     once "^1.3.0"
     path-is-absolute "^1.0.0"
+
+global@^4.3.1, global@^4.4.0, global@~4.4.0:
+  version "4.4.0"
+  resolved "https://registry.npm.taobao.org/global/download/global-4.4.0.tgz#3e7b105179006a323ed71aafca3e9c57a5cc6406"
+  integrity sha1-PnsQUXkAajI+1xqvyj6cV6XMZAY=
+  dependencies:
+    min-document "^2.19.0"
+    process "^0.11.10"
 
 globals@^11.1.0:
   version "11.12.0"
@@ -4258,6 +4342,11 @@ indexes-of@^1.0.1:
   resolved "https://registry.nlark.com/indexes-of/download/indexes-of-1.0.1.tgz#f30f716c8e2bd346c7b67d3df3915566a7c05607"
   integrity sha1-8w9xbI4r00bHtn0985FVZqfAVgc=
 
+individual@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npm.taobao.org/individual/download/individual-2.0.0.tgz#833b097dad23294e76117a98fb38e0d9ad61bb97"
+  integrity sha1-gzsJfa0jKU52EXqY+zjg2a1hu5c=
+
 infer-owner@^1.0.3:
   version "1.0.4"
   resolved "https://registry.nlark.com/infer-owner/download/infer-owner-1.0.4.tgz#c4cefcaa8e51051c2a40ba2ce8a3d27295af9467"
@@ -4493,6 +4582,11 @@ is-fullwidth-code-point@^3.0.0:
   version "3.0.0"
   resolved "https://registry.nlark.com/is-fullwidth-code-point/download/is-fullwidth-code-point-3.0.0.tgz#f116f8064fe90b3f7844a38997c0b75051269f1d"
   integrity sha1-8Rb4Bk/pCz94RKOJl8C3UFEmnx0=
+
+is-function@^1.0.1:
+  version "1.0.2"
+  resolved "https://registry.npm.taobao.org/is-function/download/is-function-1.0.2.tgz#4f097f30abf6efadac9833b17ca5dc03f8144e08"
+  integrity sha1-Twl/MKv2762smDOxfKXcA/gUTgg=
 
 is-glob@^3.1.0:
   version "3.1.0"
@@ -4782,6 +4876,11 @@ jsprim@^1.2.2:
     json-schema "0.4.0"
     verror "1.10.0"
 
+keycode@^2.2.0:
+  version "2.2.1"
+  resolved "https://registry.npmmirror.com/keycode/download/keycode-2.2.1.tgz#09c23b2be0611d26117ea2501c2c391a01f39eff"
+  integrity sha512-Rdgz9Hl9Iv4QKi8b0OlCRQEzp4AgVxyCtz5S/+VIHezDmrDhkp2N2TqBWOLz0/gbeREXOOiI9/4b8BY9uw2vFg==
+
 killable@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npm.taobao.org/killable/download/killable-1.0.1.tgz#4c8ce441187a061c7474fb87ca08e2a638194892"
@@ -4951,6 +5050,15 @@ lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
+m3u8-parser@4.7.0:
+  version "4.7.0"
+  resolved "https://registry.nlark.com/m3u8-parser/download/m3u8-parser-4.7.0.tgz?cache=0&sync_timestamp=1621435940345&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fm3u8-parser%2Fdownload%2Fm3u8-parser-4.7.0.tgz#e01e8ce136098ade1b14ee691ea20fc4dc60abf6"
+  integrity sha1-4B6M4TYJit4bFO5pHqIPxNxgq/Y=
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@videojs/vhs-utils" "^3.0.0"
+    global "^4.4.0"
+
 make-dir@^2.0.0:
   version "2.1.0"
   resolved "https://registry.nlark.com/make-dir/download/make-dir-2.1.0.tgz#5f0310e18b8be898cc07009295a30ae41e91e6f5"
@@ -5112,6 +5220,13 @@ mimic-fn@^2.1.0:
   resolved "https://registry.nlark.com/mimic-fn/download/mimic-fn-2.1.0.tgz#7ed2c2ccccaf84d3ffcb7a69b57711fc2083401b"
   integrity sha1-ftLCzMyvhNP/y3pptXcR/CCDQBs=
 
+min-document@^2.19.0:
+  version "2.19.0"
+  resolved "https://registry.npm.taobao.org/min-document/download/min-document-2.19.0.tgz#7bd282e3f5842ed295bb748cdd9f1ffa2c824685"
+  integrity sha1-e9KC4/WELtKVu3SM3Z8f+iyCRoU=
+  dependencies:
+    dom-walk "^0.1.0"
+
 mini-css-extract-plugin@^0.9.0:
   version "0.9.0"
   resolved "https://registry.npmmirror.com/mini-css-extract-plugin/download/mini-css-extract-plugin-0.9.0.tgz#47f2cf07aa165ab35733b1fc97d4c46c0564339e"
@@ -5167,6 +5282,11 @@ mississippi@^3.0.0:
     stream-each "^1.1.0"
     through2 "^2.0.0"
 
+mitt@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npmmirror.com/mitt/download/mitt-3.0.0.tgz#69ef9bd5c80ff6f57473e8d89326d01c414be0bd"
+  integrity sha512-7dX2/10ITVyqh4aOSVI9gdape+t9l2/8QxHrFmUXu4EEUpdlxl6RudZUPZoc+zuY2hk1j7XxVroIVIan/pD/SQ==
+
 mixin-deep@^1.2.0:
   version "1.3.2"
   resolved "https://registry.nlark.com/mixin-deep/download/mixin-deep-1.3.2.tgz#1120b43dc359a785dce65b55b82e257ccf479566"
@@ -5193,6 +5313,16 @@ move-concurrently@^1.0.1:
     mkdirp "^0.5.1"
     rimraf "^2.5.4"
     run-queue "^1.0.3"
+
+mpd-parser@0.19.2:
+  version "0.19.2"
+  resolved "https://registry.npmmirror.com/mpd-parser/download/mpd-parser-0.19.2.tgz#68611e653cdf2cc1e90688825c4a129b7f9007e0"
+  integrity sha1-aGEeZTzfLMHpBoiCXEoSm3+QB+A=
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@videojs/vhs-utils" "^3.0.2"
+    "@xmldom/xmldom" "^0.7.2"
+    global "^4.4.0"
 
 ms@2.0.0:
   version "2.0.0"
@@ -5221,6 +5351,13 @@ multicast-dns@^6.0.1:
   dependencies:
     dns-packet "^1.3.1"
     thunky "^1.0.2"
+
+mux.js@5.14.1:
+  version "5.14.1"
+  resolved "https://registry.npmmirror.com/mux.js/download/mux.js-5.14.1.tgz#209583f454255d9ba2ff1bb61ad5a6867cf61878"
+  integrity sha1-IJWD9FQlXZui/xu2GtWmhnz2GHg=
+  dependencies:
+    "@babel/runtime" "^7.11.2"
 
 mz@^2.4.0:
   version "2.7.0"
@@ -5279,6 +5416,11 @@ node-forge@^0.10.0:
   version "0.10.0"
   resolved "https://registry.npmmirror.com/node-forge/download/node-forge-0.10.0.tgz#32dea2afb3e9926f02ee5ce8794902691a676bf3"
   integrity sha1-Mt6ir7Ppkm8C7lzoeUkCaRpna/M=
+
+node-forge@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.npmmirror.com/node-forge/download/node-forge-1.2.1.tgz#82794919071ef2eb5c509293325cec8afd0fd53c"
+  integrity sha512-Fcvtbb+zBcZXbTTVwqGA5W+MKBj56UjVRevvchv5XrcyXbmNdesfZL37nlcWOfpgHhgmxApw3tQbTr4CqNmX4w==
 
 node-ipc@^9.1.1:
   version "9.2.1"
@@ -5798,6 +5940,13 @@ pinkie@^2.0.0:
   resolved "https://registry.nlark.com/pinkie/download/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
   integrity sha1-clVrgM+g1IqXToDnckjoDtT3+HA=
 
+pkcs7@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.npm.taobao.org/pkcs7/download/pkcs7-1.0.4.tgz#6090b9e71160dabf69209d719cbafa538b00a1cb"
+  integrity sha1-YJC55xFg2r9pIJ1xnLr6U4sAocs=
+  dependencies:
+    "@babel/runtime" "^7.5.5"
+
 pkg-dir@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmmirror.com/pkg-dir/download/pkg-dir-3.0.0.tgz?cache=0&sync_timestamp=1633498133295&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fpkg-dir%2Fdownload%2Fpkg-dir-3.0.0.tgz#2749020f239ed990881b1f71210d51eb6523bea3"
@@ -6311,6 +6460,11 @@ querystringify@^2.1.1:
   resolved "https://registry.npm.taobao.org/querystringify/download/querystringify-2.2.0.tgz#3345941b4153cb9d082d8eee4cda2016a9aef7f6"
   integrity sha1-M0WUG0FTy50ILY7uTNogFqmu9/Y=
 
+qweather-icons@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.npmmirror.com/qweather-icons/download/qweather-icons-1.1.0.tgz#38b5336cb3dcee53bbc6cdd2174685c4f1d85c08"
+  integrity sha512-8AqL5oKLlCGxqHLZBusB6mHiRJxOxSpv7lnLWQmVjGSEITVP6gv56y/TFRnNNqo9nz1d0UaZvDSsP7W3o5Encw==
+
 randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5, randombytes@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmmirror.com/randombytes/download/randombytes-2.1.0.tgz#df6f84372f0270dc65cdf6291349ab7a473d4f2a"
@@ -6601,6 +6755,13 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   dependencies:
     aproba "^1.1.1"
 
+rust-result@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.nlark.com/rust-result/download/rust-result-1.0.0.tgz#34c75b2e6dc39fe5875e5bdec85b5e0f91536f72"
+  integrity sha1-NMdbLm3Dn+WHXlveyFteD5FTb3I=
+  dependencies:
+    individual "^2.0.0"
+
 safe-buffer@5.1.2, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.2"
   resolved "https://registry.nlark.com/safe-buffer/download/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
@@ -6610,6 +6771,13 @@ safe-buffer@5.2.1, safe-buffer@>=5.1.0, safe-buffer@^5.0.1, safe-buffer@^5.1.0, 
   version "5.2.1"
   resolved "https://registry.nlark.com/safe-buffer/download/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
   integrity sha1-Hq+fqb2x/dTsdfWPnNtOa3gn7sY=
+
+safe-json-parse@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.npm.taobao.org/safe-json-parse/download/safe-json-parse-4.0.0.tgz#7c0f578cfccd12d33a71c0e05413e2eca171eaac"
+  integrity sha1-fA9XjPzNEtM6ccDgVBPi7KFx6qw=
+  dependencies:
+    rust-result "^1.0.0"
 
 safe-regex@^1.1.0:
   version "1.1.0"
@@ -7529,6 +7697,11 @@ url-parse@^1.4.3, url-parse@^1.5.3:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
 
+url-toolkit@^2.2.1:
+  version "2.2.3"
+  resolved "https://registry.nlark.com/url-toolkit/download/url-toolkit-2.2.3.tgz?cache=0&sync_timestamp=1625914559846&other_urls=https%3A%2F%2Fregistry.nlark.com%2Furl-toolkit%2Fdownload%2Furl-toolkit-2.2.3.tgz#78fa901215abbac34182066932220279b804522b"
+  integrity sha1-ePqQEhWrusNBggZpMiICebgEUis=
+
 url@^0.11.0:
   version "0.11.0"
   resolved "https://registry.npmmirror.com/url/download/url-0.11.0.tgz#3838e97cfc60521eb73c525a8e55bfdd9e2e28f1"
@@ -7607,6 +7780,17 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
 
+vant@^2.12.39:
+  version "2.12.39"
+  resolved "https://registry.npmmirror.com/vant/download/vant-2.12.39.tgz#2cb976c124b4b11bfed340030b5dc90285a3bb66"
+  integrity sha512-6WQdySrjV4e9oCH1hbbI9ynkc3AwarwAc0k54Y3NRXQxciZ1C9DMjqUYxGSSR1acgqSB/GHcumneOdSui+BoCg==
+  dependencies:
+    "@babel/runtime" "7.x"
+    "@vant/icons" "^1.7.1"
+    "@vant/popperjs" "^1.1.0"
+    "@vue/babel-helper-vue-jsx-merge-props" "^1.0.0"
+    vue-lazyload "1.2.3"
+
 vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.nlark.com/vary/download/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
@@ -7626,6 +7810,37 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
+"video.js@^6 || ^7", video.js@^7.17.0:
+  version "7.17.0"
+  resolved "https://registry.npmmirror.com/video.js/download/video.js-7.17.0.tgz#35918cc03748a5680f5d5f1da410e06eeea7786e"
+  integrity sha512-8RbLu9+Pdpep9OTPncUHIvZXFgn/7hKdPnSTE/lGSnlFSucXtTUBp41R7NDwncscMLQ0WgazUbmFlvr4MNWMbA==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@videojs/http-streaming" "2.12.0"
+    "@videojs/vhs-utils" "^3.0.3"
+    "@videojs/xhr" "2.6.0"
+    aes-decrypter "3.1.2"
+    global "^4.4.0"
+    keycode "^2.2.0"
+    m3u8-parser "4.7.0"
+    mpd-parser "0.19.2"
+    mux.js "5.14.1"
+    safe-json-parse "4.0.0"
+    videojs-font "3.2.0"
+    videojs-vtt.js "^0.15.3"
+
+videojs-font@3.2.0:
+  version "3.2.0"
+  resolved "https://registry.npm.taobao.org/videojs-font/download/videojs-font-3.2.0.tgz#212c9d3f4e4ec3fa7345167d64316add35e92232"
+  integrity sha1-ISydP05Ow/pzRRZ9ZDFq3TXpIjI=
+
+videojs-vtt.js@^0.15.3:
+  version "0.15.3"
+  resolved "https://registry.npm.taobao.org/videojs-vtt.js/download/videojs-vtt.js-0.15.3.tgz#84260393b79487fcf195d9372f812d7fab83a993"
+  integrity sha1-hCYDk7eUh/zxldk3L4Etf6uDqZM=
+  dependencies:
+    global "^4.3.1"
+
 vm-browserify@^1.0.1:
   version "1.1.2"
   resolved "https://registry.nlark.com/vm-browserify/download/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
@@ -7635,6 +7850,11 @@ vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.nlark.com/vue-hot-reload-api/download/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
   integrity sha1-UylVzB6yCKPZkLOp+acFdGV+CPI=
+
+vue-lazyload@1.2.3:
+  version "1.2.3"
+  resolved "https://registry.npmmirror.com/vue-lazyload/download/vue-lazyload-1.2.3.tgz#901f9ec15c7e6ca78781a2bae4a343686bdedb2c"
+  integrity sha512-DC0ZwxanbRhx79tlA3zY5OYJkH8FYp3WBAnAJbrcuoS8eye1P73rcgAZhyxFSPUluJUTelMB+i/+VkNU/qVm7g==
 
 "vue-loader-v16@npm:vue-loader@^16.1.0":
   version "16.8.3"

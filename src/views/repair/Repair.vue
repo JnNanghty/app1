@@ -2,23 +2,16 @@
 
 </style>
 <template>
-  <IonPage>维修</IonPage>
+  <div>维修</div>
 </template>
 
-<script setup>
-import {IonPage, onIonViewWillEnter} from "@ionic/vue";
-import {msg} from "@/components/message";
+<script>
 
-onIonViewWillEnter(() => {
-  if (window.serialPortPlugin) {
-    msg({
-      message: '有插件!!!!'
-    });
-  } else {
-    msg({
-      message: '没有插件????'
-    })
+export default {
+  data() {
+    return {}
+  },
+  mounted() {
   }
-});
+}
 </script>
-

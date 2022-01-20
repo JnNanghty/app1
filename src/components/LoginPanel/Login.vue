@@ -36,7 +36,7 @@
 }
 </style>
 <template>
-  <teleport to="body">
+  <div to="body">
     <div class="__login-shadow" @click.self="close" v-if="visible">
       <transition name="content-transform">
         <div class="__login-main" v-if="visibleMain">
@@ -51,11 +51,8 @@
         </div>
       </transition>
     </div>
-  </teleport>
+  </div>
 </template>
-<script setup>
-
-</script>
 <script>
 export default {
   name: 'Login',

@@ -2,10 +2,16 @@
 
 </style>
 <template>
-  <IonPage>节目模式</IonPage>
+  <div>节目模式</div>
 </template>
 
-<script setup>
-import {IonPage} from "@ionic/vue";
+<script>
+export default {
+  data() {
+    return {}
+  },
+  mounted() {
+  },
+  methods: {}
+}
 </script>
-

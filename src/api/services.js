@@ -7,34 +7,35 @@ import ls from "@/store/ls";
 const serverUrl = '';
 
 let service = axios.create({
-  baseURL: serverUrl + '/rest/', timeout: 10000
+  baseURL: serverUrl + '/rest/',
+  timeout: 10000,
 });
 
-service.interceptors.request.use(async config => {
-  let serviceUrl = await ls.get('serviceUrl');
+service.interceptors.request.use(config => {
+  let serviceUrl = ls.get('serviceUrl');
   if (process.env.NODE_ENV === 'development') {
     serviceUrl = ''
   }
   config.baseURL = serviceUrl + '/rest/';
-  await getToken().then((value) => {
-    if (value) {
-      config.headers['token'] = value;
-    }
-  });
 
-  const companyId = await ls.get('companyId');
-  if (companyId) {
-    const extraData = {
-      companyId, timestamp: Math.floor(Date.now() / 1000), key: ''
-    };
-
-    const md5 = forge.md.md5.create();
-    md5.update(extraData.companyId + extraData.timestamp + 'classcard');
-    extraData.key = md5.digest().toHex().toUpperCase();
-
-    const data = config.data || {};
-    config.data = Object.assign(data, extraData);
+  const token = getToken();
+  if (token) {
+    config.headers['token'] = value;
   }
+
+  const companyId = ls.get('companyId') || 0;
+
+  const extraData = {
+    companyId, timestamp: Math.floor(Date.now() / 1000), key: ''
+  };
+
+  const md5 = forge.md.md5.create();
+  md5.update(extraData.companyId + extraData.timestamp + 'classcard');
+  extraData.key = md5.digest().toHex().toUpperCase();
+
+  const data = config.data || {};
+  config.data = Object.assign(data, extraData);
+
 
   return config;
 });

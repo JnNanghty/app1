@@ -135,7 +135,7 @@ export default {
       cascaderValue: '',
       classroom: '',
       showPicker: false,
-      mac: 'xxxx',
+      mac: 'xxxxxx',
       managerAccount: {
         account: '',
         password: ''
@@ -143,7 +143,7 @@ export default {
     }
   },
   mounted() {
-    ls.set('terminalId', 6669999);
+    // ls.set('terminalId', 6669999);
     this.showPassword = true;
     const serviceUrl = ls.get('serviceUrl');
     if (serviceUrl) {
@@ -152,45 +152,8 @@ export default {
   },
   methods: {
     getTerminal() {
-      service.post('model/getEntityTree', {
-        nodes: [{
-          subnodes: [{
-            type: 'terminal',
-            filter: {
-              field: 'parent',
-              match: 'EQ',
-              value: null
-            }
-          }, {
-            type: 'terminalCategory',
-            filter: {
-              field: 'parent',
-              match: 'EQ',
-              value: null
-            }
-          }]
-        }, {
-          type: 'terminal'
-        }, {
-          type: 'terminalCategory',
-          subnodes: [{
-            type: 'terminal',
-            filter: {
-              field: 'parent',
-              match: 'EQ',
-              value: '$parentId'
-            }
-          }, {
-            type: 'terminalCategory',
-            filter: {
-              field: 'parent',
-              match: 'EQ',
-              value: '$parentId'
-            }
-          }]
-        }]
-      }).then(res => {
-        this.options = this.initData(res.list);
+      service.post('classCard/testLink', {}).then(res => {
+        this.options = this.initData(res.data);
       })
     },
     initData(list) {
@@ -205,9 +168,13 @@ export default {
       } else return undefined
     },
     checkConnect() {
-      this.serviceConnect = true;
-      ls.set('serviceUrl', this.serviceUrl);
-      this.getTerminal()
+      service.post('classCard/testLink', {}).then(res => {
+        if (res.message === 'success') {
+          this.serviceConnect = true;
+          ls.set('serviceUrl', this.serviceUrl);
+          this.getTerminal()
+        }
+      })
     },
     openPicker() {
       if (this.serviceConnect) {
@@ -238,10 +205,10 @@ export default {
       service.post('classCard/bindingTerminal', {
         terminal: id,
         mac: this.mac
-      }).then(async res => {
+      }).then(res => {
         if (res.message === 'success') {
-          await ls.set('terminalId', id);
-          await ls.set('companyId', res.data);
+          ls.set('terminalId', id);
+          ls.set('companyId', res.data);
           mitt.emit('refresh');
           msg({
             message: '绑定成功！'

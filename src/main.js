@@ -3,6 +3,13 @@ import App from './App.vue'
 import router from './router'
 import store from './store/index'
 
+
+import './theme/main.css';
+
+import './util/adaptive';
+import 'qweather-icons/font/qweather-icons.css';
+
+
 Vue.config.productionTip = false
 
 new Vue({
