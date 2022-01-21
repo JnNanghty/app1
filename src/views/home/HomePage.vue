@@ -51,7 +51,7 @@ ion-content {
   background: none;
 }
 
-ion-icon {
+.location-logo {
   font-size: 2rem;
   color: #ffd400;
 }
@@ -64,7 +64,7 @@ ion-icon {
   <div class="main">
     <div class="main-left">
       <div class="main-left-top">
-        <i>位置icon</i>
+        <van-icon class="location-logo" name="location" />
         <span class="classroom-location">{{ terminalInfo && terminalInfo.label }}</span>
       </div>
       <div class="main-left-middle">

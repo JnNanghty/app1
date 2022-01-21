@@ -159,52 +159,62 @@ export default {
   mounted() {
     this.showPassword = true;
     const serviceUrl = ls.get('serviceUrl');
-    if (serviceUrl) {
+    const token = getToken();
+    if (serviceUrl && token) {
       this.getTerminal();
     }
   },
   methods: {
     getTerminal() {
-      return service.post('model/getEntityTree', {
-        nodes: [{
-          subnodes: [{
-            type: 'terminal',
-            filter: {
-              field: 'parent',
-              match: 'EQ',
-              value: null
-            }
+      return new Promise((resolve, reject) => {
+        service.post('model/getEntityTree', {
+          nodes: [{
+            subnodes: [{
+              type: 'terminal',
+              filter: {
+                field: 'parent',
+                match: 'EQ',
+                value: null
+              }
+            }, {
+              type: 'terminalCategory',
+              filter: {
+                field: 'parent',
+                match: 'EQ',
+                value: null
+              }
+            }]
+          }, {
+            type: 'terminal'
           }, {
             type: 'terminalCategory',
-            filter: {
-              field: 'parent',
-              match: 'EQ',
-              value: null
-            }
+            subnodes: [{
+              type: 'terminal',
+              filter: {
+                field: 'parent',
+                match: 'EQ',
+                value: '$parentId'
+              }
+            }, {
+              type: 'terminalCategory',
+              filter: {
+                field: 'parent',
+                match: 'EQ',
+                value: '$parentId'
+              }
+            }]
           }]
-        }, {
-          type: 'terminal'
-        }, {
-          type: 'terminalCategory',
-          subnodes: [{
-            type: 'terminal',
-            filter: {
-              field: 'parent',
-              match: 'EQ',
-              value: '$parentId'
-            }
-          }, {
-            type: 'terminalCategory',
-            filter: {
-              field: 'parent',
-              match: 'EQ',
-              value: '$parentId'
-            }
-          }]
-        }]
-      }).then(res => {
-        this.options = this.initData(res.list);
-      });
+        }).then(res => {
+          this.options = this.initData(res.list);
+          resolve();
+        }, () => {
+          msg({
+            message: '没有权限！请重新登录！'
+          });
+          this.$refs.login.visible = true;
+          reject();
+        });
+      })
     },
     initData(list) {
       if (list) {
@@ -229,7 +239,8 @@ export default {
       })
     },
     openPicker() {
-      if (this.serviceConnect) {
+      const serviceUrl = ls.get('serviceUrl');
+      if (serviceUrl) {
         const token = getToken();
         if (token) {
           this.showPicker = true;
@@ -238,7 +249,7 @@ export default {
         }
       } else {
         msg({
-          message: '请先填写服务器地址并连接！'
+          message: '请先填写服务器地址并检查连接！'
         })
       }
     },
@@ -309,7 +320,7 @@ export default {
     },
     // 选择教室前 必须登录
     handleLoginSuccess() {
-      setToken('6669282:61646D696E36363639323130:1647679075040:24AC842388F6952412B49B8BB74E47BD');
+      // setToken('6669282:61646D696E36363639323130:1647679075040:24AC842388F6952412B49B8BB74E47BD');
       this.getTerminal().then(() => {
         this.openPicker();
       });

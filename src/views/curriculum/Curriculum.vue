@@ -113,7 +113,7 @@ export default {
     this.$nextTick(() => {
       setTimeout(() => {
         this.changeActiveIndex(0);
-      }, 0);
+      }, 501); // 为什么是501呢  因为router-view的transition时间是500ms！
     });
   },
   methods: {
@@ -127,6 +127,7 @@ export default {
       }
       this.activeIndex = index;
       const {x, width} = this.$refs.tabsLabelItem[this.activeIndex].getBoundingClientRect();
+      console.log(x, width);
       this.activeStyle = {
         left: 'calc(' + x + 'px - 5rem)',
         width: width + 'px'

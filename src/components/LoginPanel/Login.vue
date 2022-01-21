@@ -56,7 +56,8 @@
 <script>
 import service from "@/api/services";
 import {setToken} from "@/util/auth";
-
+import mitt from "@/util/mitt";
+import {msg} from "@/components/message";
 export default {
   name: 'Login',
   emits: ['loginSuccess'],
@@ -67,6 +68,10 @@ export default {
     };
   },
   created() {
+    mitt.on('brushCard', this.brushCard);
+  },
+  beforeDestroy() {
+    mitt.off('brushCard');
   },
   methods: {
     close() {
@@ -76,12 +81,22 @@ export default {
       this.$emit('loginSuccess');
       this.close();
     },
-    icLogin() {
+    // 使用ic卡刷卡登录
+    icLogin(ic) {
       service.post('auth/icLogin', {
-        ic: ''
+        ic: ic
       }).then(res => {
-        setToken('');
-      })
+        setToken(res.token);
+        this.loginSuccess();
+      }, () => {
+        msg({
+          message: '登录失败！'
+        });
+      });
+    },
+    brushCard(res) {
+      console.log(res);
+      this.icLogin();
     }
   },
   watch: {

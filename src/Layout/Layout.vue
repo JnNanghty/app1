@@ -17,7 +17,7 @@
   top: .25rem;
   width: 100%;
   text-align: center;
-  font-size: 2rem;
+  font-size: 1.6rem;
   font-weight: 600;
 }
 
@@ -95,11 +95,24 @@
   letter-spacing: 3px;
 }
 
-.app-icon > ion-icon {
+.app-item-icon {
   font-size: 2rem;
   padding: .5rem;
   border-radius: .5rem;
   background-image: linear-gradient(to bottom, white 0, transparent 60%) !important;
+}
+
+.fade-enter-active {
+  transition: transform .5s, opacity .5s;
+}
+.fade-leave-active{
+
+}
+.fade-enter {
+  transform: translateX(-50%);
+}
+.fade-leave-to, .fade-enter {
+  opacity: 0;
 }
 </style>
 <template>
@@ -109,10 +122,12 @@
         <div class="logo">
           <img style="height: 100%;" :src="config.logo" alt="">
         </div>
-        <div class="header-center" v-show="$router.currentRoute.name !== 'Home'">
-          <i class="location-logo">location icon</i>
-          {{ terminalInfo.label }}
-        </div>
+        <transition name="fade">
+          <div class="header-center" v-show="$router.currentRoute.name !== 'Home'">
+            <van-icon class="location-logo" name="location" />
+            {{ terminalInfo.label }}
+          </div>
+        </transition>
         <div class="header-right">
           <div class="header-temperature">
             <i :class="weatherInfo.icon"></i>
@@ -126,12 +141,14 @@
         </div>
       </header>
       <main class="main-content">
-        <router-view></router-view>
+        <transition name="fade">
+          <router-view></router-view>
+        </transition>
       </main>
       <footer class="footer">
         <!--    应用图标   -->
         <div class="app-icon" v-for="item in appList" :key="item.path" @click="goItem(item)" v-show="item.visible">
-          <i :style="item.style">{{ item.icon }}</i>
+          <van-icon class="app-item-icon" :style="item.style" :name="item.icon" />
           <br>
           <span>{{ item.label }}</span>
         </div>
@@ -171,7 +188,7 @@ export default {
       },
       appList: [
         {
-          icon: 'homeOutline',
+          icon: 'wap-home-o',
           style: {background: '#f6054e'},
           label: '主页',
           name: 'home',
@@ -180,7 +197,7 @@ export default {
           visible: true
         },
         {
-          icon: 'calendarOutline',
+          icon: 'notes-o',
           style: {background: '#009bff'},
           label: '课程表',
           name: 'timetable',
@@ -189,16 +206,16 @@ export default {
           visible: false
         },
         {
-          icon: 'personOutline',
+          icon: 'user-circle-o',
           style: {background: '#36ff00'},
           label: '巡课',
           name: 'patrol',
           path: 'Patrol',
-          needLogin: false,
+          needLogin: true,
           visible: false
         },
         {
-          icon: 'fingerPrintOutline',
+          icon: 'sign',
           style: {background: '#00ffd0'},
           label: '考勤',
           name: 'attendance',
@@ -207,7 +224,7 @@ export default {
           visible: false
         },
         {
-          icon: 'settingsOutline',
+          icon: 'setting-o',
           style: {background: '#2200ff'},
           label: '系统设置',
           name: 'system',
@@ -216,7 +233,7 @@ export default {
           visible: true
         },
         {
-          icon: 'newspaperOutline',
+          icon: 'newspaper-o',
           style: {background: '#dd03ff'},
           label: '教室借用',
           name: 'borrow',
@@ -225,7 +242,7 @@ export default {
           visible: false
         },
         {
-          icon: 'buildOutline',
+          icon: 'bulb-o',
           style: {background: '#ff8800'},
           label: '报修',
           name: 'home',
@@ -252,7 +269,11 @@ export default {
     console.log(this.$router);
     // this.scroll();
     mitt.on('refresh', this.refresh);
-
+    mitt.on('mqttRealTimeBroadcast', this.broadcast);
+    mitt.on('mqttConfig', (data) => {
+      ls.set('deviceConfig', data);
+      this.handleConfig(data);
+    });
     this.refresh();
 
 
@@ -268,6 +289,10 @@ export default {
     clearInterval(this.timeInterval);
   },
   methods: {
+    broadcast(data) {
+      this.noticeText = data;
+      this.scroll();
+    },
     // 通知滚动Animate
     scroll() {
       const keyframe = [
@@ -327,23 +352,28 @@ export default {
       service.post('classCard/getConfig').then((res) => {
         if (res.message === 'success') {
           const serviceUrl = ls.get('serviceUrl') || '';
-          this.config.background = res.data.background ? ('url(' + serviceUrl + res.data.background + ')') : 'url(' + require('../assets/default_background.jpg') + ') no-repeat';
-          this.config.logo = serviceUrl + res.data.logo;
           ls.set('deviceConfig', res.data);
-          const custom = JSON.parse(res.data.custom);
-          this.appList.forEach(i => {
-            custom.forEach(j => {
-              if (i.name === j.name) {
-                i.visible = j.value;
-              }
-            })
-          });
+          this.handleConfig(res.data);
         } else {
           msg({
             message: '获取班牌信息失败！'
           });
         }
       })
+    },
+    handleConfig(data) {
+      const serviceUrl = ls.get('serviceUrl') || '';
+      this.config.background = data.background ? ('url(' + serviceUrl + data.background + ')') : 'url(' + require('../assets/default_background.jpg') + ') no-repeat';
+      this.config.logo = serviceUrl + data.logo;
+
+      const custom = JSON.parse(data.custom);
+      this.appList.forEach(i => {
+        custom.forEach(j => {
+          if (i.name === j.name) {
+            i.visible = j.value;
+          }
+        })
+      });
     },
     getPosition() {
       if (navigator.geolocation) {

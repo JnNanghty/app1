@@ -57,7 +57,7 @@
   <div class="tab-content">
     <div class="list-item" v-for="(item, index) in list" :key="index">
       <div class="list-item-left">
-        第{{ timeUtil.one2two(index + 1) }}节 {{ item.startTime }} - {{ item.endTime }}
+        第{{ one2two(index + 1) }}节 {{ item.startTime }} - {{ item.endTime }}
       </div>
       <template v-if="item.courseNumber">
         <div class="list-item-right">
@@ -96,7 +96,10 @@ export default {
     }
   },
   methods: {
-    getDailyCurriculum () {
+    one2two(time) {
+      return timeUtil.one2two(time);
+    },
+    getDailyCurriculum() {
       service.post('classCard/dailyCurriculum', {
         id: this.terminalId
       }).then(res => {

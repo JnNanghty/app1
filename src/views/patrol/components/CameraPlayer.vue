@@ -38,9 +38,9 @@ export default {
   },
   methods: {
     init() {
-      this.player = videojs(this.$refs.videoPlayer, this.options, () => {
+      this.player = videojs(this.$refs.videoPlayer, this.options, function() {
         // ready
-        console.log(this);
+        console.log(this)
       });
     }
   },

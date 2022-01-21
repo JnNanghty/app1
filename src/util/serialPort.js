@@ -1,16 +1,20 @@
 // 初始化读卡器  注册回调
 import mitt from "@/util/mitt";
-export function initCardReader() {
-  if (window.serialPortPlugin) {
-    window.serialPortPlugin.init(3, 9600, res => {
-      console.log('插件init success');
-      console.log(res);
-      console.log(JSON.stringify(res));
-      mitt.emit('brushCard');
-    }, err => {
-      console.log('插件init error');
-      console.log(err);
-      console.log(JSON.stringify(err));
-    })
-  }
+
+function arrayBuffer2string(buf) {
+  return String.fromCharCode.apply(null, new Uint8Array(buf));
+}
+
+if (window.serialPortPlugin) {
+  window.serialPortPlugin.init(3, 9600, res => {
+    console.log('serialPort插件init success');
+    // 要把ic卡转成16进制字符串
+    const ic = parseInt(arrayBuffer2string(res));
+    console.log('10 ic:', ic);
+    console.log('16 ic:', ic.toString(16));
+    mitt.emit('brushCard', ic.toString(16));
+  }, err => {
+    console.log('serialPort插件init error:');
+    console.log(JSON.stringify(err));
+  })
 }

@@ -6,7 +6,7 @@
 .grid-content {
   width: 90%;
   height: 90%;
-  padding-top: 5%;
+  padding-top: 3%;
   margin: 0 auto;
   color: #ffffff;
 }
@@ -76,7 +76,8 @@
 .row2 {
   height: 65%;
 }
-.row1,.row2{
+
+.row1, .row2 {
   display: flex;
 }
 
@@ -95,12 +96,14 @@
   margin: .5rem;
   border-radius: 10px;
 }
+
 .course-info-content,
-.people-name-content{
+.people-name-content {
   flex: 4
 }
+
 .time-info-content,
-.sign-in-content{
+.sign-in-content {
   flex: 7
 }
 
@@ -202,6 +205,7 @@ import ls from "@/store/ls";
 import service from "@/api/services";
 import {msg} from "@/components/message";
 import timeUtil from '@/util/timeUtil';
+import mitt from "@/util/mitt";
 
 export default {
   data() {
@@ -225,8 +229,23 @@ export default {
     if (this.terminalId && (this.currentCourse && this.currentCourse.courseId)) {
       this.startSign();
     }
+
+    mitt.on('brushCard', this.brushCard);
   },
   methods: {
+    brushCard(ic) {
+      service.post('classCard/signIn', {
+        ic,
+        lessonId: 0
+      }).then(res => {
+        console.log(res.message);
+        console.log(res.data.label);
+        console.log(res.data.message);
+        msg({
+          message: res.data.label + ',' + res.data.message + '!'
+        }); // xxx 签到成功  重复签到  迟到   签到未开始
+      })
+    },
     startSign() {
       service.post('classCard/startSignIn', {
         courseId: this.currentCourse.courseId,

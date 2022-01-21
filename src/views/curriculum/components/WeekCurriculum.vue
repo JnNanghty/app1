@@ -47,7 +47,7 @@ ion-icon:active {
     <div class="week-curriculum-nav">第{{ currentWeek }}周</div>
     <div class="week-curriculum-content">
       <div class="pagination-button">
-        <i  @click="changeWeek('pre')">←</i>
+        <van-icon @click="changeWeek('pre')" name="arrow-left" />
       </div>
       <div class="content">
         <div class="curriculum-table">
@@ -61,7 +61,7 @@ ion-icon:active {
         </div>
       </div>
       <div class="pagination-button">
-        <i @click="changeWeek('next')">→</i>
+        <van-icon @click="changeWeek('next')" name="arrow" />
       </div>
     </div>
   </div>
@@ -72,14 +72,14 @@ import {msg} from "@/components/message";
 import service from "@/api/services";
 import timeUtil from "@/util/timeUtil";
 
-const simplifyNumberArray = ['一', '二', '三', '四', '五', '六', '日'];
 export default {
   data() {
     return {
       terminalId: null,
       currentWeek: 1,
       sectionTime: [],
-      curriculum: []
+      curriculum: [],
+      simplifyNumberArray: ['一', '二', '三', '四', '五', '六', '日']
     }
   },
   mounted() {
@@ -108,7 +108,7 @@ export default {
         this.getCurriculum();
       })
     },
-    getCurriculum  () {
+    getCurriculum() {
       service.post('course/terminalCurriculum', {
         id: this.terminalId,
         weekNo: this.currentWeek
