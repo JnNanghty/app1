@@ -59,11 +59,9 @@
 
 <script>
 import service from "@/api/services";
-import {Cascader as VanCascader} from 'vant';
 
 export default {
   components: {
-    VanCascader
   },
   data() {
     return {

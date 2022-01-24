@@ -7,6 +7,10 @@
   position: relative;
 }
 
+.setting-list {
+  width: 100%;
+}
+
 .setting-item {
   width: 10vw;
   height: 10vw;
@@ -58,15 +62,9 @@
   margin: 0 auto;
 }
 
-.password-content > ion-item {
-  color: #ffffff;
-}
-
 .confirm-button {
-  width: 20%;
-  font-size: .8rem;
-  display: block;
-  margin: 10px auto 0;
+  text-align: center;
+  padding-top: 10px;
 }
 
 .check-button {
@@ -76,32 +74,56 @@
 </style>
 <template>
   <div class="main">
-    <div>
-      <div @click="openPicker">
-        <div>教室绑定</div>
-        <div>{{ classroom }}</div>
+    <div class="setting-list">
+      <div>
+        <van-field
+            readonly
+            clickable
+            name="area"
+            :value="classroom"
+            label="教室绑定"
+            placeholder="点击选择教室"
+            @click="openPicker"
+        />
       </div>
       <div>
-        <div>服务器地址</div>
-        <button class="check-button" @click="checkConnect">检查</button>
-        <input v-model="serviceUrl" type="text"/>
+        <!--        <div>服务器地址</div>-->
+        <!--        <button class="check-button" @click="checkConnect">检查</button>-->
+        <!--        <input v-model="serviceUrl" type="text"/>-->
+
+        <van-field
+            v-model="serviceUrl"
+            type="text"
+            label="服务器地址"
+        >
+          <template #button>
+            <van-button size="small" @click="checkConnect" type="primary">检查连接</van-button>
+          </template>
+        </van-field>
+
       </div>
       <div @click="exitApp">
-        <div>退出app</div>
-        <i>exit icon</i>
+        <van-field
+            readonly
+            type="text"
+            label="退出app"
+            right-icon="revoke"
+        >
+        </van-field>
       </div>
     </div>
+
     <div class="password-shadow" v-if="showPassword">
       <div class="password-content">
         <div>
-          <div>请输入管理账号</div>
-          <input v-model="managerAccount.account"/>
+          <van-field v-model="managerAccount.account" label="管理账号" placeholder="请输入管理账号"/>
         </div>
         <div>
-          <div>请输入管理密码</div>
-          <input type="password" v-model="managerAccount.password"/>
+          <van-field v-model="managerAccount.password" type="password" label="管理密码" placeholder="请输入管理密码"/>
         </div>
-        <button class="confirm-button" @click="submit">确认</button>
+        <div class="confirm-button">
+          <van-button @click="submit" type="primary">确认</van-button>
+        </div>
       </div>
     </div>
     <div to="body">
@@ -126,14 +148,12 @@ import ls from "@/store/ls";
 import service from "@/api/services";
 import {msg} from "@/components/message";
 import mitt from "@/util/mitt";
-import {Cascader as VanCascader} from 'vant';
-import 'vant/lib/cascader/style';
+
 import Login from "@/components/LoginPanel/Login";
 import {getToken, setToken} from "@/util/auth";
 
 export default {
   components: {
-    VanCascader,
     Login
   },
   data() {
@@ -144,7 +164,7 @@ export default {
     return {
       showPassword: false,
       serviceConnect: false,
-      serviceUrl: 'http://192.168.1.140:80',
+      serviceUrl: 'http://192.168.1.179:8080',
       options: [],
       cascaderValue: '',
       classroom: '',
@@ -163,6 +183,7 @@ export default {
     if (serviceUrl && token) {
       this.getTerminal();
     }
+    this.classroom = ls.get('terminalInfo').label;
   },
   methods: {
     getTerminal() {
@@ -211,7 +232,6 @@ export default {
           msg({
             message: '没有权限！请重新登录！'
           });
-          this.$refs.login.visible = true;
           reject();
         });
       })
@@ -233,9 +253,16 @@ export default {
         if (res.message === 'success') {
           this.serviceConnect = true;
           // this.getTerminal()
+          msg({
+            message: '连接成功！'
+          });
+          mitt.emit('refresh');
         }
-      }, err => {
+      }, () => {
         ls.remove('serviceUrl')
+        msg({
+          message: '连接失败！'
+        });
       })
     },
     openPicker() {
@@ -308,6 +335,9 @@ export default {
     },
     exitApp() {
       console.log('退出app')
+      if (window.cordova) {
+        cordova.plugins.exit();
+      }
     },
     submit() {
       if (this.managerAccount.account === 'admin' && this.managerAccount.password === 'admin') {

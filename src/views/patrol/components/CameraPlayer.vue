@@ -16,8 +16,22 @@
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 
+const VIDEO_TYPE_REGEX = {
+  'application/x-mpegURL': /\.(m3u8|ts)/,
+  'video/mp4': /\.mp4/,
+  'video/webm': /\.webm/,
+  'video/ogg': /\.ogv/,
+  'rtmp/flv': /rtmp/
+};
+
 export default {
   name: 'CameraPlayer',
+  props: {
+    camera: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       player: null,
@@ -26,7 +40,7 @@ export default {
         controls: false,
         sources: [
           {
-            src: "http://vjs.zencdn.net/v/oceans.mp4",
+            src: 'http://vjs.zencdn.net/v/oceans.mp4',
             type: "video/mp4"
           }
         ]
@@ -34,13 +48,18 @@ export default {
     };
   },
   mounted() {
+    // http flv 就flv       rtmp  rtsp  都
+    if (this.camera.cameraHttpFlvPlayUrl) {
+      this.options.sources.type = 'flv';
+    } else if (this.camera.cameraRtmpPlayUrl || this.camera.cameraPlayUrl) {
+      this.options.sources.type = 'video/mp4';
+    }
     this.init();
   },
   methods: {
     init() {
       this.player = videojs(this.$refs.videoPlayer, this.options, function() {
         // ready
-        console.log(this)
       });
     }
   },

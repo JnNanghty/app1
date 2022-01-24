@@ -137,7 +137,7 @@
 
 </style>
 <template>
-  <div class="main" :style="{background: deviceConfig.background, backgroundSize: 'cover'}">
+  <div class="main" :style="{background: deviceConfig.background}">
     <div class="grid-content">
       <div class="row1">
         <div class="course-info-content">
@@ -159,10 +159,10 @@
             </div>
           </div>
           <div class="qiandao-info">
-            <div class="qiandao xiegang">应到<br>0</div>
-            <div class="qiandao xiegang">实到<br>0</div>
+            <div class="qiandao xiegang">应到<br>{{ attendanceInfo.students.length }}</div>
+            <div class="qiandao xiegang">实到<br>{{ arrived.length }}</div>
             <div class="qiandao">未到<br>
-              <span style="color: #ffa700">0</span>
+              <span style="color: #ffa700">{{ notArrived.length }}</span>
             </div>
           </div>
         </div>
@@ -170,10 +170,10 @@
       <div class="row2">
         <div class="people-name-content">
           <div class="people-name">
-            已到：{{ mergeText(arrived) }}
+            已到：{{ arrivedStudents }}
           </div>
           <div class="people-name">
-            未到：{{ mergeText(notArrived) }}
+            未到：{{ notArrivedStudents }}
           </div>
         </div>
         <div class="sign-in-content">
@@ -213,18 +213,23 @@ export default {
       terminalId: null,
       currentCourse: {},
       deviceConfig: {
-        background: 'url(' + require('../../assets/default_background.jpg') + ') no-repeat'
+        background: 'url(' + require('../../assets/default_background.jpg') + ') 0/cover no-repeat'
       },
-      attendanceInfo: {},
+      attendanceInfo: {
+        students: []
+      },
       notArrived: [],
       arrived: []
     }
+  },
+  created() {
+    this.currentCourse = ls.get('currentCourse');
   },
   mounted() {
     const config = ls.get('deviceConfig');
     const serviceUrl = ls.get('serviceUrl') || '';
     if (config.background) {
-      this.deviceConfig.background = 'url(' + serviceUrl + config.background + ')';
+      this.deviceConfig.background = 'url(' + serviceUrl + config.background + ') 0/cover no-repeat';
     }
     if (this.terminalId && (this.currentCourse && this.currentCourse.courseId)) {
       this.startSign();
@@ -232,18 +237,33 @@ export default {
 
     mitt.on('brushCard', this.brushCard);
   },
+  computed: {
+    arrivedStudents() {
+      return this.mergeText(this.arrived)
+    },
+    notArrivedStudents() {
+      return this.mergeText(this.notArrived);
+    }
+  },
   methods: {
     brushCard(ic) {
       service.post('classCard/signIn', {
         ic,
-        lessonId: 0
+        lessonId: this.attendanceInfo.id
       }).then(res => {
-        console.log(res.message);
-        console.log(res.data.label);
-        console.log(res.data.message);
         msg({
           message: res.data.label + ',' + res.data.message + '!'
         }); // xxx 签到成功  重复签到  迟到   签到未开始
+        if (res.data.message !== '重复签到' || res.data.message !== '签到未开始') {
+          this.notArrived = this.notArrived.filter(item => {
+            if (item.label === res.data.label) {
+              this.arrived.push(item);
+              return false;
+            } else {
+              return true;
+            }
+          });
+        }
       })
     },
     startSign() {
@@ -253,7 +273,14 @@ export default {
         startSource: this.currentCourse.startSource,
         endSource: this.currentCourse.endSource
       }).then(res => {
-        this.attendanceInfo = res;
+        this.attendanceInfo = res.data;
+        res.data.students.forEach(s => {
+          if (s.signInTime) {
+            this.arrived.push(s);
+          } else {
+            this.notArrived.push(s)
+          }
+        })
         msg({
           message: '开始签到！'
         })

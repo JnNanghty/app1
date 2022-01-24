@@ -1,4 +1,4 @@
-# app1
+# 电子班牌系统
 
 ## Project setup
 ```
@@ -17,3 +17,7 @@ yarn build
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+
+

@@ -23,6 +23,12 @@
 
 .__login-qrcode-wrap, .__login-video-wrap {
   flex: 1;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  text-align: center;
+  align-items: center;
 }
 
 .content-transform-enter-active,
@@ -36,13 +42,14 @@
 }
 </style>
 <template>
-  <div to="body">
+  <div>
     <div class="__login-shadow" @click.self="close" v-if="visible">
       <transition name="content-transform">
         <div class="__login-main" v-if="visibleMain">
           <div class="__login-qrcode-wrap">
-            <div>二维码
-              <button @click="loginSuccess">点击登录成功</button>
+            <div @click="loginSuccess">
+              <img :src="qrCodeUrl" alt=""/>
+              <p>小程序扫描二维码</p>
             </div>
           </div>
           <div class="__login-video-wrap">
@@ -58,22 +65,37 @@ import service from "@/api/services";
 import {setToken} from "@/util/auth";
 import mitt from "@/util/mitt";
 import {msg} from "@/components/message";
+import ls from "@/store/ls";
+import QRCode from 'qrcode'
+
 export default {
   name: 'Login',
   emits: ['loginSuccess'],
   data() {
     return {
       visible: false,
-      visibleMain: false
+      visibleMain: false,
+      qrCodeUrl: ''
     };
   },
   created() {
     mitt.on('brushCard', this.brushCard);
   },
+  mounted() {
+    this.$nextTick(() => {
+      document.body.appendChild(this.$el);
+    });
+    this.generateQrCode();
+  },
   beforeDestroy() {
     mitt.off('brushCard');
   },
   methods: {
+    generateQrCode() {
+      QRCode.toDataURL('我是傻逼').then(url => {
+        this.qrCodeUrl = url;
+      });
+    },
     close() {
       this.visibleMain = false;
     },
@@ -87,6 +109,7 @@ export default {
         ic: ic
       }).then(res => {
         setToken(res.token);
+        ls.set('userInfo', res, 6e5);
         this.loginSuccess();
       }, () => {
         msg({

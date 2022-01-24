@@ -6,6 +6,7 @@ function arrayBuffer2string(buf) {
 }
 
 if (window.serialPortPlugin) {
+  // /dev/ttyS3   波特率9600
   window.serialPortPlugin.init(3, 9600, res => {
     console.log('serialPort插件init success');
     // 要把ic卡转成16进制字符串

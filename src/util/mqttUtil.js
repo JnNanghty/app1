@@ -2,7 +2,7 @@ import mitt from "@/util/mitt";
 
 if (window.cordova) {
   cordova.plugins.CordovaMqTTPlugin.connect({
-    url: "tcp://192.168.1.179", //a public broker used for testing purposes only. Try using a self hosted broker for production.
+    url: 'tcp://192.168.1.179',
     port: 1883,
     clientId: 'device/' + window.device.uuid,
     success: function() {
@@ -12,7 +12,7 @@ if (window.cordova) {
       cordova.plugins.CordovaMqTTPlugin.subscribe({
         topic: topic,
         qos: 0,
-        success: function(s) {
+        success: function() {
           console.log('mqtt subscribe success');
           cordova.plugins.CordovaMqTTPlugin.listen(topic, function(payload, params) {
             //Callback:- (If the user has published to /topic/room/hall)
@@ -20,7 +20,6 @@ if (window.cordova) {
             //params : {singlewc:room,multiwc:hall}
             console.log('mqtt receive data');
             console.log(payload);
-            console.log(JSON.stringify(params));
             const data = JSON.parse(payload);
             if (data.type === 'config') {
               mitt.emit('mqttConfig', data.data); // 修改背景图和logo，模块的定制

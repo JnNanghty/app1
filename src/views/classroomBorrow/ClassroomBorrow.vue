@@ -15,12 +15,23 @@
 </style>
 <template>
   <div class="main">
-    <div>
+<!--    <div>-->
+<!--      <div class="list-item" v-for="(item, index) in borrowList" :key="item.id" @click="goPage(item.id)">-->
+<!--        {{ item.creator && item.creator.label }} {{ item.room && item.room.label }}-->
+<!--        {{ item.status && item.status.label }} {{ item.reason }} {{ index }}-->
+<!--      </div>-->
+<!--    </div>-->
+    <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="loadData"
+    >
       <div class="list-item" v-for="(item, index) in borrowList" :key="item.id" @click="goPage(item.id)">
         {{ item.creator && item.creator.label }} {{ item.room && item.room.label }}
         {{ item.status && item.status.label }} {{ item.reason }} {{ index }}
       </div>
-    </div>
+    </van-list>
   </div>
 </template>
 <script>
@@ -35,12 +46,15 @@ export default {
       borrowList: [],
       count: 10,
       totalCount: 0,
-      userId: null
+      userId: null,
+      loading: false,
+      finished: false
     }
   },
   mounted() {
-    this.userId = ls.get('');
-    if (this.userId) {
+    const userInfo = ls.get('userInfo');
+    if (userInfo) {
+      this.userId = userInfo.extraInformation.role.id;
       this.getBorrowList()
     } else {
       msg({
@@ -64,6 +78,7 @@ export default {
       }).then(res => {
         this.borrowList = res.list;
         this.totalCount = res.totalCount;
+        this.loading = false;
       });
     },
     goPage(id) {
@@ -74,12 +89,11 @@ export default {
         }
       })
     },
-    loadData(ev) {
+    loadData() {
       this.count += 5;
       this.getBorrowList()
-      ev.target.complete();
       if (this.count >= this.totalCount) {
-        ev.target.disabled = true;
+        this.finished = true;
       }
     }
   }

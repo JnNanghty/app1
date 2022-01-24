@@ -1,12 +1,6 @@
-class MessageBox extends HTMLElement {
-  constructor({
-                message = '',
-                duration
-              }) {
-    super();
-    const wrap = document.createElement('div');
-    this.wrap = wrap;
-    wrap.setAttribute('style', `
+function MessageBox({message = '', duration}) {
+  const wrap = document.createElement('div');
+  wrap.setAttribute('style', `
       position: absolute;
       top: 0;
       left: 0;
@@ -25,56 +19,44 @@ class MessageBox extends HTMLElement {
       color: #ffffff;
       font-size: 1rem;
     `);
-    const keyframe = [
-      {transform: 'translateY(-100%)'},
-      {transform: 'translateY(0)'}
-    ];
-    wrap.animate(keyframe, {
-      duration: 300,
-      fill: 'forwards',
-      easing: 'ease'
-    });
-    wrap.innerHTML = message;
-    const shadow = this.attachShadow({mode: 'closed'});
-    shadow.appendChild(wrap);
-    setTimeout(() => {
-      this.close();
-    }, duration || 2e3);
-  }
+  const keyframe = [
+    {transform: 'translateY(-100%)'},
+    {transform: 'translateY(0)'}
+  ];
+  wrap.animate(keyframe, {
+    duration: 300,
+    fill: 'forwards',
+    easing: 'ease'
+  });
+  wrap.innerHTML = message;
 
-  close() {
+  document.body.appendChild(wrap);
+
+  setTimeout(() => {
+    close();
+  }, duration || 2e3);
+
+  function close() {
     const keyframe = [
       {transform: 'translateY(0)'},
       {transform: 'translateY(-100%)'}
     ];
-    const downAnimate = this.wrap.animate(keyframe, {
+    const downAnimate = wrap.animate(keyframe, {
       duration: 300,
       fill: 'forwards',
       easing: 'ease'
     });
     downAnimate.onfinish = () => {
-      this.destroy();
+      console.log('destroy')
+      destroy();
     };
   }
 
-  destroy() {
-    const body = document.getElementsByTagName('body')[0];
-    body.removeChild(this);
+  function destroy() {
+    document.body.removeChild(wrap);
   }
 }
 
-if (window.customElements) {
-  window.customElements.define('message-box', MessageBox); // chrome 54版本以后
-} else {
-  document.registerElement('message-box', MessageBox); // chrome 54版本以前
-}
-
 export function msg(options) {
-  const body = document.getElementsByTagName('body')[0];
-  const msgDom = new MessageBox(options);
-  body.appendChild(msgDom);
+  new MessageBox(options);
 }
-
-// export function msg(options) {
-//   console.log(options);
-// }

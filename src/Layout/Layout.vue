@@ -73,28 +73,6 @@
   white-space: nowrap;
 }
 
-.notice {
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-  z-index: 10;
-  background: #a9ccf5;
-  height: 1.5rem;
-}
-
-.notice-text {
-  white-space: nowrap;
-  width: fit-content;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  height: 100%;
-  font-size: 1rem;
-  line-height: 1.5rem;
-  letter-spacing: 3px;
-}
-
 .app-item-icon {
   font-size: 2rem;
   padding: .5rem;
@@ -105,26 +83,29 @@
 .fade-enter-active {
   transition: transform .5s, opacity .5s;
 }
-.fade-leave-active{
+
+.fade-leave-active {
 
 }
+
 .fade-enter {
   transform: translateX(-50%);
 }
+
 .fade-leave-to, .fade-enter {
   opacity: 0;
 }
 </style>
 <template>
   <div>
-    <div class="app-main-content" :style="{background: config.background, backgroundSize: 'cover'}">
+    <div class="app-main-content" :style="{background: config.background}">
       <header class="header">
         <div class="logo">
           <img style="height: 100%;" :src="config.logo" alt="">
         </div>
         <transition name="fade">
           <div class="header-center" v-show="$router.currentRoute.name !== 'Home'">
-            <van-icon class="location-logo" name="location" />
+            <van-icon class="location-logo" name="location"/>
             {{ terminalInfo.label }}
           </div>
         </transition>
@@ -148,14 +129,11 @@
       <footer class="footer">
         <!--    应用图标   -->
         <div class="app-icon" v-for="item in appList" :key="item.path" @click="goItem(item)" v-show="item.visible">
-          <van-icon class="app-item-icon" :style="item.style" :name="item.icon" />
+          <van-icon class="app-item-icon" :style="item.style" :name="item.icon"/>
           <br>
           <span>{{ item.label }}</span>
         </div>
       </footer>
-      <div class="notice" v-show="showNotice">
-        <div ref="scrollText" class="notice-text">{{ noticeText }}</div>
-      </div>
     </div>
     <Login ref="login" @loginSuccess="handleLoginSuccess"></Login>
   </div>
@@ -247,17 +225,18 @@ export default {
           label: '报修',
           name: 'home',
           path: 'Repair',
-          needLogin: false,
+          needLogin: true,
           visible: true
         },
       ],
-      terminalInfo: {},
+      terminalInfo: {}, // 教室信息  label
       weatherInfo: {
         temperature: '无',
         weather: '无',
         icon: ''
       },
-      timeInterval: null,
+      weatherInterval: null,
+      timeInterval: null, // 用于右上角时间
       timeInfo: {
         currentTime: timeUtil.formatTime(time),
         currentDate: timeUtil.formatDate(time),
@@ -266,10 +245,8 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$router);
-    // this.scroll();
     mitt.on('refresh', this.refresh);
-    mitt.on('mqttRealTimeBroadcast', this.broadcast);
+
     mitt.on('mqttConfig', (data) => {
       ls.set('deviceConfig', data);
       this.handleConfig(data);
@@ -284,33 +261,21 @@ export default {
       this.timeInfo.currentDate = timeUtil.formatDate(time);
       this.timeInfo.currentDay = timeUtil.getCurrentDay(time);
     }, 1e3);
+
+    // 每六个小时查一次天气
+    this.weatherInterval = setInterval(() => {
+      this.getPosition();
+    }, 6 * 36e5);
   },
   beforeDestroy() {
+    mitt.off('refresh');
     clearInterval(this.timeInterval);
+    clearInterval(this.weatherInterval);
   },
   methods: {
-    broadcast(data) {
-      this.noticeText = data;
-      this.scroll();
-    },
-    // 通知滚动Animate
-    scroll() {
-      const keyframe = [
-        {transform: 'translateX(100vw)'},
-        {transform: 'translateX(-100%)'}
-      ];
-      const dom = this.$refs.scrollText;
-      const animate = dom.animate(keyframe, {
-        duration: 2e4,
-        fill: 'forwards',
-        easing: 'linear'
-      });
-      animate.onfinish = () => {
-        this.showNotice = false;
-      }
-    },
     // 用name导航  传参用params
     goItem(item) {
+      if (this.$route.name === item.path) return;
       const token = getToken();
       if (item.needLogin && !token) {
         this.loginToPath = item.path;
@@ -329,15 +294,15 @@ export default {
       });
     },
     refresh() {
-      console.log('refreshLayout');
+      console.log('Layout refresh')
       this.terminalId = ls.get('terminalId');
       if (this.terminalId) {
         this.getTerminalInfo()
       }
       const serviceUrl = ls.get('serviceUrl');
       if (serviceUrl) {
-        this.getConfig();
         this.getPosition();
+        this.getConfig();
       }
     },
     getTerminalInfo() {
@@ -351,19 +316,19 @@ export default {
     getConfig() {
       service.post('classCard/getConfig').then((res) => {
         if (res.message === 'success') {
-          const serviceUrl = ls.get('serviceUrl') || '';
           ls.set('deviceConfig', res.data);
+          mitt.emit('mqttConfig', res.data);
           this.handleConfig(res.data);
         } else {
           msg({
             message: '获取班牌信息失败！'
           });
         }
-      })
+      });
     },
     handleConfig(data) {
       const serviceUrl = ls.get('serviceUrl') || '';
-      this.config.background = data.background ? ('url(' + serviceUrl + data.background + ')') : 'url(' + require('../assets/default_background.jpg') + ') no-repeat';
+      this.config.background = data.background ? ('url(' + serviceUrl + data.background + ') 0/cover no-repeat') : 'url(' + require('../assets/default_background.jpg') + ') 0/cover no-repeat';
       this.config.logo = serviceUrl + data.logo;
 
       const custom = JSON.parse(data.custom);

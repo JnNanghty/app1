@@ -1,15 +1,24 @@
 <template>
-  <div id="app">
+  <div id="app" :style="{background: background}">
     <transition name="up">
       <router-view/>
     </transition>
+    <div class="notice" v-show="showNotice">
+      <div ref="scrollText" class="notice-text">{{ noticeText }}</div>
+    </div>
   </div>
 </template>
 <script>
 import mitt from "@/util/mitt";
+import ls from "@/store/ls";
+
 export default {
   data() {
-    return {}
+    return {
+      showNotice: false,
+      noticeText: '',
+      background: 'url(' + require('./assets/default_background.jpg') + ') no-repeat'
+    }
   },
   mounted() {
     mitt.on('mqttExam', (data) => {
@@ -29,14 +38,43 @@ export default {
         }
       });
     })
+
+    mitt.on('mqttRealTimeBroadcast', this.broadcast);
+
+    mitt.on('mqttConfig', (data) => {
+      const serviceUrl = ls.get('serviceUrl') || '';
+      this.background = data.background ? ('url(' + serviceUrl + data.background + ') 0/cover no-repeat') : ('url(' + require('./assets/default_background.jpg') + ') 0/cover no-repeat');
+    });
+
   },
   methods: {
-
+    broadcast(data) {
+      this.showNotice = true;
+      this.noticeText = data.content;
+      console.log('开始播报！！！！！！！！');
+      this.scroll();
+    },
+    // 通知滚动Animate
+    scroll() {
+      const keyframe = [
+        {transform: 'translateX(100vw)'},
+        {transform: 'translateX(-100%)'}
+      ];
+      const dom = this.$refs.scrollText;
+      const animate = dom.animate(keyframe, {
+        duration: 2e4,
+        fill: 'forwards',
+        easing: 'linear'
+      });
+      animate.onfinish = () => {
+        this.showNotice = false;
+      }
+    },
   }
 }
 </script>
 <style>
-#app{
+#app {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -44,19 +82,44 @@ export default {
   right: 0;
   width: 100%;
   height: 100%;
-  background: url("./assets/default_background.jpg") no-repeat;
-  background-size: cover;
 }
+
 .up-enter-active {
   /*transition: transform .5s, opacity .5s;*/
 }
-.up-leave-active{
+
+.up-leave-active {
   transition: transform .5s, opacity .5s;
 }
+
 .up-leave-to {
   transform: translateY(-50%);
 }
+
 .up-leave-to, .up-enter {
   opacity: 0;
+}
+
+
+.notice {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  z-index: 10;
+  background: #a9ccf5;
+  height: 1.5rem;
+}
+
+.notice-text {
+  white-space: nowrap;
+  width: fit-content;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  letter-spacing: 3px;
 }
 </style>

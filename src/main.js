@@ -10,11 +10,12 @@ import './util/adaptive';
 import 'qweather-icons/font/qweather-icons.css';
 import './util/mqttUtil';
 import './util/serialPort';
-import {Icon} from 'vant';
-import 'vant/lib/icon/local.css';
 
+import Vant from 'vant';
+import 'vant/lib/index.css';
+
+Vue.use(Vant);
 Vue.config.productionTip = false
-Vue.use(Icon);
 new Vue({
   router,
   store,
