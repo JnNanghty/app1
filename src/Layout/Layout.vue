@@ -331,7 +331,7 @@ export default {
       this.config.background = data.background ? ('url(' + serviceUrl + data.background + ') 0/cover no-repeat') : 'url(' + require('../assets/default_background.jpg') + ') 0/cover no-repeat';
       this.config.logo = serviceUrl + data.logo;
 
-      const custom = JSON.parse(data.custom);
+      const custom = JSON.parse(data.custom) || [];
       this.appList.forEach(i => {
         custom.forEach(j => {
           if (i.name === j.name) {

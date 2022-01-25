@@ -183,7 +183,8 @@ export default {
     if (serviceUrl && token) {
       this.getTerminal();
     }
-    this.classroom = ls.get('terminalInfo').label;
+    const terminalInfo = ls.get('terminalInfo') || {};
+    this.classroom = terminalInfo.label;
   },
   methods: {
     getTerminal() {
