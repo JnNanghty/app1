@@ -75,8 +75,11 @@
         <template v-if="activeDevice.type.id === 5">
           <camera-player :camera="activeDevice"></camera-player>
         </template>
+        <template v-else-if="activeDevice.type.id === 2">
+          <computer-player :computer="activeDevice" :power="true"></computer-player>
+        </template>
         <template v-else>
-          <img :src="activeDevice.src" alt="">
+          <div>没有设备！</div>
         </template>
       </div>
       <div class="right-content">
@@ -108,8 +111,8 @@
             <template v-if="item.type.id === 5">
               <camera-player :camera="item"></camera-player>
             </template>
-            <template v-else>
-              <img :src="item.src" alt="">
+            <template v-else-if="item.type.id === 2">
+              <computer-player :computer="item" :power="true"></computer-player>
             </template>
           </div>
         </div>
@@ -119,6 +122,7 @@
 </template>
 <script>
 import CameraPlayer from "./components/CameraPlayer";
+import ComputerPlayer from "@/views/patrol/components/ComputerPlayer";
 import ls from "@/store/ls";
 import service from "@/api/services";
 import {setToken} from "@/util/auth";
@@ -137,7 +141,8 @@ export default {
     }
   },
   components: {
-    CameraPlayer
+    CameraPlayer,
+    ComputerPlayer
   },
   computed: {
     filterDevices() {

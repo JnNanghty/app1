@@ -11,10 +11,9 @@ export default {
     return {}
   },
   created() {
-    console.log('节目模式参数')
     const data = this.$route.params.data
+    console.log('节目模式参数')
     console.log(data);
-    console.log(JSON.stringify(data));
   },
   mounted() {
   },

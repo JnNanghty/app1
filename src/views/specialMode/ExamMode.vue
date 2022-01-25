@@ -4,9 +4,9 @@
 <template>
   <div class="main">
     <div>
-      考试时间： {{ time }}
-      考场号： 123
-      考试科目： 数学
+      考试时间： {{ examData.examStartDate }}
+      考场号： {{ examData.examRoomNo }}
+      考试科目： {{ examData.examSubject }}
     </div>
     <button @click="show">123123123</button>
     <Login ref="login"></Login>
@@ -24,8 +24,15 @@ export default {
   },
   data() {
     return {
-      time: timeUtil.formatTime(new Date())
+      examData: {
+        examRoomNo: '考场号',
+        examStartDate: '开始时间',
+        examSubject: '考试科目'
+      }
     }
+  },
+  created() {
+    this.examData = this.$route.params.data;
   },
   mounted() {
 

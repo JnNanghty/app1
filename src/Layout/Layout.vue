@@ -160,7 +160,7 @@ export default {
       loginToPath: null,
       terminalId: null,
       config: {
-        background: 'url(' + require('../assets/default_background.jpg') + ') no-repeat',
+        background: 'url(' + require('../assets/default_background.jpg') + ') 0/cover no-repeat',
         logo: '',
         label: ''
       },
@@ -268,7 +268,7 @@ export default {
     }, 6 * 36e5);
   },
   beforeDestroy() {
-    mitt.off('refresh');
+    mitt.off('refresh', this.refresh);
     clearInterval(this.timeInterval);
     clearInterval(this.weatherInterval);
   },

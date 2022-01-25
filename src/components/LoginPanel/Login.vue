@@ -88,7 +88,7 @@ export default {
     this.generateQrCode();
   },
   beforeDestroy() {
-    mitt.off('brushCard');
+    mitt.off('brushCard', this.brushCard);
   },
   methods: {
     generateQrCode() {

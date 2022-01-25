@@ -47,7 +47,6 @@ function MessageBox({message = '', duration}) {
       easing: 'ease'
     });
     downAnimate.onfinish = () => {
-      console.log('destroy')
       destroy();
     };
   }

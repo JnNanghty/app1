@@ -213,7 +213,17 @@ export default {
       terminalId: null,
       currentCourse: {},
       deviceConfig: {
-        background: 'url(' + require('../../assets/default_background.jpg') + ') 0/cover no-repeat'
+        background: 'url(' + require('../../assets/default_background.jpg') + ') 0/cover no-repeat',
+        signInTypes: [{
+          name: 'card',
+          value: true
+        }, {
+          name: 'code',
+          value: true
+        }, {
+          name: 'face',
+          value: true
+        }]
       },
       attendanceInfo: {
         students: []
@@ -231,11 +241,15 @@ export default {
     if (config.background) {
       this.deviceConfig.background = 'url(' + serviceUrl + config.background + ') 0/cover no-repeat';
     }
+    this.deviceConfig.signInTypes = JSON.parse(config.signInTypes);
     if (this.terminalId && (this.currentCourse && this.currentCourse.courseId)) {
       this.startSign();
     }
 
     mitt.on('brushCard', this.brushCard);
+  },
+  beforeDestroy() {
+    mitt.off('brushCard', this.brushCard);
   },
   computed: {
     arrivedStudents() {
@@ -247,6 +261,16 @@ export default {
   },
   methods: {
     brushCard(ic) {
+      for (const item of this.deviceConfig.signInTypes) {
+        if (item.name === 'card') {
+          if (item.value === false) {
+            msg({
+              message: '不允许刷卡签到！'
+            });
+            return;
+          }
+        }
+      }
       service.post('classCard/signIn', {
         ic,
         lessonId: this.attendanceInfo.id

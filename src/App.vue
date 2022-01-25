@@ -17,7 +17,7 @@ export default {
     return {
       showNotice: false,
       noticeText: '',
-      background: 'url(' + require('./assets/default_background.jpg') + ') no-repeat'
+      background: 'url(' + require('./assets/default_background.jpg') + ') 0/cover no-repeat'
     }
   },
   mounted() {
@@ -51,7 +51,6 @@ export default {
     broadcast(data) {
       this.showNotice = true;
       this.noticeText = data.content;
-      console.log('开始播报！！！！！！！！');
       this.scroll();
     },
     // 通知滚动Animate
@@ -68,6 +67,7 @@ export default {
       });
       animate.onfinish = () => {
         this.showNotice = false;
+        this.noticeText = '';
       }
     },
   }

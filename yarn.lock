@@ -3414,6 +3414,11 @@ es-to-primitive@^1.2.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
 
+es6-promise@^4.2.8:
+  version "4.2.8"
+  resolved "https://registry.nlark.com/es6-promise/download/es6-promise-4.2.8.tgz#4eb21594c972bc40553d276e510539143db53e0a"
+  integrity sha1-TrIVlMlyvEBVPSduUQU5FD21Pgo=
+
 escalade@^3.1.1:
   version "3.1.1"
   resolved "https://registry.npm.taobao.org/escalade/download/escalade-3.1.1.tgz#d8cfdc7000965c5a0174b4a82eaa5c0552742e40"
@@ -3743,6 +3748,14 @@ flush-write-stream@^1.0.0:
   dependencies:
     inherits "^2.0.3"
     readable-stream "^2.3.6"
+
+flv.js@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.nlark.com/flv.js/download/flv.js-1.6.2.tgz#fa3340fe3f7ee01d3977f7876aee66b8436e5922"
+  integrity sha1-+jNA/j9+4B05d/eHau5muENuWSI=
+  dependencies:
+    es6-promise "^4.2.8"
+    webworkify-webpack "^2.1.5"
 
 follow-redirects@^1.0.0, follow-redirects@^1.14.7:
   version "1.14.7"
@@ -7854,10 +7867,24 @@ verror@1.10.0:
     videojs-font "3.2.0"
     videojs-vtt.js "^0.15.3"
 
+videojs-flash@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.nlark.com/videojs-flash/download/videojs-flash-2.2.1.tgz#1a225dbb1ced200ae9bbf15e01fe4a61086d90f1"
+  integrity sha1-GiJduxztIArpu/FeAf5KYQhtkPE=
+  dependencies:
+    global "^4.4.0"
+    video.js "^6 || ^7"
+    videojs-swf "5.4.2"
+
 videojs-font@3.2.0:
   version "3.2.0"
   resolved "https://registry.npm.taobao.org/videojs-font/download/videojs-font-3.2.0.tgz#212c9d3f4e4ec3fa7345167d64316add35e92232"
   integrity sha1-ISydP05Ow/pzRRZ9ZDFq3TXpIjI=
+
+videojs-swf@5.4.2:
+  version "5.4.2"
+  resolved "https://registry.nlark.com/videojs-swf/download/videojs-swf-5.4.2.tgz#6964a9bff903b732f3e465314ae478a02a17e8ab"
+  integrity sha1-aWSpv/kDtzLz5GUxSuR4oCoX6Ks=
 
 videojs-vtt.js@^0.15.3:
   version "0.15.3"
@@ -8111,6 +8138,11 @@ websocket-extensions@>=0.1.1:
   version "0.1.4"
   resolved "https://registry.nlark.com/websocket-extensions/download/websocket-extensions-0.1.4.tgz#7f8473bc839dfd87608adb95d7eb075211578a42"
   integrity sha1-f4RzvIOd/YdgituV1+sHUhFXikI=
+
+webworkify-webpack@^2.1.5:
+  version "2.1.5"
+  resolved "https://registry.nlark.com/webworkify-webpack/download/webworkify-webpack-2.1.5.tgz#bf4336624c0626cbe85cf1ffde157f7aa90b1d1c"
+  integrity sha1-v0M2YkwGJsvoXPH/3hV/eqkLHRw=
 
 which-boxed-primitive@^1.0.2:
   version "1.0.2"
