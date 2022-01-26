@@ -42,7 +42,7 @@
 }
 </style>
 <template>
-  <div>
+  <teleport to="body">
     <div class="__login-shadow" @click.self="close" v-if="visible">
       <transition name="content-transform">
         <div class="__login-main" v-if="visibleMain">
@@ -58,7 +58,7 @@
         </div>
       </transition>
     </div>
-  </div>
+  </teleport>
 </template>
 <script>
 import service from "@/api/services";
@@ -79,9 +79,9 @@ export default {
     };
   },
   created() {
-    mitt.on('brushCard', this.brushCard);
   },
   mounted() {
+    mitt.on('brushCard', this.brushCard);
     this.generateQrCode();
   },
   beforeDestroy() {
@@ -105,9 +105,18 @@ export default {
       service.post('auth/icLogin', {
         ic: ic
       }).then(res => {
-        setToken(res.token);
-        ls.set('userInfo', res, 6e5);
-        this.loginSuccess();
+        if (res) {
+          setToken(res.token);
+          ls.set('userInfo', res, 6e5);
+          this.loginSuccess();
+          msg({
+            message: '登录成功！'
+          })
+        } else {
+          msg({
+            message: '未找到该用户！'
+          });
+        }
       }, () => {
         msg({
           message: '登录失败！'

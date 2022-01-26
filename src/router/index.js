@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import {createRouter, createWebHashHistory} from "vue-router";
 import Layout from "@/Layout/Layout";
 import Curriculum from "@/views/curriculum/Curriculum";
 import HomePage from "@/views/home/HomePage";
@@ -11,8 +10,6 @@ import Repair from '@/views/repair/Repair'
 import Attendance from '@/views/attendance/Attendance'
 import ExamMode from '@/views/specialMode/ExamMode'
 import ProgrammeMode from '@/views/specialMode/ProgrammeMode'
-
-Vue.use(VueRouter)
 
 
 const routes = [
@@ -66,7 +63,8 @@ const routes = [
   }
 ]
 
-const router = new VueRouter({
+const router = createRouter({
+  history: createWebHashHistory(),
   routes
 })
 

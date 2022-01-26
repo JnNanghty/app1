@@ -81,18 +81,19 @@
 }
 
 .fade-enter-active {
-  transition: transform .5s, opacity .5s;
+  transition: transform .5s ease, opacity .5s ease;
 }
 
 .fade-leave-active {
 
 }
 
-.fade-enter {
+.fade-enter-from {
+  opacity: 0;
   transform: translateX(-50%);
 }
 
-.fade-leave-to, .fade-enter {
+.fade-leave-to {
   opacity: 0;
 }
 </style>
@@ -122,9 +123,11 @@
         </div>
       </header>
       <main class="main-content">
-        <transition name="fade">
-          <router-view></router-view>
-        </transition>
+        <router-view v-slot="{Component}">
+          <transition name="fade">
+            <component :is="Component"></component>
+          </transition>
+        </router-view>
       </main>
       <footer class="footer">
         <!--    应用图标   -->

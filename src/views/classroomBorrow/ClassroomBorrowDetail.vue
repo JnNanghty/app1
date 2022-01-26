@@ -42,7 +42,7 @@
         <input type="text">
       </div>
     </div>
-    <template to="body">
+    <teleport to="body">
       <div class="shadow" @click.self="showPicker = false" v-if="showPicker">
         <div class="popup-content">
           <van-cascader
@@ -53,7 +53,7 @@
               @finish="onFinish"></van-cascader>
         </div>
       </div>
-    </template>
+    </teleport>
   </div>
 </template>
 

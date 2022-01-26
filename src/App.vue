@@ -1,8 +1,10 @@
 <template>
   <div id="app" :style="{background: background}">
-    <transition name="up">
-      <router-view/>
-    </transition>
+    <router-view v-slot="{Component}">
+      <transition name="up">
+        <component :is="Component"></component>
+      </transition>
+    </router-view>
     <div class="notice" v-show="showNotice">
       <div ref="scrollText" class="notice-text">{{ noticeText }}</div>
     </div>
@@ -89,14 +91,14 @@ export default {
 }
 
 .up-leave-active {
-  transition: transform .5s, opacity .5s;
+  transition: transform .5s ease, opacity .5s ease;
 }
 
 .up-leave-to {
   transform: translateY(-50%);
 }
 
-.up-leave-to, .up-enter {
+.up-leave-to, .up-enter-from {
   opacity: 0;
 }
 

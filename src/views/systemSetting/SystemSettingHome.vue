@@ -80,17 +80,13 @@
             readonly
             clickable
             name="area"
-            :value="classroom"
+            v-model="classroom"
             label="教室绑定"
             placeholder="点击选择教室"
             @click="openPicker"
         />
       </div>
       <div>
-        <!--        <div>服务器地址</div>-->
-        <!--        <button class="check-button" @click="checkConnect">检查</button>-->
-        <!--        <input v-model="serviceUrl" type="text"/>-->
-
         <van-field
             v-model="serviceUrl"
             type="text"
@@ -126,7 +122,7 @@
         </div>
       </div>
     </div>
-    <div to="body">
+    <teleport to="body">
       <div class="shadow" @click.self="showPicker = false" v-if="showPicker">
         <div class="popup-content">
           <van-cascader
@@ -137,8 +133,8 @@
               @finish="onFinish"></van-cascader>
         </div>
       </div>
-    </div>
-    <Login @loginSuccess="handleLoginSuccess" ref="login"></Login>
+    </teleport>
+    <PasswordLogin @loginSuccess="handleLoginSuccess" ref="pswLogin"></PasswordLogin>
   </div>
 </template>
 
@@ -148,13 +144,14 @@ import ls from "@/store/ls";
 import service from "@/api/services";
 import {msg} from "@/components/message";
 import mitt from "@/util/mitt";
+import PasswordLogin from "@/components/LoginPanel/PasswordLogin";
+import {getToken, removeToken} from "@/util/auth";
+import {initMqtt} from "@/util/mqttUtil";
 
-import Login from "@/components/LoginPanel/Login";
-import {getToken, setToken} from "@/util/auth";
 
 export default {
   components: {
-    Login
+    PasswordLogin
   },
   data() {
     let mac = 'xxxxxx'
@@ -233,6 +230,8 @@ export default {
           msg({
             message: '没有权限！请重新登录！'
           });
+          removeToken()
+          ls.remove('userInfo');
           reject();
         });
       })
@@ -258,6 +257,7 @@ export default {
             message: '连接成功！'
           });
           mitt.emit('refresh');
+          initMqtt();
         }
       }, () => {
         ls.remove('serviceUrl')
@@ -273,7 +273,7 @@ export default {
         if (token) {
           this.showPicker = true;
         } else {
-          this.$refs.login.visible = true;
+          this.$refs.pswLogin.visible = true;
         }
       } else {
         msg({

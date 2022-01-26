@@ -1,8 +1,9 @@
 import mitt from "@/util/mitt";
 
-if (window.cordova) {
+export function initMqtt() {
+  if (window.cordova) {
   cordova.plugins.CordovaMqTTPlugin.connect({
-    url: 'tcp://192.168.1.179',
+    url: 'tcp://192.168.1.140',
     port: 1883,
     clientId: 'device/' + window.device.uuid,
     success: function() {
@@ -46,4 +47,5 @@ if (window.cordova) {
       console.log("mqtt disconnect");
     }
   })
+}
 }
