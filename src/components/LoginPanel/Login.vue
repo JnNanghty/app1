@@ -82,9 +82,6 @@ export default {
     mitt.on('brushCard', this.brushCard);
   },
   mounted() {
-    this.$nextTick(() => {
-      document.body.appendChild(this.$el);
-    });
     this.generateQrCode();
   },
   beforeDestroy() {
@@ -119,7 +116,7 @@ export default {
     },
     brushCard(res) {
       console.log(res);
-      this.icLogin();
+      this.icLogin(res);
     }
   },
   watch: {
