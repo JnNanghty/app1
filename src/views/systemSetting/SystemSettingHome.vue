@@ -146,7 +146,7 @@ import {msg} from "@/components/message";
 import mitt from "@/util/mitt";
 import PasswordLogin from "@/components/LoginPanel/PasswordLogin";
 import {getToken, removeToken} from "@/util/auth";
-import {initMqtt} from "@/util/mqttUtil";
+import {disConnectMqtt, initMqtt} from "@/util/mqttUtil";
 
 
 export default {
@@ -161,7 +161,7 @@ export default {
     return {
       showPassword: false,
       serviceConnect: false,
-      serviceUrl: 'http://192.168.1.179:8080',
+      serviceUrl: 'http://192.168.1.140:80',
       options: [],
       cascaderValue: '',
       classroom: '',
@@ -309,6 +309,9 @@ export default {
           msg({
             message: '绑定成功！'
           });
+          this.$router.replace({
+            name: 'Home'
+          });
         }
       }, () => {
         msg({
@@ -326,6 +329,9 @@ export default {
           mitt.emit('refresh');
           msg({
             message: '绑定成功！'
+          });
+          this.$router.replace({
+            name: 'Home'
           });
         }
       }, () => {

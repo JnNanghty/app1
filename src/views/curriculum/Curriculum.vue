@@ -126,10 +126,10 @@ export default {
         }
       }
       this.activeIndex = index;
-      const {x, width} = this.$refs.tabsLabelItem[this.activeIndex].getBoundingClientRect();
-      console.log(x, width);
+      const {left, width} = this.$refs.tabsLabelItem[this.activeIndex].getBoundingClientRect();
+      console.log(left, width);
       this.activeStyle = {
-        left: 'calc(' + x + 'px - 5rem)',
+        left: 'calc(' + left + 'px - 5rem)',
         width: width + 'px'
       };
     },

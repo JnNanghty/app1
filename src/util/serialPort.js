@@ -11,8 +11,6 @@ if (window.serialPortPlugin) {
     console.log('serialPort插件init success');
     // 要把ic卡转成16进制字符串
     const ic = parseInt(arrayBuffer2string(res));
-    console.log('10 ic:', ic);
-    console.log('16 ic:', ic.toString(16));
     mitt.emit('brushCard', ic.toString(16));
   }, err => {
     console.log('serialPort插件init error:');

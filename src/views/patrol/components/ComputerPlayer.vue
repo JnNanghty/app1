@@ -114,7 +114,7 @@ export default {
       }
     }
   },
-  destroyed: function() {
+  beforeUnmount() {
     clearInterval(this.interval);
   },
   methods: {

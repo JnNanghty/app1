@@ -32,14 +32,23 @@ ion-icon:active {
 }
 
 .curriculum-table {
-  display: grid;
-  grid-template-columns: 4fr repeat(7, 3fr);
-  grid-auto-rows: 2.5rem;
+  /*display: grid;*/
+  /*grid-template-columns: 4fr repeat(7, 3fr);*/
+  /*grid-auto-rows: 2.5rem;*/
+  display: flex;
   text-align: center;
 }
 
 .table-item {
   border: 1px solid #ffffff;
+}
+.table-col{
+  flex: 1;
+}
+.table-row{
+  border: 1px solid #ffffff;
+  min-height: 2.5rem;
+  box-sizing: border-box;
 }
 </style>
 <template>
@@ -47,21 +56,34 @@ ion-icon:active {
     <div class="week-curriculum-nav">第{{ currentWeek }}周</div>
     <div class="week-curriculum-content">
       <div class="pagination-button">
-        <van-icon @click="changeWeek('pre')" name="arrow-left" />
+        <van-icon @click="changeWeek('pre')" name="arrow-left"/>
       </div>
       <div class="content">
         <div class="curriculum-table">
-          <div class="table-item">课节时间</div>
-          <div class="table-item" v-for="item in simplifyNumberArray" :key="item">星期{{ item }}</div>
-          <div class="table-item" v-for="(item, index) in curriculum"
-               :key="index" @click="selectItem(item, index)"
-               :style="item && item.style">
-            {{ item && item.label }}
+<!--          <div class="table-item">课节时间</div>-->
+<!--          <div class="table-item" v-for="item in simplifyNumberArray" :key="item">星期{{ item }}</div>-->
+<!--          <div class="table-item" v-for="(item, index) in curriculum"-->
+<!--               :key="index" @click="selectItem(item, index)"-->
+<!--               :style="item && item.style">-->
+<!--            {{ item && item.label }}-->
+<!--          </div>-->
+          <div class="table-col">
+            <div class="table-row">课节时间</div>
+            <div class="table-row" v-for="(item, index) in sectionTime" :key="index">
+              {{ item }}
+            </div>
+          </div>
+          <div class="table-col" v-for="(item, index) in curriculum" :key="item">
+            <div class="table-row">星期{{ simplifyNumberArray[index] }}</div>
+            <div class="table-row" v-for="(course, courseIndex) in curriculum[index]"
+                 :key="courseIndex" :style="course && course.style" @click="selectItem(course, courseIndex)">
+              {{course && course.courseName}}
+            </div>
           </div>
         </div>
       </div>
       <div class="pagination-button">
-        <van-icon @click="changeWeek('next')" name="arrow" />
+        <van-icon @click="changeWeek('next')" name="arrow"/>
       </div>
     </div>
   </div>
@@ -109,24 +131,13 @@ export default {
       })
     },
     getCurriculum() {
+      // android webview 57 / chrome 57版本才实现 display:grid 所以以下代码需要改
       service.post('course/terminalCurriculum', {
         id: this.terminalId,
         weekNo: this.currentWeek
       }).then(res => {
-        let temp = [];
         // 空格子
         const sectionLen = this.sectionTime.length;
-        this.sectionTime.forEach((i, j) => {
-          temp.push({
-            label: i,
-            style: {
-              gridRowStart: j + 2,
-              gridRowEnd: j + 3,
-              gridColumnStart: 1,
-              gridColumnEnd: 2
-            }
-          });
-        });
         let data = [];
         res.result.forEach((item, index) => {
           let temp = [];
@@ -134,7 +145,11 @@ export default {
             let hasPush = false;
             item.forEach(course => {
               if (i >= course.startSession && i <= course.endSession) {
-                temp.push(course);
+                temp.push(Object.assign(course, {
+                  style: {
+                    height: (2.5 * (course.endSession - course.startSession + 1)) + 'rem'
+                  }
+                }));
                 i = course.endSession;
                 hasPush = true;
               }
@@ -144,26 +159,15 @@ export default {
               courseNumber: '',
               dayOfWeek: index + 1,
               startSession: i,
-              endSession: i
+              endSession: i,
+              style: {
+                height: '2.5rem'
+              }
             });
           }
           data.push(temp);
-        })
-        data.forEach((item, index) => {
-          // index 是星期
-          item.forEach(course => {
-            temp.push({
-              label: course.courseName,
-              style: {
-                gridRowStart: course.startSession + 1,
-                gridRowEnd: course.endSession + 2,
-                gridColumnStart: index + 2,
-                gridColumnEnd: index + 3
-              }
-            });
-          });
         });
-        this.curriculum = temp;
+        this.curriculum = data;
       });
     },
     calcCurrentWeek(firstWeek) {

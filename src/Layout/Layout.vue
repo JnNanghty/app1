@@ -270,7 +270,8 @@ export default {
       this.getPosition();
     }, 6 * 36e5);
   },
-  beforeDestroy() {
+  beforeUnmount() {
+    console.log('Layout unmount')
     mitt.off('refresh', this.refresh);
     clearInterval(this.timeInterval);
     clearInterval(this.weatherInterval);

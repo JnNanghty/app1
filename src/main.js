@@ -10,9 +10,16 @@ import './util/serialPort';
 
 import Vant from 'vant';
 import 'vant/lib/index.css';
+import ls from "@/store/ls";
+import {initMqtt} from "@/util/mqttUtil";
 
 const app = createApp(App)
 app.use(router).use(Vant);
 
-app.mount('#app')
+router.isReady().then(() => app.mount('#app'));
 
+
+const serviceUrl = ls.get('serviceUrl');
+if (serviceUrl) {
+  initMqtt();
+}

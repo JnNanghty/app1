@@ -233,7 +233,7 @@ export default {
     }
   },
   created() {
-    this.currentCourse = ls.get('currentCourse');
+    this.currentCourse = ls.get('currentCourse') || {};
   },
   mounted() {
     const config = ls.get('deviceConfig');
@@ -248,7 +248,8 @@ export default {
 
     mitt.on('brushCard', this.brushCard);
   },
-  beforeDestroy() {
+  beforeUnmount() {
+    console.log('Attendance unmount');
     mitt.off('brushCard', this.brushCard);
   },
   computed: {

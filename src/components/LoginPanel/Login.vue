@@ -75,17 +75,16 @@ export default {
     return {
       visible: false,
       visibleMain: false,
-      qrCodeUrl: ''
+      qrCodeUrl: '',
+      a: null
     };
   },
   created() {
   },
   mounted() {
-    mitt.on('brushCard', this.brushCard);
+    // 在关闭的时候 off事件
+    console.log('login mounted')
     this.generateQrCode();
-  },
-  beforeDestroy() {
-    mitt.off('brushCard', this.brushCard);
   },
   methods: {
     generateQrCode() {
@@ -94,6 +93,7 @@ export default {
       });
     },
     close() {
+      console.log('Login close');
       this.visibleMain = false;
     },
     loginSuccess() {
@@ -131,6 +131,7 @@ export default {
   watch: {
     visible(nv) {
       if (nv) {
+        mitt.on('brushCard', this.brushCard);
         setTimeout(() => {
           this.visibleMain = true;
         }, 0);
@@ -138,6 +139,7 @@ export default {
     },
     visibleMain(nv) {
       if (!nv) {
+        mitt.off('brushCard', this.brushCard);
         setTimeout(() => {
           this.visible = false;
         }, 300);

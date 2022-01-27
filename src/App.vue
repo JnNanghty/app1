@@ -27,7 +27,7 @@ export default {
       this.$router.push({
         name: 'ExamMode',
         params: {
-          data
+          data: JSON.stringify(data)
         }
       });
     });
