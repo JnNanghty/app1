@@ -35,9 +35,7 @@ export default {
     const data = this.$route.params.data || {};
     this.examData = JSON.parse(data);
   },
-  mounted() {
-
-  },
+  mounted() {},
   methods: {
     show() {
       this.$refs.login.visible = true;

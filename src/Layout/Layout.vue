@@ -29,7 +29,7 @@
 
 }
 
-.header-temperature,
+
 .header-date,
 .header-time {
   float: right;
@@ -111,10 +111,6 @@
           </div>
         </transition>
         <div class="header-right">
-          <div class="header-temperature">
-            <i :class="weatherInfo.icon"></i>
-            {{ weatherInfo.weather }} <br> {{ weatherInfo.temperature }}℃
-          </div>
           <div class="header-date">
             <div class="header-date-up">{{ timeInfo.currentDay }}</div>
             <div class="header-date-down">{{ timeInfo.currentDate }}</div>
@@ -233,12 +229,6 @@ export default {
         },
       ],
       terminalInfo: {}, // 教室信息  label
-      weatherInfo: {
-        temperature: '无',
-        weather: '无',
-        icon: ''
-      },
-      weatherInterval: null,
       timeInterval: null, // 用于右上角时间
       timeInfo: {
         currentTime: timeUtil.formatTime(time),
@@ -265,16 +255,11 @@ export default {
       this.timeInfo.currentDay = timeUtil.getCurrentDay(time);
     }, 1e3);
 
-    // 每六个小时查一次天气
-    this.weatherInterval = setInterval(() => {
-      this.getPosition();
-    }, 6 * 36e5);
   },
   beforeUnmount() {
     console.log('Layout unmount')
     mitt.off('refresh', this.refresh);
     clearInterval(this.timeInterval);
-    clearInterval(this.weatherInterval);
   },
   methods: {
     // 用name导航  传参用params
@@ -305,7 +290,6 @@ export default {
       }
       const serviceUrl = ls.get('serviceUrl');
       if (serviceUrl) {
-        this.getPosition();
         this.getConfig();
       }
     },
@@ -343,44 +327,7 @@ export default {
           }
         })
       });
-    },
-    getPosition() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(position => {
-          const {longitude, latitude} = position.coords;
-          service.post('weather/now', {
-            location: longitude.toFixed(2) + ',' + latitude.toFixed(2)
-          }).then(res => {
-            this.weatherInfo.temperature = res.now.temp;
-            this.weatherInfo.weather = res.now.text || '无';
-            this.weatherInfo.icon = 'qi-' + res.now.icon;
-          })
-        }, error => {
-          switch (error.code) {
-            case error.PERMISSION_DENIED:
-              msg({
-                message: '您拒绝对获取地理位置的请求!'
-              });
-              break;
-            case error.POSITION_UNAVAILABLE:
-              msg({
-                message: '位置信息不可用!'
-              });
-              break;
-            case error.TIMEOUT:
-              msg({
-                message: '请求您的地理位置超时!'
-              });
-              break;
-            default:
-              msg({
-                message: '未知错误!'
-              });
-              break;
-          }
-        })
-      }
-    },
+    }
   }
 }
 </script>

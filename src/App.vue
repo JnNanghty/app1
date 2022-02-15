@@ -36,7 +36,7 @@ export default {
       this.$router.push({
         name: 'ProgrammeMode',
         params: {
-          data
+          data: JSON.stringify(data)
         }
       });
     })

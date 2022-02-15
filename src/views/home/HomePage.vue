@@ -1,4 +1,4 @@
-<style scoped>
+<style lang="stylus" scoped>
 .main {
   display: flex;
   justify-content: center;
@@ -47,10 +47,6 @@
   background: rgb(146 148 171 / 70%);
 }
 
-ion-content {
-  background: none;
-}
-
 .location-logo {
   font-size: 2rem;
   color: #ffd400;
@@ -64,7 +60,7 @@ ion-content {
   <div class="main">
     <div class="main-left">
       <div class="main-left-top">
-        <van-icon class="location-logo" name="location" />
+        <van-icon class="location-logo" name="location"/>
         <span class="classroom-location">{{ terminalInfo && terminalInfo.label }}</span>
       </div>
       <div class="main-left-middle">
@@ -90,7 +86,7 @@ ion-content {
     </div>
     <div class="main-right">
       <div @click="goPage('ExamMode')"></div>
-      <div>
+      <div class="clock">
         {{ endOfClassText }}
       </div>
     </div>

@@ -291,6 +291,7 @@ export default {
         }
       })
     },
+    // 开始签到
     startSign() {
       service.post('classCard/startSignIn', {
         courseId: this.currentCourse.courseId,

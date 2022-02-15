@@ -57,6 +57,7 @@
 
 <script>
 import service from "@/api/services";
+import ls from "@/store/ls";
 
 export default {
   name: 'computer-player',
@@ -147,7 +148,8 @@ export default {
         let currentInfo = result || {};
         if (currentInfo.screenImage) {
           this.hasPCSrc = true;
-          this.src = currentInfo.screenImage;
+          let serviceUrl = ls.get('serviceUrl') || ''
+          this.src = serviceUrl + currentInfo.screenImage;
         } else {
           this.hasPCSrc = false;
         }

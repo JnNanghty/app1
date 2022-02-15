@@ -5,7 +5,6 @@ import router from './router'
 import './theme/main.css';
 
 import './util/adaptive';
-import 'qweather-icons/font/qweather-icons.css';
 import './util/serialPort';
 
 import Vant from 'vant';

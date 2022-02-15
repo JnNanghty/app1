@@ -8,12 +8,15 @@
 <script>
 export default {
   data() {
-    return {}
+    return {
+      programmeData: null
+    }
   },
   created() {
-    const data = this.$route.params.data
+    const data = this.$route.params.data || {};
+    this.programmeData = JSON.parse(data);
     console.log('节目模式参数')
-    console.log(data);
+    console.log(this.programmeData);
   },
   mounted() {
   },

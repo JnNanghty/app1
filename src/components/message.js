@@ -59,3 +59,5 @@ function MessageBox({message = '', duration}) {
 export function msg(options) {
   new MessageBox(options);
 }
+
+window.msg = msg;
