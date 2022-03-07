@@ -2,8 +2,10 @@
 .header {
   display: flex;
   justify-content: space-between;
-  padding-top: .5rem;
-  height: 3.5rem;
+  padding-top: 1.25rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  max-height: 3.5rem;
   color: #ffffff;
   position: relative;
 }
@@ -29,15 +31,21 @@
 
 }
 
-
-.header-date,
+.setting-icon,
 .header-time {
   float: right;
-  margin-right: .5rem;
+}
+
+.setting-icon {
+  width: 25px;
+  height: 25px;
+  background: url("../assets/icon/setting.png") no-repeat center;
+  background-size: contain;
 }
 
 .header-time {
-  font-size: 1.5rem;
+  margin-right: .5rem;
+  font-size: .8rem;
 }
 
 .app-main-content {
@@ -50,7 +58,7 @@
 .main-content {
   flex: 1;
   position: relative;
-  height: calc(100% - 10rem);
+  overflow: hidden;
 }
 
 .footer {
@@ -63,10 +71,22 @@
 
 .app-icon {
   width: 3rem;
-  border-radius: .4rem;
   margin-right: 1.5rem;
   color: #ffffff;
   text-align: center;
+  position: relative;
+}
+.app-item-icon-active::after{
+  content: '';
+  position: absolute;
+  display: block;
+  width: 100px;
+  height: 100px;
+  top: -30px;
+  left: -37px;
+  background-image: radial-gradient(50% 50% at 50% 50%, #CF7C0B 0%, rgba(114, 47, 0, 0.0001) 100%);
+  background-blend-mode: lighten;
+  opacity: 0.72;
 }
 
 .app-icon > span {
@@ -74,10 +94,15 @@
 }
 
 .app-item-icon {
-  font-size: 2rem;
-  padding: .5rem;
-  border-radius: .5rem;
-  background-image: linear-gradient(to bottom, white 0, transparent 60%) !important;
+  position: relative;
+  width: 25px;
+  height: 25px;
+  margin: 25px auto 8px;
+}
+
+.app-item-icon > img {
+  width: 100%;
+  height: 100%;
 }
 
 .fade-enter-active {
@@ -99,23 +124,23 @@
 </style>
 <template>
   <div>
-    <div class="app-main-content" :style="{background: config.background}">
+    <div class="app-main-content">
       <header class="header">
         <div class="logo">
           <img style="height: 100%;" :src="config.logo" alt="">
         </div>
         <transition name="fade">
-          <div class="header-center" v-show="$router.currentRoute.name !== 'Home'">
+          <div class="header-center" v-show="$router.currentRoute.value.name !== 'Home'">
             <van-icon class="location-logo" name="location"/>
             {{ terminalInfo.label }}
           </div>
         </transition>
         <div class="header-right">
-          <div class="header-date">
-            <div class="header-date-up">{{ timeInfo.currentDay }}</div>
-            <div class="header-date-down">{{ timeInfo.currentDate }}</div>
+          <div class="setting-icon"></div>
+          <div class="header-time">{{ timeInfo.currentDate }}&nbsp;&nbsp;&nbsp;{{
+              timeInfo.currentDay
+            }}&nbsp;{{ timeInfo.currentTime }}
           </div>
-          <div class="header-time">{{ timeInfo.currentTime }}</div>
         </div>
       </header>
       <main class="main-content">
@@ -127,9 +152,11 @@
       </main>
       <footer class="footer">
         <!--    应用图标   -->
-        <div class="app-icon" v-for="item in appList" :key="item.path" @click="goItem(item)" v-show="item.visible">
-          <van-icon class="app-item-icon" :style="item.style" :name="item.icon"/>
-          <br>
+        <div class="app-icon"
+             v-for="item in appList" :key="item.path" @click="goItem(item)" v-show="item.visible">
+          <div class="app-item-icon" :style="item.style" :class="$router.currentRoute.value.name === item.path ? 'app-item-icon-active' : ''">
+            <img class="app-item-icon-img" :src="item.src" alt="">
+          </div>
           <span>{{ item.label }}</span>
         </div>
       </footer>
@@ -159,14 +186,12 @@ export default {
       loginToPath: null,
       terminalId: null,
       config: {
-        background: 'url(' + require('../assets/default_background.jpg') + ') 0/cover no-repeat',
         logo: '',
         label: ''
       },
       appList: [
         {
-          icon: 'wap-home-o',
-          style: {background: '#f6054e'},
+          src: require('../assets/icon/home.png'),
           label: '主页',
           name: 'home',
           path: 'Home',
@@ -174,8 +199,7 @@ export default {
           visible: true
         },
         {
-          icon: 'notes-o',
-          style: {background: '#009bff'},
+          src: require('../assets/icon/curriculum.png'),
           label: '课程表',
           name: 'timetable',
           path: 'Curriculum',
@@ -183,8 +207,7 @@ export default {
           visible: false
         },
         {
-          icon: 'user-circle-o',
-          style: {background: '#36ff00'},
+          src: require('../assets/icon/patrol.png'),
           label: '巡课',
           name: 'patrol',
           path: 'Patrol',
@@ -192,8 +215,7 @@ export default {
           visible: false
         },
         {
-          icon: 'sign',
-          style: {background: '#00ffd0'},
+          src: require('../assets/icon/home.png'),
           label: '考勤',
           name: 'attendance',
           path: 'Attendance',
@@ -201,8 +223,7 @@ export default {
           visible: false
         },
         {
-          icon: 'setting-o',
-          style: {background: '#2200ff'},
+          src: require('../assets/icon/home.png'),
           label: '系统设置',
           name: 'system',
           path: 'SystemSettingHome',
@@ -210,8 +231,7 @@ export default {
           visible: true
         },
         {
-          icon: 'newspaper-o',
-          style: {background: '#dd03ff'},
+          src: require('../assets/icon/borrow.png'),
           label: '教室借用',
           name: 'borrow',
           path: 'ClassroomBorrow',
@@ -219,11 +239,18 @@ export default {
           visible: false
         },
         {
-          icon: 'bulb-o',
-          style: {background: '#ff8800'},
+          src: require('../assets/icon/repair.png'),
           label: '报修',
-          name: 'home',
+          name: 'repair',
           path: 'Repair',
+          needLogin: true,
+          visible: true
+        },
+        {
+          src: require('../assets/icon/open.png'),
+          label: '开门',
+          name: 'open',
+          path: 'Open',
           needLogin: true,
           visible: true
         },
@@ -238,8 +265,10 @@ export default {
     }
   },
   mounted() {
+    // 绑定教室后需要刷新
     mitt.on('refresh', this.refresh);
 
+    // 后台下发更新班牌设置
     mitt.on('mqttConfig', (data) => {
       ls.set('deviceConfig', data);
       this.handleConfig(data);
@@ -256,8 +285,9 @@ export default {
     }, 1e3);
 
   },
+  updated() {
+  },
   beforeUnmount() {
-    console.log('Layout unmount')
     mitt.off('refresh', this.refresh);
     clearInterval(this.timeInterval);
   },
@@ -316,7 +346,6 @@ export default {
     },
     handleConfig(data) {
       const serviceUrl = ls.get('serviceUrl') || '';
-      this.config.background = data.background ? ('url(' + serviceUrl + data.background + ') 0/cover no-repeat') : 'url(' + require('../assets/default_background.jpg') + ') 0/cover no-repeat';
       this.config.logo = serviceUrl + data.logo;
 
       const custom = JSON.parse(data.custom) || [];

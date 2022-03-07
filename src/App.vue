@@ -19,7 +19,7 @@ export default {
     return {
       showNotice: false,
       noticeText: '',
-      background: 'url(' + require('./assets/default_background.jpg') + ') 0/cover no-repeat'
+      background: 'linear-gradient(180deg, #353B43 0%, #1C1D1E 100%)'
     }
   },
   mounted() {
@@ -41,11 +41,17 @@ export default {
       });
     })
 
+    mitt.on('mqttInfo', (data) => {
+      console.log(data);
+    })
+
     mitt.on('mqttRealTimeBroadcast', this.broadcast);
 
     mitt.on('mqttConfig', (data) => {
       const serviceUrl = ls.get('serviceUrl') || '';
-      this.background = data.background ? ('url(' + serviceUrl + data.background + ') 0/cover no-repeat') : ('url(' + require('./assets/default_background.jpg') + ') 0/cover no-repeat');
+      if (data.background) {
+        // this.background = 'url(' + serviceUrl + data.background + ') 0/cover no-repeat';
+      }
     });
 
   },

@@ -41,7 +41,7 @@ function formatDate(time) {
   if (isNaN(_year)) {
     return 'NaN';
   }
-  result = `${_year}-${one2two(_month)}-${one2two(_day)}`;
+  result = `${_year}.${one2two(_month)}.${one2two(_day)}`;
   return result;
 }
 
@@ -53,7 +53,7 @@ function formatDate(time) {
 function getCurrentDay(time) {
   const simplifyNumberArray = ['日', '一', '二', '三', '四', '五', '六'];
   const _time = new Date(time);
-  let result = '星期';
+  let result = '周';
   const week = _time.getDay();
   return result + simplifyNumberArray[week];
 }

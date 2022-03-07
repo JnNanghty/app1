@@ -26,17 +26,16 @@
   position: relative;
   font-size: 1.5rem;
   margin-left: .5rem;
-}
-
-.main-left-middle::before {
-  content: '';
-  display: block;
-  width: .5rem;
-  height: 100%;
-  background: #ff006a;
-  position: absolute;
-  left: 0;
-  top: 0;
+  &::before {
+    content: '';
+    display: block;
+    width: .5rem;
+    height: 100%;
+    background: #ff006a;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
 }
 
 .main-left-bottom {
@@ -54,41 +53,16 @@
 
 .main-right {
   color: #ffffff;
+  flex: 1;
 }
 </style>
 <template>
   <div class="main">
     <div class="main-left">
-      <div class="main-left-top">
-        <van-icon class="location-logo" name="location"/>
-        <span class="classroom-location">{{ terminalInfo && terminalInfo.label }}</span>
-      </div>
-      <div class="main-left-middle">
-        <template v-if="currentCourse.courseId || currentCourse.courseNumber">
-          <div>{{ currentCourse.startTime }} - {{ currentCourse.endTime }} <span v-show="showComing">(即将开始)</span></div>
-          <div>{{ currentCourse.courseName }} | {{ currentCourse.teacherName }}</div>
-        </template>
-        <template v-else>
-          <div>
-            空闲
-          </div>
-        </template>
-      </div>
-      <div class="main-left-bottom">
-        <template v-if="nextCourse.courseId || nextCourse.courseNumber">
-          NEXT -> {{ nextCourse.startTime }}-{{ nextCourse.endTime }} -> {{ nextCourse.courseName }} ->
-          {{ nextCourse.teacherName }}
-        </template>
-        <template v-else>
-          NEXT -> 空闲
-        </template>
-      </div>
+      <component :is="leftComponentName" :terminalInfo="terminalInfo"></component>
     </div>
     <div class="main-right">
-      <div @click="goPage('ExamMode')"></div>
-      <div class="clock">
-        {{ endOfClassText }}
-      </div>
+      <component :is="rightComponentName" ></component>
     </div>
   </div>
 </template>
@@ -97,9 +71,14 @@ import timeUtil from "@/util/timeUtil";
 import ls from "@/store/ls";
 import service from "@/api/services";
 import {msg} from "@/components/message";
-
+import ClassroomInfo from "@/views/home/components/ClassroomInfo";
+import Clock from "@/views/home/components/Clock";
 export default {
   name: 'HomePage',
+  components: {
+    ClassroomInfo,
+    Clock
+  },
   data() {
     return {
       terminalId: null,
@@ -110,6 +89,9 @@ export default {
       endOfClassText: '空闲中',
       terminalInfo: {},
       countDownInterval: null,
+      leftComponentName: 'ClassroomInfo',
+      rightComponentName: 'Clock',
+      flag: false
     };
   },
   mounted() {

@@ -137,7 +137,7 @@
 
 </style>
 <template>
-  <div class="main" :style="{background: deviceConfig.background}">
+  <div class="main" >
     <div class="grid-content">
       <div class="row1">
         <div class="course-info-content">
@@ -213,7 +213,6 @@ export default {
       terminalId: null,
       currentCourse: {},
       deviceConfig: {
-        background: 'url(' + require('../../assets/default_background.jpg') + ') 0/cover no-repeat',
         signInTypes: [{
           name: 'card',
           value: true
@@ -237,10 +236,6 @@ export default {
   },
   mounted() {
     const config = ls.get('deviceConfig');
-    const serviceUrl = ls.get('serviceUrl') || '';
-    if (config.background) {
-      this.deviceConfig.background = 'url(' + serviceUrl + config.background + ') 0/cover no-repeat';
-    }
     this.deviceConfig.signInTypes = JSON.parse(config.signInTypes);
     if (this.terminalId && (this.currentCourse && this.currentCourse.courseId)) {
       this.startSign();

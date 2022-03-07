@@ -37,6 +37,8 @@ export function initMqtt() {
                 mitt.emit('mqttProgramme', data.data); // 节目的话有文字加资源路径显示类型（图文，视频，音频）
               } else if (data.type === 'exam') {
                 mitt.emit('mqttExam', data.data); // 考试，考试科目，考场号 考试开始结束时间
+              } else if(data.type === 'info') {
+                mitt.emit('mqttInfo', data.data) // 资讯
               }
             })
 

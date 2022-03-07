@@ -1,6 +1,7 @@
 <style scoped>
 .main {
   padding: 1rem 5rem 0;
+  box-sizing: border-box;
 }
 
 .tabs-label {
@@ -105,16 +106,20 @@ export default {
       activeStyle: {
         left: 0,
         width: 0
-      }
+      },
+      activeTabAnimationTimeout: null
     }
   },
   computed: {},
   mounted() {
     this.$nextTick(() => {
-      setTimeout(() => {
+      this.activeTabAnimationTimeout = setTimeout(() => {
         this.changeActiveIndex(0);
       }, 501); // 为什么是501呢  因为router-view的transition时间是500ms！
     });
+  },
+  beforeUnmount() {
+    clearTimeout(this.activeTabAnimationTimeout);
   },
   methods: {
     changeActiveIndex(index) {

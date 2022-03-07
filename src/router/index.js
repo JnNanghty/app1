@@ -10,6 +10,7 @@ import Repair from '@/views/repair/Repair'
 import Attendance from '@/views/attendance/Attendance'
 import ExamMode from '@/views/specialMode/ExamMode'
 import ProgrammeMode from '@/views/specialMode/ProgrammeMode'
+import Information from "@/views/information/Information";
 
 
 const routes = [
@@ -60,6 +61,10 @@ const routes = [
     path: '/programmeMode',
     name: 'ProgrammeMode',
     component: ProgrammeMode
+  }, {
+    path: '/information',
+    name: 'Information',
+    component: Information
   }
 ]
 
