@@ -1,143 +1,88 @@
-<style scoped>
+<style scoped lang="stylus">
 .main {
-  display: flex;
-  flex-wrap: wrap;
-  overflow-y: scroll;
-  padding: 0 15%;
-  position: relative;
-}
-
-.setting-list {
-  width: 100%;
-}
-
-.setting-item {
-  width: 10vw;
-  height: 10vw;
-  border: 3px solid #000000;
-  border-radius: 10px;
-  margin: 3vw 11.6vw;
-  text-align: center;
-}
-
-.shadow {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 100%;
   height: 100%;
-  background: #00000054;
-  overflow-y: scroll;
+  color #fff;
 }
 
-.popup-content {
-  position: absolute;
-  width: 50%;
-  left: 0;
-  right: 0;
-  margin: 5% auto 0;
-  overflow-y: scroll;
-  background: #ffffff;
-  border-radius: .5rem;
+header {
+  height: 60px;
+  display flex;
+  padding-top: 25px
+  padding-left: 40px
+  padding-right: 30px
+  box-sizing border-box
+
+  .back-button {
+    width: 20px
+    height @width
+    background: url("../../assets/icon/back_home.png") no-repeat;
+    background-size contain
+    background-position center
+  }
 }
 
-.password-shadow {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.8);
+main {
+  height: calc(100% - 60px);
+
+  .tab-title {
+    width: 100%;
+    padding-left: 40px
+    height 48px;
+    line-height: @height;
+    font-size 14px;
+
+    .tab-title-item{
+      float left;
+      width: 200px;
+      text-align center
+      box-sizing border-box
+      border-bottom 1px solid;
+      border-bottom-color rgba(0, 0, 0, 0)
+    }
+    .tab-title-item-active{
+      position relative;
+      border-bottom 1px solid #FDA45E;
+      &::after {
+        content: '';
+        position absolute;
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        background: linear-gradient(180deg, rgba(51, 57, 65, 0.0001) 11.53%, rgba(123, 96, 77, 0.5) 53.32%, #FDA45E 100%);
+        opacity: 0.26;
+      }
+    }
+  }
+
+
+  .tab-pane{
+    height: calc(100% - 48px);
+    padding: 13px;
+    box-sizing border-box;
+  }
 }
 
-.password-content {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  width: 50%;
-  transform: translateY(-50%);
-  margin: 0 auto;
-}
-
-.confirm-button {
-  text-align: center;
-  padding-top: 10px;
-}
-
-.check-button {
-  width: 50px;
-  height: 50px;
-}
 </style>
 <template>
   <div class="main">
-    <div class="setting-list">
-      <div>
-        <van-field
-            readonly
-            clickable
-            name="area"
-            v-model="classroom"
-            label="教室绑定"
-            placeholder="点击选择教室"
-            @click="openPicker"
-        />
+    <header>
+      <div class="logo">
+        <img style="height: 100%;" :src="config.logo" alt="">
       </div>
-      <div>
-        <van-field
-            v-model="serviceUrl"
-            type="text"
-            label="服务器地址"
-        >
-          <template #button>
-            <van-button size="small" @click="checkConnect" type="primary">检查连接</van-button>
-          </template>
-        </van-field>
-
+      <div class="">
+        <div class="back-button" @click="goHome"></div>
       </div>
-      <div @click="exitApp">
-        <van-field
-            readonly
-            type="text"
-            label="退出app"
-            right-icon="revoke"
-        >
-        </van-field>
+    </header>
+    <main>
+      <div class="tab-title">
+        <div class="tab-title-item" :class="activeTabIndex === 0 ? 'tab-title-item-active' : ''" @click="changeTab(0)">教室绑定</div>
+        <div class="tab-title-item" :class="activeTabIndex === 1 ? 'tab-title-item-active' : ''" @click="changeTab(1)">系统设置</div>
       </div>
-    </div>
-
-    <div class="password-shadow" v-if="showPassword">
-      <div class="password-content">
-        <div>
-          <van-field v-model="managerAccount.account" label="管理账号" placeholder="请输入管理账号"/>
-        </div>
-        <div>
-          <van-field v-model="managerAccount.password" type="password" label="管理密码" placeholder="请输入管理密码"/>
-        </div>
-        <div class="confirm-button">
-          <van-button @click="submit" type="primary">确认</van-button>
-        </div>
+      <div class="tab-pane">
+        <component :is="componentName"></component>
       </div>
-    </div>
-    <teleport to="body">
-      <div class="shadow" @click.self="showPicker = false" v-if="showPicker">
-        <div class="popup-content">
-          <van-cascader
-              v-model="cascaderValue"
-              title="请选择教室"
-              :options="options"
-              @close="showPicker = false"
-              @finish="onFinish"></van-cascader>
-        </div>
-      </div>
-    </teleport>
-    <PasswordLogin @loginSuccess="handleLoginSuccess" ref="pswLogin"></PasswordLogin>
-
-
-
+    </main>
   </div>
 </template>
 
@@ -150,11 +95,12 @@ import mitt from "@/util/mitt";
 import PasswordLogin from "@/components/LoginPanel/PasswordLogin";
 import {getToken, removeToken} from "@/util/auth";
 import {disConnectMqtt, initMqtt} from "@/util/mqttUtil";
-
+import BindClassroom from "@/views/systemSetting/settingItem/BindClassroom";
+import SystemSetting from "@/views/systemSetting/settingItem/SystemSetting";
 
 export default {
   components: {
-    PasswordLogin
+    PasswordLogin, SystemSetting, BindClassroom
   },
   data() {
     let mac = 'xxxxxx'
@@ -162,18 +108,12 @@ export default {
       mac = window.device.uuid;
     }
     return {
-      showPassword: false,
-      serviceConnect: false,
-      serviceUrl: 'http://192.168.1.140:80',
-      options: [],
-      cascaderValue: '',
-      classroom: '',
-      showPicker: false,
+      config: {
+        log: ''
+      },
       mac: mac,
-      managerAccount: {
-        account: 'admin',
-        password: 'admin'
-      }
+      componentName: 'SystemSetting',
+      activeTabIndex: 0
     }
   },
   mounted() {
@@ -364,6 +304,16 @@ export default {
       this.getTerminal().then(() => {
         this.openPicker();
       });
+    },
+    goHome() {
+      this.$router.push({
+        name: "Home"
+      })
+    },
+    changeTab(index) {
+      this.activeTabIndex = index;
+      let tabsNameArr = ['BindClassroom', 'SystemSetting'];
+      this.componentName = tabsNameArr[index];
     }
   }
 }

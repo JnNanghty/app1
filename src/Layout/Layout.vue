@@ -136,11 +136,8 @@
           </div>
         </transition>
         <div class="header-right">
-          <div class="setting-icon"></div>
-          <div class="header-time">{{ timeInfo.currentDate }}&nbsp;&nbsp;&nbsp;{{
-              timeInfo.currentDay
-            }}&nbsp;{{ timeInfo.currentTime }}
-          </div>
+          <div class="setting-icon" @click="goSetting"></div>
+          <div class="header-time">{{ timeInfo.currentDate }}&nbsp;&nbsp;&nbsp;{{timeInfo.currentDay }}&nbsp;{{ timeInfo.currentTime }}</div>
         </div>
       </header>
       <main class="main-content">
@@ -223,14 +220,6 @@ export default {
           visible: false
         },
         {
-          src: require('../assets/icon/home.png'),
-          label: '系统设置',
-          name: 'system',
-          path: 'SystemSettingHome',
-          needLogin: false,
-          visible: true
-        },
-        {
           src: require('../assets/icon/borrow.png'),
           label: '教室借用',
           name: 'borrow',
@@ -305,6 +294,11 @@ export default {
           name: item.path
         });
       }
+    },
+    goSetting() {
+      this.$router.push({
+        name: 'SystemSettingHome'
+      });
     },
     handleLoginSuccess() {
       // 需要登录的界面

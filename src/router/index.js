@@ -32,10 +32,6 @@ const routes = [
       name: 'Patrol',
       component: Patrol
     }, {
-      path: '/systemSettingHome',
-      name: 'SystemSettingHome',
-      component: SystemSettingHome
-    }, {
       path: '/classroomBorrow',
       name: 'ClassroomBorrow',
       component: ClassroomBorrow
@@ -53,6 +49,10 @@ const routes = [
     path: '/attendance',
     name: 'Attendance',
     component: Attendance
+  }, {
+    path: '/systemSettingHome',
+    name: 'SystemSettingHome',
+    component: SystemSettingHome
   }, {
     path: '/examMode',
     name: 'ExamMode',
