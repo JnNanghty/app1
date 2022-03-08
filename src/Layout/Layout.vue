@@ -1,4 +1,6 @@
-<style scoped>
+<style lang="stylus" scoped>
+@import "~@/theme/mixin.styl";
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -6,8 +8,9 @@
   padding-left: 1.5rem;
   padding-right: 1.5rem;
   max-height: 3.5rem;
-  color: #ffffff;
   position: relative;
+
+  get_font_color(font_color)
 }
 
 .logo {
@@ -72,11 +75,12 @@
 .app-icon {
   width: 3rem;
   margin-right: 1.5rem;
-  color: #ffffff;
   text-align: center;
   position: relative;
+
+  get_font_color(font_color);
 }
-.app-item-icon-active::after{
+.app-item-icon-active-dark::after{
   content: '';
   position: absolute;
   display: block;
@@ -85,6 +89,19 @@
   top: -30px;
   left: -37px;
   background-image: radial-gradient(50% 50% at 50% 50%, #CF7C0B 0%, rgba(114, 47, 0, 0.0001) 100%);
+  background-blend-mode: lighten;
+  opacity: 0.72;
+}
+
+.app-item-icon-active-bright::after{
+  content: '';
+  position: absolute;
+  display: block;
+  width: 100px;
+  height: 100px;
+  top: -30px;
+  left: -37px;
+  background-image: radial-gradient(50% 50% at 50% 50%, #0e0e0a 0%, rgba(114, 47, 0, 0.0001) 100%);
   background-blend-mode: lighten;
   opacity: 0.72;
 }
@@ -151,7 +168,7 @@
         <!--    应用图标   -->
         <div class="app-icon"
              v-for="item in appList" :key="item.path" @click="goItem(item)" v-show="item.visible">
-          <div class="app-item-icon" :style="item.style" :class="$router.currentRoute.value.name === item.path ? 'app-item-icon-active' : ''">
+          <div class="app-item-icon" :style="item.style" :class="$router.currentRoute.value.name === item.path ? 'app-item-icon-active-dark' : ''">
             <img class="app-item-icon-img" :src="item.src" alt="">
           </div>
           <span>{{ item.label }}</span>
@@ -254,6 +271,7 @@ export default {
     }
   },
   mounted() {
+
     // 绑定教室后需要刷新
     mitt.on('refresh', this.refresh);
 

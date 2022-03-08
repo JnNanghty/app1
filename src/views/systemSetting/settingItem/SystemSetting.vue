@@ -6,26 +6,26 @@
   width: 100%
 
   .main-left {
-    margin-right: 13px
+    margin-right: 0.75rem
   }
 
   .main-left,
   .main-right {
     flex: 1;
     background: rgba(66, 72, 81, 0.25);
-    border-radius 7px;
-    padding-top: 14px
-    padding-left: 25px
+    border-radius 0.35rem
+    padding-top: 0.7rem
+    padding-left: 1.25rem
     position relative
   }
 }
 
 .form-content {
-  margin-left: 11px
+  margin-left: 0.55rem
 }
 
 .form-title {
-  margin-bottom: 23px
+  margin-bottom: 1.15rem
 }
 
 .form-row {
@@ -37,60 +37,60 @@
 }
 
 .form-item {
-  margin-bottom: 17px
+  margin-bottom: 0.85rem
 }
 
 .form-item-inline {
-  margin-bottom: 11px
+  margin-bottom: 0.55rem
   display flex;
 
   .form-label {
-    width 50px;
+    width 2.5rem
     white-space nowrap;
-    margin-right: 13px
-    line-height 40px;
+    margin-right: 0.65rem
+    line-height 2rem
     text-align right
   }
 }
 
 .form-label {
-  margin-bottom: 7px
-  font-size 14px;
+  margin-bottom: 0.35rem
+  font-size 0.7rem
 }
 
 .form-input {
   background: #424851;
-  width: 329px;
-  border-radius 8px;
-  height: 40px
-  padding-left: 12px
+  width: 16.45rem
+  border-radius 0.4rem
+  height: 2rem
+  padding-left: 0.6rem
   border: none
 }
 
 .form-select {
-  border-radius 8px;
-  height: 40px
+  border-radius 0.4rem
+  height: 2rem
   border: none
-  padding-left: 12px
-  width 128px;
-  background: #424851 url("../../../assets/icon/down.png") @width - 25px 12px / 16px 16px no-repeat;
+  padding-left: 0.6rem
+  width 6.4rem
+  background: #424851 url("../../../assets/icon/down.png") @width - 1.25rem 0.6rem / 0.8rem 0.8rem no-repeat;
   appearance: none;
   color #fff;
 }
 
 .form-select-big-size {
-  width: 341px
-  background: #424851 url("../../../assets/icon/down.png") @width - 25px 12px / 16px 16px no-repeat;
+  width: 17.05rem
+  background: #424851 url("../../../assets/icon/down.png") @width - 1.25rem 0.6rem / 0.8rem 0.8rem no-repeat;
 }
 
 .submit-button {
   text-align center;
   background-color: #FDA45E;
-  border-radius 8px;
-  width: 310px
-  height: 40px
+  border-radius 0.4rem;
+  width: 15.5rem
+  height: 2rem
   line-height @height;
-  bottom: 17px
+  bottom: 0.85rem
   position absolute
   left: 0
   right: 0

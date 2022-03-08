@@ -3,39 +3,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
 }
 
 .main-left {
   margin-right: 2.5rem;
-  color: #ffffff;
   min-width: 35%;
-}
-
-.main-left-top {
-
-}
-
-.classroom-location {
-  font-size: 1.6rem;
-  font-weight: 600;
-}
-
-.main-left-middle {
-  margin-top: 1rem;
-  padding-left: 1rem;
-  position: relative;
-  font-size: 1.5rem;
-  margin-left: .5rem;
-  &::before {
-    content: '';
-    display: block;
-    width: .5rem;
-    height: 100%;
-    background: #ff006a;
-    position: absolute;
-    left: 0;
-    top: 0;
-  }
 }
 
 .main-left-bottom {
@@ -52,7 +25,6 @@
 }
 
 .main-right {
-  color: #ffffff;
   flex: 1;
 }
 </style>

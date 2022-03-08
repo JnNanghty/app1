@@ -1,6 +1,6 @@
 <template>
-  <div id="app" :style="{background: background}">
-    <router-view v-slot="{Component}">
+  <div id="app">
+    <router-view v-slot="{Component}" @click="changeTheme">
       <transition name="up">
         <component :is="Component"></component>
       </transition>
@@ -18,11 +18,14 @@ export default {
   data() {
     return {
       showNotice: false,
-      noticeText: '',
-      background: 'linear-gradient(180deg, #353B43 0%, #1C1D1E 100%)'
+      noticeText: ''
     }
   },
+  created() {
+    window.document.documentElement.setAttribute('data-theme', 'dark');
+  },
   mounted() {
+
     mitt.on('mqttExam', (data) => {
       this.$router.push({
         name: 'ExamMode',
@@ -78,10 +81,20 @@ export default {
         this.noticeText = '';
       }
     },
+    changeTheme() {
+      this.showNotice = !this.showNotice
+      if (!this.showNotice) {
+        window.document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        window.document.documentElement.setAttribute('data-theme', 'bright');
+      }
+    }
   }
 }
 </script>
-<style>
+<style lang="stylus">
+@import "~@/theme/mixin.styl";
+
 #app {
   position: absolute;
   top: 0;
@@ -90,6 +103,8 @@ export default {
   right: 0;
   width: 100%;
   height: 100%;
+
+  get_background(background)
 }
 
 .up-enter-active {

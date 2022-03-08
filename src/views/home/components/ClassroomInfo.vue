@@ -1,9 +1,12 @@
 <style lang="stylus" scoped>
+@import "~@/theme/mixin.styl";
+
 .ci-main {
   position relative;
   height: 150px;
   padding-left: 36px;
   max-width: 450px;
+  get_font_color(font_color);
 
   &::before {
     content: '';

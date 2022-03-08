@@ -1,0 +1,27 @@
+@import './variables.styl'
+
+get_background($color)
+  //默认样式（任意选择一个主题即可注意要和下面的默认主题一致）
+  background: darkMode[$color];
+  for item in themeList
+    //判断html的data-theme的属性值，{}是Stylus插值
+    [data-theme = {item.name}] & {
+      //这里的item可以当作一个对象，item[$color]可表示为：对象名.属性
+      background-color: item[$color];
+    }
+
+
+get_font_color($color)
+  color: darkMode[$color];
+  for item in themeList
+    [data-theme = {item.name}] & {
+      color: item[$color];
+    }
+
+get_border_color($color)
+  border-color: darkMode[$color];
+
+  for item in themeList
+    [data-theme = {item.name}] & {
+      border-color: item[$color];
+    }

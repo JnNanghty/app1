@@ -5,15 +5,15 @@
 }
 
 header {
-  height: 60px;
+  height: 3rem
   display flex;
-  padding-top: 25px
-  padding-left: 40px
-  padding-right: 30px
+  padding-top: 1.25rem
+  padding-left: 2rem
+  padding-right: 1.5rem
   box-sizing border-box
 
   .back-button {
-    width: 20px
+    width: 1rem
     height @width
     background: url("../../assets/icon/back_home.png") no-repeat;
     background-size contain
@@ -22,18 +22,19 @@ header {
 }
 
 main {
-  height: calc(100% - 60px);
+  height: calc(100% - 3rem);
 
   .tab-title {
     width: 100%;
-    padding-left: 40px
-    height 48px;
+    padding-left: 2rem
+    height 2.4rem;
     line-height: @height;
-    font-size 14px;
+    font-size 0.7rem;
+    box-sizing border-box;
 
     .tab-title-item{
       float left;
-      width: 200px;
+      width: 10rem;
       text-align center
       box-sizing border-box
       border-bottom 1px solid;
@@ -57,8 +58,8 @@ main {
 
 
   .tab-pane{
-    height: calc(100% - 48px);
-    padding: 13px;
+    height: calc(100% - 2.4rem);
+    padding: 0.65rem;
     box-sizing border-box;
   }
 }
@@ -112,7 +113,7 @@ export default {
         log: ''
       },
       mac: mac,
-      componentName: 'SystemSetting',
+      componentName: 'BindClassroom',
       activeTabIndex: 0
     }
   },
