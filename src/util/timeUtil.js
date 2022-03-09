@@ -71,8 +71,18 @@ function getNowTime() {
   const hour = now.getHours();
   const minute = now.getMinutes();
   const second = now.getSeconds();
+  const currentSource = hour * 60 + minute;
 
-  return {year, month, day, week, hour, minute, second};
+  return {year, month, day, week, hour, minute, second, currentSource};
+}
+
+/**
+ * @description 将 source 转换成 时间 770 => '12:50'
+ * */
+function sourceToTime(source) {
+  const h = Math.floor(source / 60)
+  const m = source % 60;
+  return one2two(h) + ':' + one2two(m);
 }
 
 export default {
@@ -80,5 +90,6 @@ export default {
   one2two,
   formatTime,
   formatDate,
-  getCurrentDay
+  getCurrentDay,
+  sourceToTime
 }

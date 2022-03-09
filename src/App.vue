@@ -82,12 +82,13 @@ export default {
       }
     },
     changeTheme() {
-      this.showNotice = !this.showNotice
-      if (!this.showNotice) {
-        window.document.documentElement.setAttribute('data-theme', 'dark');
-      } else {
-        window.document.documentElement.setAttribute('data-theme', 'bright');
-      }
+      // this.showNotice = !this.showNotice
+      // if (!this.showNotice) {
+      //   window.document.documentElement.setAttribute('data-theme', 'dark');
+      // } else {
+      //   window.document.documentElement.setAttribute('data-theme', 'bright');
+      // }
+      // mitt.emit('changeTheme')
     }
   }
 }

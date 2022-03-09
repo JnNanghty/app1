@@ -229,14 +229,6 @@ export default {
           visible: false
         },
         {
-          src: require('../assets/icon/home.png'),
-          label: '考勤',
-          name: 'attendance',
-          path: 'Attendance',
-          needLogin: false,
-          visible: false
-        },
-        {
           src: require('../assets/icon/borrow.png'),
           label: '教室借用',
           name: 'borrow',

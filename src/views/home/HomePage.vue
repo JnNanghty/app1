@@ -34,7 +34,8 @@
       <component :is="leftComponentName" :terminalInfo="terminalInfo"></component>
     </div>
     <div class="main-right">
-      <component :is="rightComponentName" ></component>
+      <component :is="rightComponentName" :currentCourse="currentCourse" :nextCourse="nextCourse"
+                 :inCourse="inCourse" ></component>
     </div>
   </div>
 </template>
@@ -45,6 +46,7 @@ import service from "@/api/services";
 import {msg} from "@/components/message";
 import ClassroomInfo from "@/views/home/components/ClassroomInfo";
 import Clock from "@/views/home/components/Clock";
+
 export default {
   name: 'HomePage',
   components: {
@@ -56,7 +58,7 @@ export default {
       terminalId: null,
       currentCourse: {},
       nextCourse: {},
-      showComing: false,
+      inCourse: false, // 当前时间是否在课节内
       curriculumData: [],
       endOfClassText: '空闲中',
       terminalInfo: {},
@@ -66,13 +68,15 @@ export default {
       flag: false
     };
   },
+  created() {
+  },
   mounted() {
     this.terminalId = ls.get('terminalId');
     if (this.terminalId) {
       this.getDailyCurriculum();
       this.countDownInterval = setInterval(() => {
-        this.endOfClassTime();
-      }, 1e3);
+        this.resolveData()
+      }, 6e4);
       this.terminalInfo = ls.get('terminalInfo');
     } else {
       msg({
@@ -95,87 +99,41 @@ export default {
         this.resolveData();
       });
     },
-    endOfClassTime() {
-      let text = '空闲中';
-      let endTime = new Date();
-      const now = Date.now();
-      if ((this.currentCourse.courseId || this.currentCourse.courseNumber) && this.currentCourse !== this.nextCourse) {
-        // 有当前课程  且不在下课期间
-        endTime.setHours(Math.floor(this.currentCourse.endSource / 60));
-        endTime.setMinutes(this.currentCourse.endSource % 60);
-        endTime.setSeconds(0);
-        const time = Math.floor((endTime.getTime() - now) / 1000); // 秒
-        const second = time % 60;
-        let minute = Math.floor(time / 60) % 60;
-        let hour = Math.floor(time / 60 / 60);
-        text = `距离下课${timeUtil.one2two(hour)}:${timeUtil.one2two(minute)}:${timeUtil.one2two(second)}`;
-      } else {
-        // 没有当前课程  那么就要计算并修改当前课程
-        this.resolveData()
-      }
-      this.endOfClassText = text;
-    },
     resolveData() {
       const len = this.curriculumData.length;
       for (let i = 0; i < len; i++) {
         let item = this.curriculumData[i];
         // 当前课程的开始结束 小时和分钟数
-        const sh = Math.floor(item.startSource / 60);
-        const sm = item.startSource % 60;
-        item.startTime = timeUtil.one2two(sh) + ':' + timeUtil.one2two(sm);
-        const eh = Math.floor(item.endSource / 60);
-        const em = item.endSource % 60;
-        item.endTime = timeUtil.one2two(eh) + ':' + timeUtil.one2two(em);
+        item.startTime = timeUtil.sourceToTime(item.startSource);
+        item.endTime = timeUtil.sourceToTime(item.endSource);
         // 下节课的开始结束小时分钟数
         let nextItem = this.curriculumData[i + 1];
-        const nsh = (nextItem && Math.floor(nextItem.startSource / 60)) || 0;
-        const nsm = (nextItem && (nextItem.startSource % 60)) || 0;
-        nextItem && (nextItem.startTime = timeUtil.one2two(nsh) + ':' + timeUtil.one2two(nsm));
-        const neh = (nextItem && Math.floor(nextItem.endSource / 60)) || 0;
-        const nem = (nextItem && (nextItem.endSource % 60)) || 0;
-        nextItem && (nextItem.endTime = timeUtil.one2two(neh) + ':' + timeUtil.one2two(nem));
+        if (nextItem) {
+          nextItem.startTime = timeUtil.sourceToTime(nextItem.startSource);
+          nextItem.endTime = timeUtil.sourceToTime(nextItem.endSource);
+        }
         // 当前时间
-        const {hour, minute, second} = timeUtil.getNowTime();
-        if ((
-            (sh !== eh) && (
-                (hour === sh && minute >= sm) ||
-                (hour > sh && hour < eh) ||
-                (hour === eh && minute <= em)
-            )) || (
-            (sh === eh) && (
-                (hour === sh && minute >= sm && minute <= em)
-            ))) {
-          // 当前课程的开始小时不等于（小于）结束小时
-          //    当前小时等于开始小时，且分钟数大于等于开始分钟数
-          //    当前小时大于开始小时，小于结束小时
-          //    当前小时等于结束小时，且分钟数小于结束分钟数
-          // 开始小时等于结束小时
-          //    当前小时等于开始小时，且分钟数处于开始分钟和结束分钟之间
+        const {hour, minute, second, currentSource} = timeUtil.getNowTime();
+        if (item.startSource <= currentSource && item.endSource >= currentSource) {
+          // 上课中
           this.currentCourse = item;
           this.nextCourse = nextItem;
           // 减去秒数  把误差控制在1s以内
           ls.set('currentCourse', item, (item.endSource - (hour * 60 + minute)) * 60 * 1000 - second * 1000);
-          this.showComing = false;
-        } else if ((
-                (eh === nsh) &&
-                (hour === eh && minute > em && minute < nsm)
-            ) ||
-            (eh !== nsh) && (
-                (hour === eh && minute > em) ||
-                (hour > eh && hour < nsh) ||
-                (hour === nsh && minute < nsm)
-            )) {
-          // 课间
-          // 当前课程结束小时 等于下节课开始小时
-          //    当前小时等于结束小时，且分钟数处于结束分钟和下节开始分钟之间
-          // 当前结束小时不等于（小于）下节课开始小时
-          //    当前小时等于结束小时，且分钟数大于结束分钟
-          //    当前小时大于结束小时小于下节开始小时
-          //    当前小时等于下节开始小时，且分钟数小于下节开始分钟数
-          this.currentCourse = nextItem;
+          this.inCourse = true;
+        } else if ((item.endSource < currentSource && currentSource < nextItem.startSource) ||
+            (i === 0 && currentSource < item.startTime)) {
+          // 课间 或者 第一节课前
+          this.currentCourse = {};
           this.nextCourse = nextItem;
-          this.showComing = true;
-          ls.set('currentCourse', nextItem, (nextItem.endSource - (hour * 60 + minute)) * 60 * 1000 - second * 1000);
+          this.inCourse = false;
+          ls.remove('currentCourse');
+        } else {
+          // 一天的课上完了
+          this.currentCourse = {};
+          this.nextCourse = {};
+          this.inCourse = false;
+          ls.remove('currentCourse');
         }
       }
     },

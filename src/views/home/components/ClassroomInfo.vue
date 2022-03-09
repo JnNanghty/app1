@@ -42,8 +42,8 @@
 <template>
   <div class="ci-main">
     <h1 class="ci-terminal-label">{{ terminalInfo.label }}</h1>
-    <div class="ci-classdesc">教室描述123123 / {{ terminalInfo.seatCount }}座</div>
-    <p class="ci-manager">管理员：</p>
+    <div class="ci-classdesc">{{ terminalType }} / {{ terminalInfo.seatCount }}座</div>
+    <p class="ci-manager">{{ terminalInfo.remark }}</p>
   </div>
 </template>
 
@@ -51,7 +51,31 @@
 export default {
   name: "ClassroomInfo",
   props: ['terminalInfo'],
+  data() {
+    return {
+      terminalTypeList: [
+        { id: 7, name: 'media', label: '多媒体教室' },
+        { id: 1, name: 'wisdom', label: '智慧教室' },
+        { id: 3, name: 'record', label: '录播教室' },
+        { id: 4, name: 'computer', label: '计算机教室' },
+        { id: 2, name: 'experiment', label: '实验实训室' },
+        { id: 5, name: 'art', label: '功能教室' },
+        { id: 6, name: 'other', label: '其他' }
+      ]
+    }
+  },
   created() {
+  },
+  computed: {
+    terminalType() {
+      let label = ''
+      this.terminalTypeList.forEach(i => {
+        if(i.id === this.terminalInfo.type) {
+          label = i.label
+        }
+      })
+      return label;
+    }
   },
   mounted() {
   },
