@@ -21,6 +21,7 @@
   position: absolute;
   top: .25rem;
   width: 100%;
+  left: 0
   text-align: center;
   font-size: 1.6rem;
   font-weight: 600;
@@ -148,7 +149,6 @@
         </div>
         <transition name="fade">
           <div class="header-center" v-show="$router.currentRoute.value.name !== 'Home'">
-            <van-icon class="location-logo" name="location"/>
             {{ terminalInfo.label }}
           </div>
         </transition>

@@ -1,89 +1,92 @@
-<style scoped>
-.week-curriculum-main {
+<style scoped lang="stylus">
+@import "~@/theme/mixin.styl";
+.week-curriculum-main
+  overflow-y: scroll;
   height: 100%;
-  color: #ffffff;
-}
+  padding-right: 30px
+  box-sizing border-box
+  get_font_color(font_color)
 
-.week-curriculum-nav {
-  text-align: center;
-  font-size: 1.2rem;
-  font-weight: 600;
-}
+  .change-week
+    overflow-x scroll
+    margin-bottom: 0.25rem;
 
-.week-curriculum-content {
-  display: flex;
-  height: calc(100% - 2rem);
-}
+    .scroll-wrap
+      itemWidth = 100px;
+      width 19 * itemWidth
 
-.pagination-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-}
+      .week-item
+        float left
+        width: itemWidth
+        height: 48px
 
-ion-icon:active {
-  color: #3a7be0;
-}
+.table
+  display flex
+  text-align center
 
-.content {
+.table-col
   flex: 1;
-  overflow: scroll;
-}
 
-.curriculum-table {
-  /*display: grid;*/
-  /*grid-template-columns: 4fr repeat(7, 3fr);*/
-  /*grid-auto-rows: 2.5rem;*/
-  display: flex;
-  text-align: center;
-}
+  .table-row
+    min-height: 2.5rem;
+    box-sizing: border-box;
+    border-right: 1px solid #2F333A;
+    overflow: hidden;
+    white-space nowrap
+    text-overflow ellipsis;
+    display flex
+    justify-content center
+    align-items center
 
-.table-item {
-  border: 1px solid #ffffff;
-}
-.table-col{
-  flex: 1;
-}
-.table-row{
-  border: 1px solid #ffffff;
-  min-height: 2.5rem;
-  box-sizing: border-box;
-}
+  .table-title
+    get_background(curriculum_section_background)
+    padding: 8px 0;
+    margin-bottom: 2px
+    font-size 14px;
+    min-height: auto;
+    border-right: none
+
+  &:nth-child(1) .table-title
+    border-top-left-radius 8px;
+
+  &:nth-child(8) .table-title
+    border-top-right-radius 8px;
+
+  .section-row
+    padding: 3px
+    get_background(curriculum_section_background)
+    color #9fa2a7
+    display block
+
+    .section-label
+      font-size 16px
+
+    .section-time
+      font-size 12px
+      transform scale(0.8)
+
 </style>
 <template>
   <div class="week-curriculum-main">
-    <div class="week-curriculum-nav">第{{ currentWeek }}周</div>
-    <div class="week-curriculum-content">
-      <div class="pagination-button">
-        <van-icon @click="changeWeek('pre')" name="arrow-left"/>
+    <div class="change-week">
+      <div class="scroll-wrap">
+        <div class="week-item"></div>
       </div>
-      <div class="content">
-        <div class="curriculum-table">
-<!--          <div class="table-item">课节时间</div>-->
-<!--          <div class="table-item" v-for="item in simplifyNumberArray" :key="item">星期{{ item }}</div>-->
-<!--          <div class="table-item" v-for="(item, index) in curriculum"-->
-<!--               :key="index" @click="selectItem(item, index)"-->
-<!--               :style="item && item.style">-->
-<!--            {{ item && item.label }}-->
-<!--          </div>-->
-          <div class="table-col">
-            <div class="table-row">课节时间</div>
-            <div class="table-row" v-for="(item, index) in sectionTime" :key="index">
-              {{ item }}
-            </div>
-          </div>
-          <div class="table-col" v-for="(item, index) in curriculum" :key="item">
-            <div class="table-row">星期{{ simplifyNumberArray[index] }}</div>
-            <div class="table-row" v-for="(course, courseIndex) in curriculum[index]"
-                 :key="courseIndex" :style="course && course.style" @click="selectItem(course, courseIndex)">
-              {{course && course.courseName}}
-            </div>
-          </div>
+    </div>
+    <div class="table">
+      <div class="table-col">
+        <div class="table-row table-title">课节时间</div>
+        <div class="table-row section-row" v-for="(item, index) in sectionTime" :key="index">
+          <span class="section-label">第{{ simplifyNum[index] }}节</span>
+          <div class="section-time">{{ item }}</div>
         </div>
       </div>
-      <div class="pagination-button">
-        <van-icon @click="changeWeek('next')" name="arrow"/>
+      <div class="table-col" v-for="(item, index) in curriculum" :key="item">
+        <div class="table-row table-title">星期{{ simplifyNumberArray[index] }}</div>
+        <div class="table-row" v-for="(course, courseIndex) in curriculum[index]"
+             :key="courseIndex" :style="course && course.style" @click="selectItem(course, courseIndex)">
+          {{ course && course.courseName }} {{ index + 1 }} - {{ courseIndex + 1 }}
+        </div>
       </div>
     </div>
   </div>
@@ -101,7 +104,8 @@ export default {
       currentWeek: 1,
       sectionTime: [],
       curriculum: [],
-      simplifyNumberArray: ['一', '二', '三', '四', '五', '六', '日']
+      simplifyNumberArray: ['一', '二', '三', '四', '五', '六', '日'],
+      simplifyNum: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四'],
     }
   },
   mounted() {
@@ -121,11 +125,7 @@ export default {
       }).then(res => {
         this.currentWeek = this.calcCurrentWeek(res.data.firstWeek);
         this.sectionTime = res.data.sessionSourceList.map(i => {
-          const sh = Math.floor(i.startSource / 60);
-          const sm = i.startSource % 60;
-          const eh = Math.floor(i.endSource / 60);
-          const em = i.endSource % 60;
-          return `${timeUtil.one2two(sh)}:${timeUtil.one2two(sm)}-${timeUtil.one2two(eh)}:${timeUtil.one2two(em)}`;
+          return `${timeUtil.sourceToTime(i.startSource)}-${timeUtil.sourceToTime(i.endSource)}`;
         })
         this.getCurriculum();
       })

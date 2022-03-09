@@ -1,43 +1,54 @@
-<style scoped>
+<style scoped lang="stylus">
+@import "~@/theme/mixin.styl";
 .main {
-  padding: 1rem 5rem 0;
   box-sizing: border-box;
+  display: flex;
 }
 
 .tabs-label {
-  display: flex;
   position: relative;
-  margin-bottom: .5rem;
+  display: flex;
+  justify-content space-around
+  flex-direction column
+  padding: 0 1rem
 }
 
 .tabs-label-item {
-  color: #ffffff;
-  margin: 0 .5rem;
-  font-size: .9rem;
+  get_font_color(font_color);
+  text-align center
+  white-space nowrap
+  font-size 12px;
+
+
+  .tabs-icon {
+    text-align center
+    margin: 0 auto 9px;
+    width: 40px
+    height: 40px
+    padding: 10px;
+    box-sizing border-box
+    border-radius 4px
+
+    img {
+      width: 20px
+      height: 20px
+    }
+  }
 }
 
 .tabs-active {
-  position: absolute;
-  top: 0;
-  left: .5rem;
-  width: 3rem;
-  height: .25rem;
-  background: #0059ff;
-  transform-origin: center center;
-  transform: translateY(-100%);
-  transition: all .3s ease;
+  background: #fba35e;
 }
 
 .tabs-pane {
   overflow: hidden;
   width: 100%;
-  height: 85%;
+  height: 100%;
 }
 
 .tabs-pane-item {
   width: 100%;
   height: 100%;
-  float: left;
 }
 
 .no-mode-fade-enter-active, .no-mode-fade-leave-active {
@@ -52,11 +63,11 @@
   <div class="main">
     <div class="tabs-label">
       <div class="tabs-label-item" v-for="(item, index) in tabsLabelArray"
-           @click="changeActiveIndex(index)" ref="tabsLabelItem"
-           :key="index" v-show="!item.hidden">
-        {{ item.label }}
+           @click="changeActiveIndex(index)"
+           :key="index">
+        <div class="tabs-icon" :class="activeIndex === index ? 'tabs-active' : ''"><img :src="item.icon" alt=""></div>
+        <div>{{ item.label }}</div>
       </div>
-      <div class="tabs-active" :style="activeStyle"></div>
     </div>
     <div class="tabs-pane">
       <transition name="no-mode-fade">
@@ -67,14 +78,13 @@
           <WeekCurriculum></WeekCurriculum>
         </div>
         <div class="tabs-pane-item" v-else-if="activeIndex === 2">
-          <img src="" alt="校历">
+          <PersonalCurriculum></PersonalCurriculum>
         </div>
         <div class="tabs-pane-item" v-else-if="activeIndex === 3">
-          <PersonalCurriculum></PersonalCurriculum>
+          <img src="" alt="校历">
         </div>
       </transition>
     </div>
-    <Login ref="login" @loginSuccess="handleLoginSuccess"></Login>
   </div>
 </template>
 <script>
@@ -90,59 +100,45 @@ export default {
   data() {
     return {
       tabsLabelArray: [{
-        label: '当日课表',
-        hidden: false
+        label: '今日课表',
+        icon: require('@/assets/curriculum_icon/today.png')
       }, {
-        label: '周课表',
-        hidden: false
-      }, {
-        label: '校历',
-        hidden: false
+        label: '本周课表',
+        icon: require('@/assets/curriculum_icon/today.png')
       }, {
         label: '个人课表',
-        hidden: false
+        icon: require('@/assets/curriculum_icon/today.png')
+      }, {
+        label: '学年校历',
+        icon: require('@/assets/curriculum_icon/today.png')
       }],
-      activeIndex: 0,
-      activeStyle: {
-        left: 0,
-        width: 0
-      },
-      activeTabAnimationTimeout: null
+      activeIndex: 0
     }
   },
   computed: {},
   mounted() {
     this.$nextTick(() => {
-      this.activeTabAnimationTimeout = setTimeout(() => {
-        this.changeActiveIndex(0);
-      }, 501); // 为什么是501呢  因为router-view的transition时间是500ms！
+      this.changeActiveIndex(0);
     });
   },
   beforeUnmount() {
-    clearTimeout(this.activeTabAnimationTimeout);
   },
   methods: {
     changeActiveIndex(index) {
-      if (index === 3) {
+      if (index === 2) {
         const token = getToken();
         if (!token) {
-          this.showLogin();
+          // this.showLogin();
           return;
         }
       }
       this.activeIndex = index;
-      const {left, width} = this.$refs.tabsLabelItem[this.activeIndex].getBoundingClientRect();
-      console.log(left, width);
-      this.activeStyle = {
-        left: 'calc(' + left + 'px - 5rem)',
-        width: width + 'px'
-      };
     },
     showLogin() {
       this.$refs.login.visible = true;
     },
     handleLoginSuccess() {
-      this.changeActiveIndex(3);
+      this.changeActiveIndex(2);
     }
   }
 }

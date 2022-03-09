@@ -87,7 +87,6 @@ function sourceToTime(source) {
 
 export default {
   getNowTime,
-  one2two,
   formatTime,
   formatDate,
   getCurrentDay,
