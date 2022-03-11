@@ -11,6 +11,9 @@
     overflow-x scroll
     margin-bottom: 0.25rem;
 
+    &::-webkit-scrollbar
+      height: 0
+
     .scroll-wrap
       itemWidth = 100px;
       width 19 * itemWidth
@@ -19,6 +22,23 @@
         float left
         width: itemWidth
         height: 48px
+        line-height @height
+        text-align center
+
+      .week-item-active
+        position relative;
+        border-bottom 1px solid #FDA45E;
+
+        &::after {
+          content: '';
+          position absolute;
+          top: 0
+          left: 0
+          width: 100%
+          height: 100%
+          background: linear-gradient(180deg, rgba(51, 57, 65, 0.0001) 11.53%, rgba(123, 96, 77, 0.5) 53.32%, #FDA45E 100%);
+          opacity: 0.26;
+        }
 
 .table
   display flex
@@ -31,12 +51,18 @@
     min-height: 2.5rem;
     box-sizing: border-box;
     border-right: 1px solid #2F333A;
-    overflow: hidden;
-    white-space nowrap
-    text-overflow ellipsis;
     display flex
     justify-content center
     align-items center
+    position relative
+    .course-info
+      position absolute
+      bottom: 10px
+      &::after
+        content: ''
+        position absolute
+        display block
+
 
   .table-title
     get_background(curriculum_section_background)
@@ -68,9 +94,12 @@
 </style>
 <template>
   <div class="week-curriculum-main">
-    <div class="change-week">
+    <div class="change-week" ref="weekWrap">
       <div class="scroll-wrap">
-        <div class="week-item"></div>
+        <div class="week-item" :class="currentWeek === item ? 'week-item-active' : ''"
+             v-for="item in 19" :ref="'week-item-' + item">
+          第{{ simplifyNum[item - 1] }}周
+        </div>
       </div>
     </div>
     <div class="table">
@@ -85,7 +114,13 @@
         <div class="table-row table-title">星期{{ simplifyNumberArray[index] }}</div>
         <div class="table-row" v-for="(course, courseIndex) in curriculum[index]"
              :key="courseIndex" :style="course && course.style" @click="selectItem(course, courseIndex)">
-          {{ course && course.courseName }} {{ index + 1 }} - {{ courseIndex + 1 }}
+          {{ course && course.courseName }}
+          <template v-if="course.courseId">
+            <div class="course-info">
+              <div>{{course.courseName}}</div>
+              <div>{{course.teacherName}} &nbsp; &nbsp; {{course.startSource}}</div>
+            </div>
+          </template>
         </div>
       </div>
     </div>
@@ -105,7 +140,7 @@ export default {
       sectionTime: [],
       curriculum: [],
       simplifyNumberArray: ['一', '二', '三', '四', '五', '六', '日'],
-      simplifyNum: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四'],
+      simplifyNum: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九'],
     }
   },
   mounted() {
@@ -124,6 +159,7 @@ export default {
         id: this.terminalId
       }).then(res => {
         this.currentWeek = this.calcCurrentWeek(res.data.firstWeek);
+        this.scrollLeft()
         this.sectionTime = res.data.sessionSourceList.map(i => {
           return `${timeUtil.sourceToTime(i.startSource)}-${timeUtil.sourceToTime(i.endSource)}`;
         })
@@ -201,6 +237,12 @@ export default {
     },
     selectItem(item, index) {
       console.log(item, index);
+    },
+    scrollLeft() {
+      this.$refs.weekWrap.scrollBy({
+        left: (this.currentWeek - 1) * 100,
+        behavior: "smooth"
+      })
     }
   }
 }

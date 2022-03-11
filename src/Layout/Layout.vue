@@ -19,12 +19,27 @@
 
 .header-center {
   position: absolute;
-  top: .25rem;
-  width: 100%;
+  top: 0;
+  width: 40%;
   left: 0
+  right: 0
+  margin: 0 auto;
   text-align: center;
-  font-size: 1.6rem;
-  font-weight: 600;
+  font-size: 0.9rem;
+  padding-top:.5rem;
+
+  &::before{
+    content: ''
+    display block
+    position absolute
+    top: 0
+    left: 0
+    right: 0
+    margin: 0 auto;
+    width: 2.6rem;
+    height: 8px
+    background: #FDA45E;
+  }
 }
 
 .location-logo {
@@ -71,6 +86,18 @@
   height: 5rem;
   padding: .5rem 0;
   overflow-x: scroll;
+  position relative
+  get_font_color(font_color)
+  .brush-tip{
+    position absolute
+    right: 0
+    bottom: 0
+  }
+  .mj-logo{
+    position absolute
+    left: 8px;
+    bottom: 8px;
+  }
 }
 
 .app-icon {
@@ -81,7 +108,8 @@
 
   get_font_color(font_color);
 }
-.app-item-icon-active-dark::after{
+
+.app-item-icon-active-dark::after {
   content: '';
   position: absolute;
   display: block;
@@ -94,7 +122,7 @@
   opacity: 0.72;
 }
 
-.app-item-icon-active-bright::after{
+.app-item-icon-active-bright::after {
   content: '';
   position: absolute;
   display: block;
@@ -148,13 +176,17 @@
           <img style="height: 100%;" :src="config.logo" alt="">
         </div>
         <transition name="fade">
-          <div class="header-center" v-show="$router.currentRoute.value.name !== 'Home'">
-            {{ terminalInfo.label }}
+          <div class="header-center" v-show="showHeader">
+            <div style="font-weight: 300">{{ terminalInfo.label }}</div>
+            <div style="font-size: .6rem;font-weight: 200">{{terminalType}} / {{ terminalInfo.seatCount }}座 </div>
           </div>
         </transition>
         <div class="header-right">
           <div class="setting-icon" @click="goSetting"></div>
-          <div class="header-time">{{ timeInfo.currentDate }}&nbsp;&nbsp;&nbsp;{{timeInfo.currentDay }}&nbsp;{{ timeInfo.currentTime }}</div>
+          <div class="header-time">{{ timeInfo.currentDate }}&nbsp;&nbsp;&nbsp;{{
+              timeInfo.currentDay
+            }}&nbsp;{{ timeInfo.currentTime }}
+          </div>
         </div>
       </header>
       <main class="main-content">
@@ -168,14 +200,19 @@
         <!--    应用图标   -->
         <div class="app-icon"
              v-for="item in appList" :key="item.path" @click="goItem(item)" v-show="item.visible">
-          <div class="app-item-icon" :style="item.style" :class="$router.currentRoute.value.name === item.path ? 'app-item-icon-active-dark' : ''">
+          <div class="app-item-icon" :style="item.style"
+               :class="$router.currentRoute.value.name === item.path ? 'app-item-icon-active-dark' : ''">
             <img class="app-item-icon-img" :src="item.src" alt="">
           </div>
           <span>{{ item.label }}</span>
         </div>
+
+        <div class="brush-tip">
+          刷卡区
+        </div>
+        <div class="mj-logo"><img src="../assets/mj_logo.png" alt=""></div>
       </footer>
     </div>
-    <Login ref="login" @loginSuccess="handleLoginSuccess"></Login>
   </div>
 </template>
 <script>
@@ -185,13 +222,10 @@ import ls from "@/store/ls";
 import service from "@/api/services";
 import {msg} from "@/components/message";
 import timeUtil from "@/util/timeUtil";
-import Login from "@/components/LoginPanel/Login";
 
 export default {
   name: 'Layout-view',
-  components: {
-    Login
-  },
+  components: {},
   data() {
     let time = Date.now();
     return {
@@ -230,10 +264,10 @@ export default {
         },
         {
           src: require('../assets/icon/borrow.png'),
-          label: '教室借用',
+          label: '预约',
           name: 'borrow',
           path: 'ClassroomBorrow',
-          needLogin: true,
+          needLogin: false,
           visible: false
         },
         {
@@ -259,7 +293,30 @@ export default {
         currentTime: timeUtil.formatTime(time),
         currentDate: timeUtil.formatDate(time),
         currentDay: timeUtil.getCurrentDay(time),
-      }
+      },
+      terminalTypeList: [
+        { id: 7, name: 'media', label: '多媒体教室' },
+        { id: 1, name: 'wisdom', label: '智慧教室' },
+        { id: 3, name: 'record', label: '录播教室' },
+        { id: 4, name: 'computer', label: '计算机教室' },
+        { id: 2, name: 'experiment', label: '实验实训室' },
+        { id: 5, name: 'art', label: '功能教室' },
+        { id: 6, name: 'other', label: '其他' }
+      ]
+    }
+  },
+  computed: {
+    showHeader() {
+      return true;
+    },
+    terminalType() {
+      let label = ''
+      this.terminalTypeList.forEach(i => {
+        if(i.id === this.terminalInfo.type) {
+          label = i.label
+        }
+      })
+      return label;
     }
   },
   mounted() {
@@ -272,8 +329,8 @@ export default {
       ls.set('deviceConfig', data);
       this.handleConfig(data);
     });
-    this.refresh();
 
+    this.refresh();
 
     let time = Date.now();
     this.timeInterval = setInterval(() => {
@@ -297,7 +354,6 @@ export default {
       const token = getToken();
       if (item.needLogin && !token) {
         this.loginToPath = item.path;
-        this.$refs.login.visible = true;
       } else {
         this.loginToPath = null;
         this.$router.push({
@@ -306,8 +362,13 @@ export default {
       }
     },
     goSetting() {
+      let t = getToken()
+      let path = 'Auth'
+      if (t) {
+        path = 'SystemSettingHome'
+      }
       this.$router.push({
-        name: 'SystemSettingHome'
+        name: path
       });
     },
     handleLoginSuccess() {
@@ -331,8 +392,8 @@ export default {
       service.post('classCard/terminalInfo', {
         id: this.terminalId
       }).then(res => {
-        this.terminalInfo = res.data;
-        ls.set('terminalInfo', res.data);
+        this.terminalInfo = res.data ? res.data : {};
+        ls.set('terminalInfo', this.terminalInfo);
       })
     },
     getConfig() {
@@ -352,7 +413,7 @@ export default {
       const serviceUrl = ls.get('serviceUrl') || '';
       this.config.logo = serviceUrl + data.logo;
 
-      const custom = JSON.parse(data.custom) || [];
+      const custom = data.custom ? JSON.parse(data.custom) : [];
       this.appList.forEach(i => {
         custom.forEach(j => {
           if (i.name === j.name) {

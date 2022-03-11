@@ -25,3 +25,18 @@ get_border_color($color)
     [data-theme = {item.name}] & {
       border-color: item[$color];
     }
+
+get_background_image($name)
+  background-image: darkMode[$name];
+
+  for item in themeList
+    [data-theme = {item.name}] & {
+      background-image: item[$name];
+    }
+
+._input{
+  get_background(input_background)
+  border-radius 0.4rem
+  padding-left: 0.6rem
+  border: none
+}

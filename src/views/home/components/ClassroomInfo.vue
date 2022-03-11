@@ -1,5 +1,4 @@
 <style lang="stylus" scoped>
-@import "~@/theme/mixin.styl";
 
 .ci-main {
   position relative;

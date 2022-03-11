@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view v-slot="{Component}" @click="changeTheme">
+    <router-view v-slot="{Component}" v-doubleclick="changeTheme">
       <transition name="up">
         <component :is="Component"></component>
       </transition>
@@ -82,19 +82,18 @@ export default {
       }
     },
     changeTheme() {
-      // this.showNotice = !this.showNotice
-      // if (!this.showNotice) {
-      //   window.document.documentElement.setAttribute('data-theme', 'dark');
-      // } else {
-      //   window.document.documentElement.setAttribute('data-theme', 'bright');
-      // }
-      // mitt.emit('changeTheme')
+      this.showNotice = !this.showNotice
+      if (!this.showNotice) {
+        window.document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        window.document.documentElement.setAttribute('data-theme', 'bright');
+      }
+      mitt.emit('changeTheme')
     }
   }
 }
 </script>
 <style lang="stylus">
-@import "~@/theme/mixin.styl";
 
 #app {
   position: absolute;
@@ -104,8 +103,11 @@ export default {
   right: 0;
   width: 100%;
   height: 100%;
-
   get_background(background)
+  background-image: url('./assets/bg-mark.png');
+  background-repeat: no-repeat;
+  background-size: 40%;
+  background-position: 0 100%;
 }
 
 .up-enter-active {

@@ -7,8 +7,8 @@
 }
 
 .main-left {
-  margin-right: 2.5rem;
-  min-width: 35%;
+  margin-right: 1rem;
+  flex: 1;
 }
 
 .main-left-bottom {

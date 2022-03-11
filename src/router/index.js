@@ -5,12 +5,12 @@ import HomePage from "@/views/home/HomePage";
 import Patrol from '@/views/patrol/Patrol'
 import SystemSettingHome from '@/views/systemSetting/SystemSettingHome'
 import ClassroomBorrow from '@/views/classroomBorrow/ClassroomBorrow'
-import ClassroomBorrowDetail from '@/views/classroomBorrow/ClassroomBorrowDetail'
 import Repair from '@/views/repair/Repair'
 import Attendance from '@/views/attendance/Attendance'
 import ExamMode from '@/views/specialMode/ExamMode'
 import ProgrammeMode from '@/views/specialMode/ProgrammeMode'
 import Information from "@/views/information/Information";
+import Auth from "@/components/authPage/Auth";
 
 
 const routes = [
@@ -36,13 +36,13 @@ const routes = [
       name: 'ClassroomBorrow',
       component: ClassroomBorrow
     }, {
-      path: '/classroomBorrowDetail',
-      name: 'ClassroomBorrowDetail',
-      component: ClassroomBorrowDetail
-    }, {
       path: '/repair',
       name: 'Repair',
       component: Repair
+    }, {
+      path: '/auth',
+      name: 'Auth',
+      component: Auth
     }]
   },
   {
@@ -65,7 +65,7 @@ const routes = [
     path: '/information',
     name: 'Information',
     component: Information
-  }
+  },
 ]
 
 const router = createRouter({

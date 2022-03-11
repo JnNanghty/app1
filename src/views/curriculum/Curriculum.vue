@@ -104,13 +104,13 @@ export default {
         icon: require('@/assets/curriculum_icon/today.png')
       }, {
         label: '本周课表',
-        icon: require('@/assets/curriculum_icon/today.png')
+        icon: require('@/assets/curriculum_icon/week.png')
       }, {
         label: '个人课表',
-        icon: require('@/assets/curriculum_icon/today.png')
+        icon: require('@/assets/curriculum_icon/my.png')
       }, {
         label: '学年校历',
-        icon: require('@/assets/curriculum_icon/today.png')
+        icon: require('@/assets/curriculum_icon/year.png')
       }],
       activeIndex: 0
     }

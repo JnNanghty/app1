@@ -1,5 +1,5 @@
 <style lang="stylus" scoped>
-@import "~@/theme/mixin.styl";
+
 .c-main-content
   position relative
   get_font_color(font_color);

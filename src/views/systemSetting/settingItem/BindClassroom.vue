@@ -59,17 +59,17 @@
 }
 
 .form-input {
-  background: #424851;
   max-width: 19.5rem;
-  border-radius 0.4rem;
+  background: #424851;
   height: 2rem
+  border-radius 0.4rem;
   padding-left: 0.6rem
   border: none
 }
 
 .form-select {
-  border-radius 0.4rem;
   height: 2rem
+  border-radius 0.4rem;
   border: none
   padding-left: 0.6rem
   width 6.4rem;
