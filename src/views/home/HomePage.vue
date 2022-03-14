@@ -31,7 +31,7 @@
 <template>
   <div class="main">
     <div class="main-left">
-      <component :is="leftComponentName" :terminalInfo="terminalInfo"></component>
+      <component v-show="terminalId" :is="leftComponentName" :terminalInfo="terminalInfo"></component>
     </div>
     <div class="main-right">
       <component :is="rightComponentName" :currentCourse="currentCourse" :nextCourse="nextCourse"

@@ -84,6 +84,9 @@
   div {
     flex: 1
   }
+  .cancel-button {
+    get_background(input_background)
+  }
 }
 </style>
 <template>
@@ -118,7 +121,7 @@
           <input class="form-input _input">
         </div>
         <div class="submit-button">
-          <div class="_button">取消</div>
+          <div class="_button cancel-button">取消</div>
           <div class="_button" style="margin-left: 2rem">保存</div>
         </div>
       </form>

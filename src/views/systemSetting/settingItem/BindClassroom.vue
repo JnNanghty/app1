@@ -44,7 +44,7 @@
   margin-bottom: 1.3rem
   display flex;
 
-  .form-label{
+  .form-label {
     width 2.5rem;
     white-space nowrap;
     margin-right: 0.65rem
@@ -65,7 +65,8 @@
 
 .form-select {
   height: 2rem
-  width 6.4rem;
+  //width 6.4rem;
+  width: 17rem;
 }
 
 .form-select-big-size {
@@ -102,41 +103,41 @@
     <div class="ss-main-right">
       <h2 class="form-title">当前绑定教室信息</h2>
       <form class="form-content">
-        <div class="form-item-inline">
-          <div class="form-label">学校名称</div>
-          <select class="form-select _select form-select-big-size" v-model="schoolInfo.school">
-            <option v-for="item in selectOption.school" :value="item.id" :label="item.label"></option>
-          </select>
-        </div>
-        <div class="form-row">
+<!--        <div class="form-item-inline">-->
+<!--          <div class="form-label">学校名称</div>-->
+<!--          <select class="form-select _select form-select-big-size" v-model="schoolInfo.school">-->
+<!--            <option v-for="item in campus" :value="item.id" :label="item.label"></option>-->
+<!--          </select>-->
+<!--        </div>-->
+<!--        <div class="form-row">-->
           <div class="form-item-inline">
             <div class="form-label">当前校区</div>
             <select class="form-select _select" v-model="schoolInfo.campus">
-              <option v-for="item in selectOption.campus" :value="item.id" :label="item.label"></option>
+              <option v-for="item in campus" :value="item.id" :label="item.label"></option>
             </select>
           </div>
           <div class="form-item-inline">
             <div class="form-label">教学楼</div>
             <select class="form-select _select" v-model="schoolInfo.category">
-              <option v-for="item in selectOption.category" :value="item.id" :label="item.label"></option>
+              <option v-for="item in category" :value="item.id" :label="item.label"></option>
             </select>
           </div>
-        </div>
-        <div class="form-row">
+<!--        </div>-->
+<!--        <div class="form-row">-->
           <div class="form-item-inline">
             <div class="form-label">当前楼层</div>
             <select class="form-select _select" v-model="schoolInfo.floor">
-              <option v-for="item in selectOption.floor" :value="item.id" :label="item.label"></option>
+              <option v-for="item in floor" :value="item.id" :label="item.label"></option>
             </select>
           </div>
           <div class="form-item-inline">
             <div class="form-label">当前教室</div>
             <select class="form-select _select" v-model="schoolInfo.terminal">
-              <option v-for="item in selectOption.terminal" :value="item.id" :label="item.label"></option>
+              <option v-for="item in terminal" :value="item.id" :label="item.label"></option>
             </select>
           </div>
-        </div>
-        <div class="submit-button">切换绑定</div>
+<!--        </div>-->
+        <div class="submit-button" @click="bind">切换绑定</div>
       </form>
     </div>
   </div>
@@ -148,10 +149,15 @@ import {msg} from "@/components/message";
 import {removeToken} from "@/util/auth";
 import ls from "@/store/ls";
 import mitt from "@/util/mitt";
+import {initMqtt} from "@/util/mqttUtil";
 
 export default {
   name: "BindClassroom",
   data() {
+    let mac = 'xxxxxx'
+    if (window.device) {
+      mac = window.device.uuid;
+    }
     return {
       serviceUrl: '',
       terminals: [],
@@ -162,20 +168,32 @@ export default {
         floor: '', // 楼层
         terminal: '' // 教室
       },
-      selectOption: {
-        school: [],
-        campus: [],
-        category: [],
-        floor: [],
-        terminal: []
-      }
+      campus: [],
+      mac
     }
   },
   created() {
     this.serviceUrl = ls.get('serviceUrl') || '';
   },
+  computed: {
+    category() {
+      let r = []
+      this.campus.some(i => i.id === this.schoolInfo.campus && (r = i.children))
+      return r
+    },
+    floor() {
+      let r = []
+      this.category.some(i => i.id === this.schoolInfo.category && (r = i.children))
+      return r
+    },
+    terminal() {
+      let r = []
+      this.floor.some(i => i.id === this.schoolInfo.floor && (r = i.children))
+      return r
+    }
+  },
   mounted() {
-    if(this.serviceUrl) {
+    if (this.serviceUrl) {
       this.getTerminal();
       this.getSchool();
     }
@@ -190,6 +208,7 @@ export default {
         console.log(res);
       })
     },
+    // 查教室树
     getTerminal() {
       return new Promise((resolve, reject) => {
         service.post('model/getEntityTree', {
@@ -231,6 +250,7 @@ export default {
           }]
         }).then(res => {
           console.log(res);
+          this.campus = res.list;
           resolve();
         }, () => {
           msg({
@@ -242,20 +262,67 @@ export default {
         });
       })
     },
-    checkIp(){
+    // 检查连接
+    checkIp() {
       ls.set('serviceUrl', this.serviceUrl);
       service.post('classCard/testLink').then(res => {
-        if(res.message === 'success') {
+        if (res.message === 'success') {
           msg({
             message: '连接成功!'
           });
           mitt.emit('refresh');
-        }else {
+          initMqtt();
+        } else {
           ls.remove('serviceUrl');
           msg({
             message: '连接服务器失败!'
           });
         }
+      })
+    },
+    bind() {
+      const terminalId = ls.get('terminalId');
+      if (terminalId) {
+        this.changeBind()
+      } else {
+        this.bindTerminal()
+      }
+    },
+    // 绑定教室
+    bindTerminal() {
+      service.post('classCard/bindingTerminal', {
+        terminal: this.schoolInfo.terminal,
+        mac: this.mac
+      }).then(res => {
+        if (res.message === 'success') {
+          ls.set('terminalId', id);
+          mitt.emit('refresh');
+          msg({
+            message: '绑定成功！'
+          });
+        }
+      }, () => {
+        msg({
+          message: '绑定失败！'
+        });
+      })
+    },
+    changeBind() {
+      service.post('classCard/changeBinding', {
+        terminal: this.schoolInfo.terminal,
+        mac: this.mac
+      }).then((res) => {
+        if (res.message === 'success') {
+          ls.set('terminalId', id);
+          mitt.emit('refresh');
+          msg({
+            message: '绑定成功！'
+          });
+        }
+      }, () => {
+        msg({
+          message: '绑定失败！'
+        });
       })
     }
   }

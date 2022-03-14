@@ -55,9 +55,7 @@ class storage {
         router.replace({
           name: 'Home'
         }).then(() => {
-          msg({
-            message: '请重新登陆！'
-          })
+
         });
       }
       return null;

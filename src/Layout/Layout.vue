@@ -58,7 +58,7 @@
 .setting-icon {
   width: 25px;
   height: 25px;
-  background: url("../assets/icon/setting.png") no-repeat center;
+  background: url("../assets/icon/setting_dark.png") no-repeat center;
   background-size: contain;
 }
 
@@ -84,7 +84,6 @@
   display: flex;
   justify-content: center;
   height: 5rem;
-  padding: .5rem 0;
   overflow-x: scroll;
   position relative
   get_font_color(font_color)
@@ -117,8 +116,9 @@
   display: block;
   width: 100px;
   height: 100px;
-  top: -30px;
-  left: -37px;
+  top: 50%;
+  left: 50%;
+  transform translate(-50%, -40%)
   background-image: radial-gradient(50% 50% at 50% 50%, #CF7C0B 0%, rgba(114, 47, 0, 0.0001) 100%);
   background-blend-mode: lighten;
   opacity: 0.72;
@@ -129,16 +129,21 @@
   position: absolute;
   display: block;
   width: 100px;
-  height: 100px;
-  top: -30px;
-  left: -37px;
-  background-image: radial-gradient(50% 50% at 50% 50%, #0e0e0a 0%, rgba(114, 47, 0, 0.0001) 100%);
+  height: 200px;
+  border-radius: 15px 15px 0 0;
+  top: 0
+  left: 50%;
+  transform translate(-50%, -10%)
+  background: #FFFFFF;
   background-blend-mode: lighten;
   opacity: 0.72;
 }
 
 .app-icon > span {
   white-space: nowrap;
+  position absolute
+  left: 0
+  right: 0
 }
 
 .app-item-icon {
@@ -178,7 +183,7 @@
           <img style="height: 100%;" :src="config.logo" alt="">
         </div>
         <transition name="fade">
-          <div class="header-center" v-show="showHeader">
+          <div class="header-center" v-show="showHeader && terminalId">
             <div style="font-weight: 300">{{ terminalInfo.label }}</div>
             <div style="font-size: .6rem;font-weight: 200">{{ terminalType }} / {{ terminalInfo.seatCount }}座</div>
           </div>
@@ -203,7 +208,7 @@
         <div class="app-icon"
              v-for="item in appList" :key="item.path" @click="goItem(item)" v-show="item.visible">
           <div class="app-item-icon" :style="item.style"
-               :class="$router.currentRoute.value.name === item.path ? 'app-item-icon-active-dark' : ''">
+               :class="$router.currentRoute.value.name === item.path ? activeClass : ''">
             <img class="app-item-icon-img" :src="item.src" alt="">
           </div>
           <span>{{ item.label }}</span>
@@ -241,7 +246,7 @@ export default {
       },
       appList: [
         {
-          src: require('../assets/icon/home.png'),
+          src: require('../assets/icon/home_dark.png'),
           label: '主页',
           name: 'home',
           path: 'Home',
@@ -249,7 +254,7 @@ export default {
           visible: true
         },
         {
-          src: require('../assets/icon/curriculum.png'),
+          src: require('../assets/icon/curriculum_dark.png'),
           label: '课程表',
           name: 'timetable',
           path: 'Curriculum',
@@ -257,7 +262,7 @@ export default {
           visible: false
         },
         {
-          src: require('../assets/icon/patrol.png'),
+          src: require('../assets/icon/patrol_dark.png'),
           label: '巡课',
           name: 'patrol',
           path: 'Patrol',
@@ -265,7 +270,7 @@ export default {
           visible: false
         },
         {
-          src: require('../assets/icon/borrow.png'),
+          src: require('../assets/icon/borrow_dark.png'),
           label: '预约',
           name: 'borrow',
           path: 'ClassroomBorrow',
@@ -273,7 +278,7 @@ export default {
           visible: false
         },
         {
-          src: require('../assets/icon/repair.png'),
+          src: require('../assets/icon/repair_dark.png'),
           label: '报修',
           name: 'repair',
           path: 'Repair',
@@ -281,7 +286,7 @@ export default {
           visible: true
         },
         {
-          src: require('../assets/icon/open.png'),
+          src: require('../assets/icon/open_dark.png'),
           label: '开门',
           name: 'open',
           path: 'Open',
@@ -304,7 +309,8 @@ export default {
         {id: 2, name: 'experiment', label: '实验实训室'},
         {id: 5, name: 'art', label: '功能教室'},
         {id: 6, name: 'other', label: '其他'}
-      ]
+      ],
+      activeClass: 'app-item-icon-active-dark'
     }
   },
   computed: {
@@ -337,6 +343,8 @@ export default {
         name: this.loginToPath
       });
     });
+
+    mitt.on('changeTheme', this.changeTheme)
 
     this.refresh();
 
@@ -433,6 +441,10 @@ export default {
           }
         })
       });
+    },
+    changeTheme() {
+      let theme = window.document.documentElement.dataset.theme
+      this.activeClass = 'app-item-icon-active-' + theme
     }
   }
 }

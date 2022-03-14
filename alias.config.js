@@ -1,0 +1,17 @@
+/**
+ * 仅用于WebStorm识别alias
+ *
+ * */
+const path = require('path');
+
+function resolve(dir) {
+  return path.join(__dirname, dir);
+}
+
+module.exports = {
+  resolve: {
+    alias: {
+      '@': resolve('src')
+    }
+  }
+};

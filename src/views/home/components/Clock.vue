@@ -79,7 +79,7 @@
   <div class="c-main-content">
     <canvas class="c-clock-canvas" ref="clockCanvas" :width="canvasSize" :height="canvasSize"></canvas>
     <div class="point" :style="pointStyle">
-      <img src="@/assets/icon/point.svg" alt="">
+      <img :src="pointSrc" alt="">
     </div>
     <div class="c-course-info">
       <template v-if="clockStatus === 1">
@@ -129,6 +129,7 @@ export default {
       deviceConfig: {
         signInForwardOffset: 5 // 考勤时间 分钟
       },
+      pointSrc: require('@/assets/icon/point_dark.svg'),
       clockColor: ['#384050', '#e1581b', '#fba35e'],
       pointStyle: {
         transform: 'rotate(0deg)'
@@ -222,8 +223,10 @@ export default {
   methods: {
     init() {
       let img = require('@/assets/clock.png');
+      this.pointSrc = require('@/assets/icon/point_dark.svg')
       if (window.document.documentElement.dataset.theme === 'bright') {
         img = require('@/assets/clock_bright.png');
+        this.pointSrc = require('@/assets/icon_bright/point_bright.png')
       }
       this.loadImageAndDraw(img, 20, 20, 280, 280)
 

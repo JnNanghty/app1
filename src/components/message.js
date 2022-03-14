@@ -2,7 +2,8 @@ function MessageBox({message = '', duration}) {
   const wrap = document.createElement('div');
   wrap.setAttribute('style', `
       position: absolute;
-      top: 0;
+      top: 50%;
+      transform: translateY(-50%);
       left: 0;
       right: 0;
       margin: 0 auto;
@@ -11,17 +12,16 @@ function MessageBox({message = '', duration}) {
       padding: .5rem 1rem 0;
       height: 2rem;
       background: #0069ff;
-      border-bottom-left-radius: 1.5rem;
-      border-bottom-right-radius: 1.5rem;
+      border-radius: 4px;
       z-index: 3000;
-      opacity: 1;
+      opacity: 0;
       text-align: center;
       color: #ffffff;
       font-size: 1rem;
     `);
   const keyframe = [
-    {transform: 'translateY(-100%)'},
-    {transform: 'translateY(0)'}
+    {opacity: 0},
+    {opacity: 1}
   ];
   wrap.animate(keyframe, {
     duration: 300,
@@ -38,8 +38,8 @@ function MessageBox({message = '', duration}) {
 
   function close() {
     const keyframe = [
-      {transform: 'translateY(0)'},
-      {transform: 'translateY(-100%)'}
+      {opacity: 1},
+      {opacity: 0}
     ];
     const downAnimate = wrap.animate(keyframe, {
       duration: 300,

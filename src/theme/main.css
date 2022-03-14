@@ -1,9 +1,17 @@
+@font-face {
+    font-family: 'PingFang-SC-Regular';
+    src: url("../assets/font/PingFang-SC-Regular.otf");
+    font-weight: normal;
+    font-style: normal;
+}
+
 .main {
     height: 100%;
 }
 
 html {
     font-size: 20px;
+    font-family: PingFang-SC-Regular, sans-serif;
 }
 *{
     margin: 0;

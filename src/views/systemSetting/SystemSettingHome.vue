@@ -7,17 +7,67 @@
 header {
   height: 3rem
   display flex;
-  padding-top: 1.25rem
+  padding-top: .5rem
   padding-left: 2rem
   padding-right: 1.5rem
   box-sizing border-box
 
+  .logo{
+    width: 193px
+    height: 55px
+  }
+  .right-content {
+    position relative
+    padding-top: 0.8rem
+    padding-left: 1rem;
+    box-sizing border-box
+    &::after{
+      content: '';
+      position absolute
+      top: 0
+      left: 0
+      height: 100%;
+      width: 2px
+      background-image: linear-gradient(#17191A00, #232323)
+    }
+  }
   .back-button {
     width: 1rem
     height @width
-    background: url("../../assets/icon/back_home.png") no-repeat;
+    get_background_image(back_button_background_image)
     background-size contain
     background-position center
+    background-repeat: no-repeat
+  }
+
+  .header-center {
+    flex: 1;
+    text-align: center;
+    font-size: 0.9rem;
+    padding-top: .5rem;
+    &::before {
+      content: ''
+      display block
+      position absolute
+      top: 0
+      left: 0
+      right: 0
+      margin: 0 auto;
+      width: 2.6rem;
+      height: 8px
+      background: #FDA45E;
+    }
+  }
+
+  .user-info{
+    padding-top: .5rem
+    margin-right: 20px
+    .exit-button{
+      padding: 6px 10px;
+      text-align center
+      border-radius 8px;
+      get_background(input_background)
+    }
   }
 }
 
@@ -71,7 +121,18 @@ main {
       <div class="logo">
         <img style="height: 100%;" :src="config.logo" alt="">
       </div>
-      <div class="">
+      <div class="header-center">
+        <div style="font-weight: 300">{{ terminalInfo.label }}</div>
+        <div v-show="terminalId" style="font-size: .6rem;font-weight: 200">{{ terminalType }} / {{ terminalInfo.seatCount }}座</div>
+      </div>
+      <div class="user-info">
+        <div>
+          <div></div>
+          <div></div>
+        </div>
+        <div class="exit-button">退出</div>
+      </div>
+      <div class="right-content">
         <div class="back-button" @click="goHome"></div>
       </div>
     </header>
@@ -90,12 +151,7 @@ main {
 
 <script>
 import ls from "@/store/ls";
-import service from "@/api/services";
-import {msg} from "@/components/message";
-import mitt from "@/util/mitt";
 import PasswordLogin from "@/components/LoginPanel/PasswordLogin";
-import {getToken, removeToken} from "@/util/auth";
-import {disConnectMqtt, initMqtt} from "@/util/mqttUtil";
 import BindClassroom from "@/views/systemSetting/settingItem/BindClassroom";
 import SystemSetting from "@/views/systemSetting/settingItem/SystemSetting";
 
@@ -114,197 +170,41 @@ export default {
       },
       mac: mac,
       componentName: 'BindClassroom',
-      activeTabIndex: 0
+      activeTabIndex: 0,
+      terminalId: null,
+      terminalInfo: {},
+      terminalTypeList: [
+        {id: 7, name: 'media', label: '多媒体教室'},
+        {id: 1, name: 'wisdom', label: '智慧教室'},
+        {id: 3, name: 'record', label: '录播教室'},
+        {id: 4, name: 'computer', label: '计算机教室'},
+        {id: 2, name: 'experiment', label: '实验实训室'},
+        {id: 5, name: 'art', label: '功能教室'},
+        {id: 6, name: 'other', label: '其他'}
+      ],
+      userInfo: {}
     }
   },
-  mounted() {
-    this.showPassword = true;
-    const serviceUrl = ls.get('serviceUrl');
-    const token = getToken();
-    if (serviceUrl && token) {
-      this.getTerminal();
+  computed: {
+    terminalType() {
+      let label = ''
+      this.terminalTypeList.forEach(i => {
+        if (i.id === this.terminalInfo.type) {
+          label = i.label
+        }
+      })
+      return label;
     }
-    const terminalInfo = ls.get('terminalInfo') || {};
-    this.classroom = terminalInfo.label;
+  },
+  created() {
+    this.terminalInfo = ls.get('terminalInfo') || {};
+    this.userInfo = ls.get('userInfo') || {}
   },
   methods: {
-    getTerminal() {
-      return new Promise((resolve, reject) => {
-        service.post('model/getEntityTree', {
-          nodes: [{
-            subnodes: [{
-              type: 'terminal',
-              filter: {
-                field: 'parent',
-                match: 'EQ',
-                value: null
-              }
-            }, {
-              type: 'terminalCategory',
-              filter: {
-                field: 'parent',
-                match: 'EQ',
-                value: null
-              }
-            }]
-          }, {
-            type: 'terminal'
-          }, {
-            type: 'terminalCategory',
-            subnodes: [{
-              type: 'terminal',
-              filter: {
-                field: 'parent',
-                match: 'EQ',
-                value: '$parentId'
-              }
-            }, {
-              type: 'terminalCategory',
-              filter: {
-                field: 'parent',
-                match: 'EQ',
-                value: '$parentId'
-              }
-            }]
-          }]
-        }).then(res => {
-          this.options = this.initData(res.list);
-          resolve();
-        }, () => {
-          msg({
-            message: '没有权限！请重新登录！'
-          });
-          removeToken()
-          ls.remove('userInfo');
-          reject();
-        });
-      })
-    },
-    initData(list) {
-      if (list) {
-        return list.map(item => {
-          return {
-            text: item.label,
-            value: item.id,
-            children: this.initData(item.children)
-          }
-        });
-      } else return undefined
-    },
-    checkConnect() {
-      ls.set('serviceUrl', this.serviceUrl);
-      service.post('classCard/testLink', {}).then(res => {
-        if (res.message === 'success') {
-          this.serviceConnect = true;
-          // this.getTerminal()
-          msg({
-            message: '连接成功！'
-          });
-          mitt.emit('refresh');
-          initMqtt();
-        }
-      }, () => {
-        ls.remove('serviceUrl')
-        msg({
-          message: '连接失败！'
-        });
-      })
-    },
-    openPicker() {
-      const serviceUrl = ls.get('serviceUrl');
-      if (serviceUrl) {
-        const token = getToken();
-        if (token) {
-          this.showPicker = true;
-        } else {
-          this.$refs.pswLogin.visible = true;
-        }
-      } else {
-        msg({
-          message: '请先填写服务器地址并检查连接！'
-        })
-      }
-    },
-    onFinish({selectedOptions}) {
-      let value = '';
-      selectedOptions.forEach(item => {
-        value += item.text + ' / ';
-      });
-      this.classroom = value.slice(0, -3);
-      this.showPicker = false;
-
-      // 如果已经绑定了，  那么就用切换绑定接口
-      const terminalId = ls.get('terminalId');
-      if (terminalId) {
-        this.changeBind(this.cascaderValue);
-      } else {
-        this.bindClass(this.cascaderValue);
-      }
-    },
-    bindClass(id) {
-      service.post('classCard/bindingTerminal', {
-        terminal: id,
-        mac: this.mac
-      }).then(res => {
-        if (res.message === 'success') {
-          ls.set('terminalId', id);
-          ls.set('companyId', res.data);
-          mitt.emit('refresh');
-          msg({
-            message: '绑定成功！'
-          });
-          this.$router.replace({
-            name: 'Home'
-          });
-        }
-      }, () => {
-        msg({
-          message: '绑定失败！'
-        });
-      });
-    },
-    changeBind(id) {
-      service.post('classCard/changeBinding', {
-        terminal: id,
-        mac: this.mac
-      }).then(res => {
-        if (res.message === 'success') {
-          ls.set('terminalId', id);
-          mitt.emit('refresh');
-          msg({
-            message: '绑定成功！'
-          });
-          this.$router.replace({
-            name: 'Home'
-          });
-        }
-      }, () => {
-        msg({
-          message: '绑定失败！'
-        });
-      })
-    },
     exitApp() {
-      console.log('退出app')
       if (window.cordova) {
         cordova.plugins.exit();
       }
-    },
-    submit() {
-      if (this.managerAccount.account === 'admin' && this.managerAccount.password === 'admin') {
-        this.showPassword = false;
-      } else {
-        msg({
-          message: '账号或密码错误！'
-        });
-      }
-    },
-    // 选择教室前 必须登录
-    handleLoginSuccess() {
-      // setToken('6669282:61646D696E36363639323130:1647679075040:24AC842388F6952412B49B8BB74E47BD');
-      this.getTerminal().then(() => {
-        this.openPicker();
-      });
     },
     goHome() {
       this.$router.push({

@@ -16,7 +16,6 @@
     "style-resources-loader": "^1.5.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
-    "vant": "3",
     "video.js": "^7.17.0",
     "videojs-flash": "^2.2.1",
     "vue": "^3.2.29",

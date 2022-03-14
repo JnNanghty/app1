@@ -7,18 +7,14 @@ import './theme/main.css';
 import './util/adaptive';
 import './util/serialPort';
 
-import Vant from 'vant';
-import 'vant/lib/index.css';
 import ls from "@/store/ls";
 import {initMqtt} from "@/util/mqttUtil";
 
 const app = createApp(App)
-app.use(router).use(Vant);
+app.use(router)
 
 app.directive('doubleclick', {
   mounted(el, binding) {
-    console.log('click')
-    console.log(el, binding)
     let clicked = false;
     let resetTimeout = null
     el.onclick = () => {
@@ -34,7 +30,12 @@ app.directive('doubleclick', {
       }
     }
   }
-})
+});
+
+import Message from "@/components/Message.vue";
+import Confirm from "@/components/Confirm";
+app.component(Message.name, Message);
+app.component(Confirm.name, Confirm);
 
 router.isReady().then(() => app.mount('#app'));
 
