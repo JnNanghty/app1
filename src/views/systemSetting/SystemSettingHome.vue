@@ -1,7 +1,7 @@
 <style scoped lang="stylus">
 .main {
   height: 100%;
-  color #fff;
+  get_font_color(font_color)
 }
 
 header {

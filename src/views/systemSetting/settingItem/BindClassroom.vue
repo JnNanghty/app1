@@ -1,7 +1,7 @@
 <style scoped lang="stylus">
 .ss-main-content {
   display: flex;
-  color #fff;
+  get_font_color(font_color)
   height: 100%;
   width: 100%
 
@@ -12,7 +12,7 @@
   .ss-main-left,
   .ss-main-right {
     flex: 1;
-    background: rgba(66, 72, 81, 0.25);
+    get_background(setting_panel_bancground)
     border-radius .35rem;
     padding-top: .7rem
     padding-left: 1.25rem
@@ -60,27 +60,17 @@
 
 .form-input {
   max-width: 19.5rem;
-  background: #424851;
   height: 2rem
-  border-radius 0.4rem;
-  padding-left: 0.6rem
-  border: none
 }
 
 .form-select {
   height: 2rem
-  border-radius 0.4rem;
-  border: none
-  padding-left: 0.6rem
   width 6.4rem;
-  background: #424851 url("../../../assets/icon/down.png") @width - 1.25rem 0.6rem / 0.8rem 0.8rem no-repeat;
-  appearance: none;
-  color #fff;
 }
 
 .form-select-big-size {
   width: 17.75rem
-  background: #424851 url("../../../assets/icon/down.png") @width - 1.25rem 0.6rem / 0.8rem 0.8rem no-repeat;
+
 }
 
 .submit-button {
@@ -104,7 +94,7 @@
       <form class="form-content">
         <div class="form-item">
           <div class="form-label">迈杰云平台</div>
-          <input class="form-input" v-model="serviceUrl" style="width: 19.5rem">
+          <input class="form-input _input" v-model="serviceUrl" style="width: 19.5rem">
         </div>
         <div class="submit-button" @click="checkIp">保存</div>
       </form>
@@ -114,20 +104,20 @@
       <form class="form-content">
         <div class="form-item-inline">
           <div class="form-label">学校名称</div>
-          <select class="form-select form-select-big-size" v-model="schoolInfo.school">
+          <select class="form-select _select form-select-big-size" v-model="schoolInfo.school">
             <option v-for="item in selectOption.school" :value="item.id" :label="item.label"></option>
           </select>
         </div>
         <div class="form-row">
           <div class="form-item-inline">
             <div class="form-label">当前校区</div>
-            <select class="form-select" v-model="schoolInfo.campus">
+            <select class="form-select _select" v-model="schoolInfo.campus">
               <option v-for="item in selectOption.campus" :value="item.id" :label="item.label"></option>
             </select>
           </div>
           <div class="form-item-inline">
             <div class="form-label">教学楼</div>
-            <select class="form-select" v-model="schoolInfo.category">
+            <select class="form-select _select" v-model="schoolInfo.category">
               <option v-for="item in selectOption.category" :value="item.id" :label="item.label"></option>
             </select>
           </div>
@@ -135,13 +125,13 @@
         <div class="form-row">
           <div class="form-item-inline">
             <div class="form-label">当前楼层</div>
-            <select class="form-select" v-model="schoolInfo.floor">
+            <select class="form-select _select" v-model="schoolInfo.floor">
               <option v-for="item in selectOption.floor" :value="item.id" :label="item.label"></option>
             </select>
           </div>
           <div class="form-item-inline">
             <div class="form-label">当前教室</div>
-            <select class="form-select" v-model="schoolInfo.terminal">
+            <select class="form-select _select" v-model="schoolInfo.terminal">
               <option v-for="item in selectOption.terminal" :value="item.id" :label="item.label"></option>
             </select>
           </div>
@@ -187,9 +177,19 @@ export default {
   mounted() {
     if(this.serviceUrl) {
       this.getTerminal();
+      this.getSchool();
     }
   },
   methods: {
+    getSchool() {
+      service.post('model/getSubCompanies', {
+        target: 'company_',
+        start: 0,
+        count: 100
+      }).then(res => {
+        console.log(res);
+      })
+    },
     getTerminal() {
       return new Promise((resolve, reject) => {
         service.post('model/getEntityTree', {

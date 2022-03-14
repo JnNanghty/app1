@@ -32,7 +32,7 @@
   <div class="auth-main">
     <div class="auth-title">{{ title }}</div>
     <div class="auth-content">
-      <div class="card">
+      <div class="card" @click="loginSuccess">
         <div class="login-item">
           <img src="../../assets/brush.png" alt="">
         </div>
@@ -56,6 +56,11 @@
 
 <script>
 import QRCode from 'qrcode'
+import mitt from "@/util/mitt";
+import {setToken} from "@/util/auth";
+import service from "@/api/services";
+import ls from "@/store/ls";
+import {msg} from "@/components/message";
 export default {
   name: "Auth",
   props: {
@@ -71,12 +76,46 @@ export default {
   },
   created() {
     this.wxQrCode()
+    mitt.on('brushCard', this.brushCard);
+  },
+  beforeUnmount() {
+    mitt.off('brushCard', this.brushCard);
   },
   methods: {
     wxQrCode() {
       QRCode.toDataURL('nb').then(url => {
         this.qrCodeUrl = url;
       });
+    },
+    loginSuccess() {
+      setToken('6669282:61646D696E36363639323130:1652167051808:F7353F580F31DF479A3D75B0A931164A');
+      mitt.emit('loginSuccess');
+      // this.$router.back();
+    },
+    icLogin(ic) {
+      service.post('auth/icLogin', {
+        ic: ic
+      }).then(res => {
+        if (res) {
+          setToken(res.token);
+          ls.set('userInfo', res, 6e5);
+          msg({
+            message: '登录成功！'
+          })
+        } else {
+          msg({
+            message: '未找到该用户！'
+          });
+        }
+      }, () => {
+        msg({
+          message: '登录失败！'
+        });
+      });
+    },
+    brushCard(res) {
+      console.log(res);
+      this.icLogin(res);
     }
   }
 }

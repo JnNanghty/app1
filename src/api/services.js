@@ -1,6 +1,5 @@
 import axios from 'axios';
 import {getToken} from "@/util/auth";
-// import {msg} from "@/components/message";
 import forge from 'node-forge';
 import ls from "@/store/ls";
 //
@@ -46,9 +45,6 @@ service.interceptors.response.use(res => {
   let {data} = res;
   return data;
 }, error => {
-  // msg({
-  //   message: '请求失败！'
-  // });
   return Promise.reject(error);
 });
 

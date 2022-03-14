@@ -4,12 +4,12 @@
 .header {
   display: flex;
   justify-content: space-between;
-  padding-top: 1.25rem;
+  padding-top: .8rem;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
   max-height: 3.5rem;
   position: relative;
-
+  height: 3rem;
   get_font_color(font_color)
 }
 
@@ -26,9 +26,9 @@
   margin: 0 auto;
   text-align: center;
   font-size: 0.9rem;
-  padding-top:.5rem;
+  padding-top: .5rem;
 
-  &::before{
+  &::before {
     content: ''
     display block
     position absolute
@@ -88,12 +88,14 @@
   overflow-x: scroll;
   position relative
   get_font_color(font_color)
-  .brush-tip{
+
+  .brush-tip {
     position absolute
     right: 0
     bottom: 0
   }
-  .mj-logo{
+
+  .mj-logo {
     position absolute
     left: 8px;
     bottom: 8px;
@@ -178,7 +180,7 @@
         <transition name="fade">
           <div class="header-center" v-show="showHeader">
             <div style="font-weight: 300">{{ terminalInfo.label }}</div>
-            <div style="font-size: .6rem;font-weight: 200">{{terminalType}} / {{ terminalInfo.seatCount }}座 </div>
+            <div style="font-size: .6rem;font-weight: 200">{{ terminalType }} / {{ terminalInfo.seatCount }}座</div>
           </div>
         </transition>
         <div class="header-right">
@@ -295,13 +297,13 @@ export default {
         currentDay: timeUtil.getCurrentDay(time),
       },
       terminalTypeList: [
-        { id: 7, name: 'media', label: '多媒体教室' },
-        { id: 1, name: 'wisdom', label: '智慧教室' },
-        { id: 3, name: 'record', label: '录播教室' },
-        { id: 4, name: 'computer', label: '计算机教室' },
-        { id: 2, name: 'experiment', label: '实验实训室' },
-        { id: 5, name: 'art', label: '功能教室' },
-        { id: 6, name: 'other', label: '其他' }
+        {id: 7, name: 'media', label: '多媒体教室'},
+        {id: 1, name: 'wisdom', label: '智慧教室'},
+        {id: 3, name: 'record', label: '录播教室'},
+        {id: 4, name: 'computer', label: '计算机教室'},
+        {id: 2, name: 'experiment', label: '实验实训室'},
+        {id: 5, name: 'art', label: '功能教室'},
+        {id: 6, name: 'other', label: '其他'}
       ]
     }
   },
@@ -312,7 +314,7 @@ export default {
     terminalType() {
       let label = ''
       this.terminalTypeList.forEach(i => {
-        if(i.id === this.terminalInfo.type) {
+        if (i.id === this.terminalInfo.type) {
           label = i.label
         }
       })
@@ -328,6 +330,12 @@ export default {
     mitt.on('mqttConfig', (data) => {
       ls.set('deviceConfig', data);
       this.handleConfig(data);
+    });
+
+    mitt.on('loginSuccess', () => {
+      this.$router.push({
+        name: this.loginToPath
+      });
     });
 
     this.refresh();
@@ -354,6 +362,9 @@ export default {
       const token = getToken();
       if (item.needLogin && !token) {
         this.loginToPath = item.path;
+        this.$router.push({
+          name: 'Auth'
+        });
       } else {
         this.loginToPath = null;
         this.$router.push({
@@ -363,9 +374,10 @@ export default {
     },
     goSetting() {
       let t = getToken()
-      let path = 'Auth'
-      if (t) {
-        path = 'SystemSettingHome'
+      let path = 'SystemSettingHome'
+      if (!t) {
+        this.loginToPath = 'SystemSettingHome';
+        path = 'Auth'
       }
       this.$router.push({
         name: path

@@ -1,3 +1,4 @@
+import router from "@/router";
 /**
  * 可设置过期时间的Storage
  * 如果有过期时间就额外保存一个超时时间值，每次get判断是否超时， 如果超时就删除并返回null
@@ -48,9 +49,17 @@ class storage {
     const source = this.source,
       expired = source[`${key}__expires__`] || Date.now + 1;
     const now = Date.now();
-
     if (now >= expired) {
       this.remove(key);
+      if(key === 'token') {
+        router.replace({
+          name: 'Home'
+        }).then(() => {
+          msg({
+            message: '请重新登陆！'
+          })
+        });
+      }
       return null;
     }
     return source[key] ? JSON.parse(source[key]) : source[key];

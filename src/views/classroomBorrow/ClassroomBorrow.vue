@@ -6,97 +6,149 @@
   height: 100%;
   get_font_color(font_color)
   display flex
-  padding: 0 40px;
+  padding: 10px 40px 0;
   box-sizing border-box
-.left, .right
+.left
+  width: 50%
+.right
   flex 1
-
+  margin-left: 1rem
 .wrap
   get_background(borrow_wrap_background)
   border-radius 8px
-  padding: 20px 30px
+  padding: 15px 25px
   box-sizing border-box
   margin-bottom: 10px
+  border 2px solid rgba(0,0,0,0)
 .change-button
   border-radius 8px
   get_background(borrow_change_button_background)
   text-align center
   padding: 6px 20px;
   font-size 14px;
+
+.wrap-active
+  border 2px solid #FDA45E
+
 .wrap1
   display flex
   .w1-left
-    flex 1
+    width: 70%;
     .w1-room-name
-      font-size 32px
+      font-size 32px;
+      white-space nowrap
+      overflow: hidden;
+      text-overflow ellipsis;
   .w1-right
     width: 30%
+    display flex
+    justify-content flex-end
+    align-items center
 .wrap2
   .w2-top
     display flex
+    justify-content space-between
   .w2-bottom
     display flex
-
+    margin-top: 5px
+    .borrow-time-wrap
+      overflow-x: scroll
+      .borrow-time-item
+        border-radius 6px;
+        padding: 4px 20px 4px 5px
+        height: 100%
+        background: #677181;
+        box-sizing border-box
+        margin-left: 10px
 .wrap3
   display flex
+.reason-input
+  padding-top: 5px
+  padding-bottom: @padding-top
 </style>
 <template>
   <div class="main">
     <div class="left">
-      <div class="wrap wrap1">
+      <div @click="selectWrap(0)" :class="activeWrap === 0 ? 'wrap-active' : ''" class="wrap wrap1">
         <div class="w1-left">
           <div>预约教室：</div>
-          <div class="w1-room-name">预约的教室123</div>
+          <div class="w1-room-name">{{formData.terminal.label}}</div>
         </div>
         <div class="w1-right">
           <div class="change-button">切换教室</div>
         </div>
       </div>
-      <div class="wrap wrap2">
+      <div @click="selectWrap(1)" :class="activeWrap === 1 ? 'wrap-active' : ''" class="wrap wrap2">
         <div class="w2-top">
-          <div>预约日期: </div>
-          <div>切换教室</div>
+          <div>预约日期: {{formData.date}}</div>
+          <div class="change-button">切换教室</div>
         </div>
         <div class="w2-bottom">
           <div>
             <span>预约时段:</span>
             <br>
-            <span>支持多选</span>
+            <span style="font-size: 12px;">支持多选</span>
           </div>
-          <div></div>
+          <div class="borrow-time-wrap">
+            <div class="borrow-time-item">
+              <div>第一节</div>
+              <div>09:00-09:40</div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="wrap wrap3">
+      <div @click="selectWrap(2)" :class="activeWrap === 2 ? 'wrap-active' : ''" class="wrap wrap3">
         <div>申请理由：</div>
-        <input class="_input" type="text" placeholder="选填">
+        <input class="_input reason-input" type="text" placeholder="选填">
       </div>
-      <div>提交申请</div>
+      <div class="_button">提交申请</div>
     </div>
-    <div class="right"></div>
+    <div class="right">
+      <component :is="rightComponentName"></component>
+    </div>
   </div>
 </template>
 <script>
 import service from "@/api/services";
 import ls from "@/store/ls";
 import {msg} from "@/components/message";
-
+import ClassroomSelect from "@/views/classroomBorrow/components/ClassroomSelect";
+import DateSelect from "@/views/classroomBorrow/components/DateSelect";
+import mitt from "@/util/mitt";
 
 export default {
+  components: {
+    ClassroomSelect,
+    DateSelect
+  },
   data() {
     return {
-      borrowList: [],
-      count: 10,
-      totalCount: 0,
-      userId: null,
-      loading: false,
-      finished: false
+      formData: {
+        terminal: {
+          id: '',
+          label: ''
+        },
+        date: Date.now(),
+        reason: []
+      },
+      rightComponentName: 'ClassroomSelect',
+      terminalInfo: {},
+      activeWrap: 0,
+      componentArray: ['ClassroomSelect', 'DateSelect']
     }
+  },
+  created() {
+    this.terminalInfo = ls.get('terminalInfo'); // 默认值
+    this.formData.terminal = ls.get('terminalInfo');
+
+    mitt.on('updateSelect', this.setTerminal)
+  },
+  beforeUnmount() {
+    mitt.off('updateSelect', this.setTerminal);
   },
   mounted() {
     const userInfo = ls.get('userInfo');
     if (userInfo) {
-      this.userId = userInfo.extraInformation.role.id;
-      this.getBorrowList()
     } else {
       msg({
         message: '请先登录!'
@@ -104,38 +156,12 @@ export default {
     }
   },
   methods: {
-    getBorrowList() {
-      service.post('model/getEntities', {
-        target: 'terminalBorrow',
-        start: 0,
-        count: this.count,
-        orderBy: ['id DESC'],
-        extraFilter: {
-          field: 'creator',
-          match: 'EQ',
-          value: this.userId
-        },
-        retFields: ['creator', 'room', 'start', 'end', 'time', 'status', 'reason']
-      }).then(res => {
-        this.borrowList = res.list;
-        this.totalCount = res.totalCount;
-        this.loading = false;
-      });
+    selectWrap(index) {
+      this.activeWrap = index;
+      this.rightComponentName = this.componentArray[index];
     },
-    goPage(id) {
-      this.$router.push({
-        name: 'ClassroomBorrowDetail',
-        params: {
-          id: id
-        }
-      })
-    },
-    loadData() {
-      this.count += 5;
-      this.getBorrowList()
-      if (this.count >= this.totalCount) {
-        this.finished = true;
-      }
+    setTerminal(item) {
+      this.formData.terminal = item;
     }
   }
 }

@@ -134,6 +134,7 @@ export default {
   z-index: 10;
   background: #a9ccf5;
   height: 1.5rem;
+  opacity 0;
 }
 
 .notice-text {

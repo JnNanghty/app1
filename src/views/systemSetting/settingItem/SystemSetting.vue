@@ -1,7 +1,7 @@
 <style scoped lang="stylus">
 .main-content {
   display: flex;
-  color #fff;
+  get_font_color(font_color)
   height: 100%;
   width: 100%
 
@@ -12,7 +12,7 @@
   .main-left,
   .main-right {
     flex: 1;
-    background: rgba(66, 72, 81, 0.25);
+    get_background(setting_panel_bancground)
     border-radius 0.35rem
     padding-top: 0.7rem
     padding-left: 1.25rem
@@ -59,42 +59,31 @@
 }
 
 .form-input {
-  background: #424851;
   width: 16.45rem
-  border-radius 0.4rem
   height: 2rem
-  padding-left: 0.6rem
-  border: none
 }
 
 .form-select {
-  border-radius 0.4rem
   height: 2rem
-  border: none
-  padding-left: 0.6rem
   width 6.4rem
-  background: #424851 url("../../../assets/icon/down.png") @width - 1.25rem 0.6rem / 0.8rem 0.8rem no-repeat;
-  appearance: none;
-  color #fff;
 }
 
 .form-select-big-size {
   width: 17.05rem
-  background: #424851 url("../../../assets/icon/down.png") @width - 1.25rem 0.6rem / 0.8rem 0.8rem no-repeat;
 }
 
 .submit-button {
-  text-align center;
-  background-color: #FDA45E;
-  border-radius 0.4rem;
-  width: 15.5rem
-  height: 2rem
-  line-height @height;
-  bottom: 0.85rem
   position absolute
+  width: 75%
+  bottom: 0.85rem
   left: 0
   right: 0
   margin: 0 auto;
+  display flex
+  justify-content space-around
+  div {
+    flex: 1
+  }
 }
 </style>
 <template>
@@ -104,33 +93,33 @@
       <form class="form-content">
         <div class="form-item-inline">
           <div class="form-label">ip获取</div>
-          <select class="form-select form-select-big-size" v-model="systemInfo.ip">
+          <select class="form-select _select form-select-big-size" v-model="systemInfo.ip">
             <option v-for="item in selectOption.school" :value="item.id" :label="item.label"></option>
           </select>
         </div>
         <div class="form-item-inline">
           <div class="form-label">ip地址</div>
-          <input class="form-input">
+          <input class="form-input _input">
         </div>
         <div class="form-item-inline">
           <div class="form-label">子网掩码</div>
-          <input class="form-input">
+          <input class="form-input _input">
         </div>
         <div class="form-item-inline">
           <div class="form-label">网关</div>
-          <input class="form-input">
+          <input class="form-input _input">
         </div>
         <div class="form-item-inline">
           <div class="form-label">首选DNS</div>
-          <input class="form-input">
+          <input class="form-input _input">
         </div>
         <div class="form-item-inline">
           <div class="form-label">备用DNS</div>
-          <input class="form-input">
+          <input class="form-input _input">
         </div>
-        <div>
-          <div>取消</div>
-          <div class="submit-button">保存</div>
+        <div class="submit-button">
+          <div class="_button">取消</div>
+          <div class="_button" style="margin-left: 2rem">保存</div>
         </div>
       </form>
     </div>

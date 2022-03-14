@@ -7,7 +7,7 @@ get_background($color)
     //判断html的data-theme的属性值，{}是Stylus插值
     [data-theme = {item.name}] & {
       //这里的item可以当作一个对象，item[$color]可表示为：对象名.属性
-      background-color: item[$color];
+      background: item[$color];
     }
 
 
@@ -39,4 +39,25 @@ get_background_image($name)
   border-radius 0.4rem
   padding-left: 0.6rem
   border: none
+  get_font_color(font_color)
+}
+._button{
+  text-align center;
+  background-color: #FDA45E;
+  border-radius 0.4rem;
+  width: 75%
+  height: 2rem
+  line-height @height;
+  margin: 0 auto;
+  get_font_color(font_color)
+}
+._select{
+  border-radius 0.4rem
+  width 100%
+  height: 2rem
+  border: none
+  padding-left: 0.6rem
+  get_background(select_background)
+  get_font_color(font_color)
+  appearance: none;
 }

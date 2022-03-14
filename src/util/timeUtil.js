@@ -30,9 +30,10 @@ function formatTime(time) {
 /**
  * @description 格式化当前日期
  * @param {Date | Number} time 时间
+ * @param {String} split 分隔符
  * @return string '2021-02-31'
  * */
-function formatDate(time) {
+function formatDate(time, split = '.') {
   const _time = new Date(time);
   let result = '';
   const _year = _time.getFullYear();
@@ -41,7 +42,7 @@ function formatDate(time) {
   if (isNaN(_year)) {
     return 'NaN';
   }
-  result = `${_year}.${one2two(_month)}.${one2two(_day)}`;
+  result = `${_year}${split}${one2two(_month)}${split}${one2two(_day)}`;
   return result;
 }
 
