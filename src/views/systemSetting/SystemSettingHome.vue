@@ -59,16 +59,7 @@ header {
     }
   }
 
-  .user-info{
-    padding-top: .5rem
-    margin-right: 20px
-    .exit-button{
-      padding: 6px 10px;
-      text-align center
-      border-radius 8px;
-      get_background(input_background)
-    }
-  }
+
 }
 
 main {
@@ -126,11 +117,7 @@ main {
         <div v-show="terminalId" style="font-size: .6rem;font-weight: 200">{{ terminalType }} / {{ terminalInfo.seatCount }}座</div>
       </div>
       <div class="user-info">
-        <div>
-          <div></div>
-          <div></div>
-        </div>
-        <div class="exit-button">退出</div>
+        <user-info></user-info>
       </div>
       <div class="right-content">
         <div class="back-button" @click="goHome"></div>
