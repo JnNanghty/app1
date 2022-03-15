@@ -121,6 +121,7 @@ export default {
   created() {
     this.currentCourse = ls.get('currentCourse') || {};
     this.getTerminal();
+    this.getDeviceList();
   },
   computed: {
     filterDevices() {
@@ -198,7 +199,6 @@ export default {
       })
     },
     getDeviceList() {
-      setToken('6669282:61646D696E36363639323130:1647679075040:24AC842388F6952412B49B8BB74E47BD');
       service.post('model/getEntities', {
         target: 'device',
         filter: {

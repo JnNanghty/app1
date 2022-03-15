@@ -128,7 +128,9 @@ export default {
       if (index === 2) {
         const token = getToken();
         if (!token) {
-          // this.showLogin();
+          this.$router.push({
+            name: ''
+          })
           return;
         }
       }

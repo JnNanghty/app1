@@ -31,11 +31,11 @@
 <template>
   <div class="main">
     <div class="main-left">
-      <component v-show="terminalId" :is="leftComponentName" :terminalInfo="terminalInfo"></component>
+      <component v-show="terminalId" :is="leftComponentName"  :inCourse="inCourse" :terminalInfo="terminalInfo" :currentCourse="currentCourse" :nextCourse="nextCourse" ></component>
     </div>
     <div class="main-right">
       <component :is="rightComponentName" :currentCourse="currentCourse" :nextCourse="nextCourse"
-                 :inCourse="inCourse" ></component>
+                 :inCourse="inCourse"></component>
     </div>
   </div>
 </template>
@@ -46,13 +46,11 @@ import service from "@/api/services";
 import {msg} from "@/components/message";
 import ClassroomInfo from "@/views/home/components/ClassroomInfo";
 import Clock from "@/views/home/components/Clock";
+import Attendance from "@/views/home/components/Attendance";
 
 export default {
   name: 'HomePage',
-  components: {
-    ClassroomInfo,
-    Clock
-  },
+  components: {ClassroomInfo, Clock, Attendance},
   data() {
     return {
       terminalId: null,
@@ -63,8 +61,8 @@ export default {
       endOfClassText: '空闲中',
       terminalInfo: {},
       countDownInterval: null,
-      leftComponentName: 'ClassroomInfo',
-      rightComponentName: 'Clock',
+      leftComponentName: 'Clock',
+      rightComponentName: 'Attendance',
       flag: false
     };
   },

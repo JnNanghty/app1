@@ -45,18 +45,18 @@ export default {
     }
   },
   created() {
-    this.userInfo = ls.get('userInfo');
-    let expires = +ls.get('userInfo__expires__');
-    this.exitInterval = setInterval(() => {
-      let now = Date.now();
-      if (now >= this.expireTime) {
-        clearInterval(this.exitInterval);
-        this.$router.replace({
-          name: 'Home'
-        });
-      }
-      this.expireTime = Math.floor((expires - now) / 1000);
-    }, 1e3);
+    this.userInfo = ls.get('userInfo') || {};
+    let expires = +ls.get('userInfo__expires__') || 0;
+    // this.exitInterval = setInterval(() => {
+    //   let now = Date.now();
+    //   this.expireTime = Math.floor((expires - now) / 1000);
+    //   if (now >= this.expireTime) {
+    //     clearInterval(this.exitInterval);
+    //     this.$router.replace({
+    //       name: 'Home'
+    //     });
+    //   }
+    // }, 1e3);
   },
   mounted() {
   },
