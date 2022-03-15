@@ -274,7 +274,7 @@ export default {
           label: '预约',
           name: 'borrow',
           path: 'ClassroomBorrow',
-          needLogin: false,
+          needLogin: true,
           visible: false
         },
         {
@@ -290,7 +290,7 @@ export default {
           label: '开门',
           name: 'open',
           path: 'Open',
-          needLogin: true,
+          needLogin: false,
           visible: true
         },
       ],

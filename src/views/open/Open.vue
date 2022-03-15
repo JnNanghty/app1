@@ -1,18 +1,23 @@
 <style lang="stylus" scoped>
-.p-main
-  get_font_color(font_color)
+
 </style>
 <template>
-  <div class="p-main">
-    个人课表
+  <div>
+    开门
   </div>
 </template>
-<script>
 
+<script>
 export default {
-  name: 'Personal-Curriculum',
+  name: "Open",
+  data() {
+    return {}
+  },
+  created() {
+  },
   mounted() {
   },
   methods: {}
 }
 </script>
+

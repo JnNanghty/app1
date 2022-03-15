@@ -11,7 +11,7 @@ import ExamMode from '@/views/specialMode/ExamMode'
 import ProgrammeMode from '@/views/specialMode/ProgrammeMode'
 import Information from "@/views/information/Information";
 import Auth from "@/components/authPage/Auth";
-
+import Open from "@/views/open/Open";
 
 const routes = [
   {
@@ -43,6 +43,10 @@ const routes = [
       path: '/auth',
       name: 'Auth',
       component: Auth
+    }, {
+      path: '/open',
+      name: 'Open',
+      component: Open
     }]
   },
   {

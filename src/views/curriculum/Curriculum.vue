@@ -78,7 +78,12 @@
           <WeekCurriculum></WeekCurriculum>
         </div>
         <div class="tabs-pane-item" v-else-if="activeIndex === 2">
-          <PersonalCurriculum></PersonalCurriculum>
+          <template v-if="!!token">
+            <PersonalCurriculum></PersonalCurriculum>
+          </template>
+          <template v-else>
+            <auth></auth>
+          </template>
         </div>
         <div class="tabs-pane-item" v-else-if="activeIndex === 3">
           <img src="" alt="校历">
@@ -91,13 +96,13 @@
 import TodayCurriculum from './components/TodayCurriculum.vue';
 import WeekCurriculum from "./components/WeekCurriculum";
 import PersonalCurriculum from "./components/PersonalCurriculum";
-import Login from "@/components/LoginPanel/Login";
 import {getToken} from "@/util/auth";
 import mitt from "@/util/mitt";
+import Auth from "@/components/authPage/Auth";
 
 export default {
   name: 'Curriculum-index',
-  components: {TodayCurriculum, WeekCurriculum, PersonalCurriculum, Login,},
+  components: {TodayCurriculum, WeekCurriculum, PersonalCurriculum, Auth},
   data() {
     return {
       tabsLabelArray: [{
@@ -113,11 +118,13 @@ export default {
         label: '学年校历',
         icon: require('@/assets/curriculum_icon/year.png')
       }],
-      activeIndex: 0
+      activeIndex: 0,
+      token: null
     }
   },
   computed: {},
   created() {
+    this.token = getToken();
     mitt.on('loginSuccess', this.loginSuccess);
   },
   mounted() {
@@ -130,26 +137,11 @@ export default {
   },
   methods: {
     loginSuccess() {
-      this.activeIndex = 2;
+      this.token = getToken()
     },
     changeActiveIndex(index) {
-      if (index === 2) {
-        const token = getToken();
-        if (!token) {
-          this.$router.push({
-            name: 'Auth'
-          })
-          return;
-        }
-      }
       this.activeIndex = index;
     },
-    showLogin() {
-      this.$refs.login.visible = true;
-    },
-    handleLoginSuccess() {
-      this.changeActiveIndex(2);
-    }
   }
 }
 </script>

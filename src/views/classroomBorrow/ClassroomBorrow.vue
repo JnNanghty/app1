@@ -136,7 +136,8 @@ export default {
       activeWrap: 0,
       componentArray: ['ClassroomSelect', 'DateSelect'],
       date: Date.now(),
-      timeSelect: []
+      timeSelect: [],
+      borrowTime: []
     }
   },
   created() {
@@ -145,10 +146,12 @@ export default {
 
     mitt.on('updateSelect', this.setTerminal)
     mitt.on('changeDate', this.changeDate)
+    mitt.on('addBorrowTime', this.addBorrowTime)
   },
   beforeUnmount() {
     mitt.off('updateSelect', this.setTerminal);
     mitt.off('changeDate', this.changeDate)
+    mitt.off('addBorrowTime', this.addBorrowTime)
   },
   mounted() {
     const userInfo = ls.get('userInfo');
@@ -179,6 +182,12 @@ export default {
         terminalId: this.terminalInfo.id
       }).then(res => {
       })
+    },
+    addBorrowTime(item) {
+      this.borrowTime.push(item)
+    },
+    removeBorrowTime(item) {
+      this.borrowTime = this.borrowTime.filter(i => i.id !== item.id)
     }
   }
 }

@@ -29,25 +29,42 @@
 
 .ds-content
   overflow-y scroll
-  margin-top: 5px
+  margin-top: 10px
   padding: 1rem;
   box-sizing border-box
+  height: 16rem
   .time-item
     display flex
     justify-content space-between
     padding: 13px
-    &:nth-child(2n)
+    line-height 2rem;
+    &:nth-child(2n + 1)
       get_background(borrow_date_item_background)
     .status1
       width: 5rem
       margin: 0
     .status2
+      width: 5rem
       color #59B565
       border 2px solid @color
       border-radius 8px
       height: 2rem
       line-height @height
       text-align center
+      box-sizing border-box
+      .icon
+        margin-right: .5rem;
+        vertical-align middle
+        img
+          width: .8rem
+          height: @width
+    .status3
+      width: 5rem;
+      height: 2rem
+      line-height @height
+      text-align center
+      border-radius 8px
+      get_background(input_background)
 </style>
 <template>
   <div class="ds-main">
@@ -60,10 +77,10 @@
       <div class="time-item" v-for="(item, index) in timeConfig" :key="item.id">
         <div>第{{ index + 1 }}节 <span>{{ item.start }}</span> <span>-</span> <span>{{ item.end }}</span></div>
         <template v-if="item.status === 1">
-          <div class="status1 _button">预约</div>
+          <div class="status1 _button" @click="borrow(item)">预约</div>
         </template>
         <template v-else-if="item.status === 2">
-          <div class="status2"><i><img src="../../../assets/success.png" alt=""></i>已预约</div>
+          <div class="status2"><i class="icon"><img src="../../../assets/success_2.png" alt=""></i>已预约</div>
         </template>
         <template v-else>
           <div class="status3">不可预约</div>
@@ -115,29 +132,6 @@ export default {
       }
       mitt.emit('changeDate', this.date)
     },
-    // getTimeConfig() {
-    //   service.post('model/getEntities', {
-    //     target: 'terminalBorrowConfig',
-    //     retFields: ['start', 'end']
-    //   }).then(res => {
-    //     let config = res.list[0];
-    //     let start = JSON.parse(config.start)
-    //     console.log(start)
-    //     let end = JSON.parse(config.end)
-    //     let len = start.length;
-    //     let temp = []
-    //     // status 当前时间的借用状态  1 可以预约  2已经预约  3不可预约
-    //     for (let i = 0; i < len; i++) {
-    //       temp.push({
-    //         start: start[i],
-    //         end: end[i],
-    //         status: 1,
-    //         id: i
-    //       })
-    //     }
-    //     this.timeConfig = temp;
-    //   })
-    // },
     getSectionConfig() {
       service.post('course/terminalSection', {
         id: this.terminalId
@@ -148,15 +142,27 @@ export default {
           let time = item.split('-')
           let start = time[0]
           let end = time[1]
+          let status = 1
+          if(index > 4) {
+            status = 2
+          }
+          if(index > 6) {
+            status = 3
+          }
           temp.push({
             start,
             end,
-            status: 1,
+            status: status,
             id: index + 1
           })
         })
         this.timeConfig = temp;
       })
+    },
+    borrow(item) {
+      // 添加预约时间
+      item.status = 2;
+      this.$emit('addBorrowTime', item)
     }
   }
 }
