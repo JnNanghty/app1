@@ -55,6 +55,7 @@
     justify-content center
     align-items center
     position relative
+    overflow: hidden
     .course-info
       position absolute
       bottom: 10px
@@ -62,7 +63,12 @@
         content: ''
         position absolute
         display block
-
+  .course-item
+    get_background(patrol_bottom_background)
+    border-radius 4px;
+    margin-left: .25rem
+    margin-right: .25rem
+    margin-bottom: .5rem
 
   .table-title
     get_background(curriculum_section_background)
@@ -97,7 +103,7 @@
     <div class="change-week" ref="weekWrap">
       <div class="scroll-wrap">
         <div class="week-item" :class="currentWeek === item ? 'week-item-active' : ''"
-             v-for="item in 19" :ref="'week-item-' + item">
+             v-for="item in 19" :ref="'week-item-' + item" @click="changeWeek(item)">
           第{{ simplifyNum[item - 1] }}周
         </div>
       </div>
@@ -112,15 +118,9 @@
       </div>
       <div class="table-col" v-for="(item, index) in curriculum" :key="item">
         <div class="table-row table-title">星期{{ simplifyNumberArray[index] }}</div>
-        <div class="table-row" v-for="(course, courseIndex) in curriculum[index]"
+        <div class="table-row" :class="!!course.courseName ? 'course-item' : ''" v-for="(course, courseIndex) in curriculum[index]"
              :key="courseIndex" :style="course && course.style" @click="selectItem(course, courseIndex)">
           {{ course && course.courseName }}
-          <template v-if="course.courseId">
-            <div class="course-info">
-              <div>{{course.courseName}}</div>
-              <div>{{course.teacherName}} &nbsp; &nbsp; {{course.startSource}}</div>
-            </div>
-          </template>
         </div>
       </div>
     </div>
@@ -183,7 +183,7 @@ export default {
               if (i >= course.startSession && i <= course.endSession) {
                 temp.push(Object.assign(course, {
                   style: {
-                    height: (2.5 * (course.endSession - course.startSession + 1)) + 'rem'
+                    height: (2.5 * (course.endSession - course.startSession + 1) - 0.5) + 'rem'
                   }
                 }));
                 i = course.endSession;
@@ -215,24 +215,8 @@ export default {
       }
       return weekNum;
     },
-    changeWeek(value) {
-      if (!this.terminalId) {
-        msg({
-          message: '请先在设置中绑定班级！'
-        });
-        return;
-      }
-      if (value === 'pre') {
-        this.currentWeek--;
-        if (this.currentWeek < 1) {
-          this.currentWeek = 1;
-        }
-      } else {
-        this.currentWeek++;
-        if (this.currentWeek > 19) {
-          this.currentWeek = 19;
-        }
-      }
+    changeWeek(week) {
+      this.currentWeek = week;
       this.getCurriculum();
     },
     selectItem(item, index) {

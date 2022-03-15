@@ -338,13 +338,9 @@ export default {
       this.handleConfig(data);
     });
 
-    mitt.on('loginSuccess', () => {
-      this.$router.push({
-        name: this.loginToPath
-      });
-    });
-
+    mitt.on('loginSuccess', this.loginSuccess);
     mitt.on('changeTheme', this.changeTheme)
+
 
     this.refresh();
 
@@ -361,6 +357,8 @@ export default {
   },
   beforeUnmount() {
     mitt.off('refresh', this.refresh);
+    mitt.off('loginSuccess', this.loginSuccess);
+    mitt.off('changeTheme', this.changeTheme)
     clearInterval(this.timeInterval);
   },
   methods: {
@@ -445,6 +443,14 @@ export default {
     changeTheme() {
       let theme = window.document.documentElement.dataset.theme
       this.activeClass = 'app-item-icon-active-' + theme
+    },
+    loginSuccess() {
+      if (this.loginToPath) {
+        this.$router.push({
+          name: this.loginToPath
+        });
+        this.loginToPath = null;
+      }
     }
   }
 }

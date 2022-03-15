@@ -93,6 +93,7 @@ import WeekCurriculum from "./components/WeekCurriculum";
 import PersonalCurriculum from "./components/PersonalCurriculum";
 import Login from "@/components/LoginPanel/Login";
 import {getToken} from "@/util/auth";
+import mitt from "@/util/mitt";
 
 export default {
   name: 'Curriculum-index',
@@ -116,20 +117,27 @@ export default {
     }
   },
   computed: {},
+  created() {
+    mitt.on('loginSuccess', this.loginSuccess);
+  },
   mounted() {
     this.$nextTick(() => {
       this.changeActiveIndex(0);
     });
   },
   beforeUnmount() {
+    mitt.off('loginSuccess', this.loginSuccess)
   },
   methods: {
+    loginSuccess() {
+      this.activeIndex = 2;
+    },
     changeActiveIndex(index) {
       if (index === 2) {
         const token = getToken();
         if (!token) {
           this.$router.push({
-            name: ''
+            name: 'Auth'
           })
           return;
         }

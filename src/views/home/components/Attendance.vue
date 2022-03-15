@@ -65,15 +65,15 @@
     <div class="a-top">
       <div class="top-item line">
         <p>应到人数</p>
-        <div class="number">123</div>
+        <div class="number">{{ attendanceInfo.students.length }}</div>
       </div>
       <div class="top-item line">
         <p>实到人数</p>
-        <div class="number" style="color: #F3A568;">11</div>
+        <div class="number" style="color: #F3A568;">{{ arrived.length }}</div>
       </div>
       <div class="top-item">
         <p>未到人数</p>
-        <div class="number" style="color:#989898;">321</div>
+        <div class="number" style="color:#989898;">{{ notArrived.length }}</div>
       </div>
       <div class="drag-button"><img src="../../../assets/drag-down.png" alt=""></div>
     </div>
@@ -95,20 +95,47 @@
 </template>
 
 <script>
+import service from "@/api/services";
+import mitt from "@/util/mitt";
+
 export default {
   name: "Attendance",
+  props: {
+    attendanceInfo: {
+      type: Object,
+      default: {
+        students: []
+      }
+    }
+  },
   data() {
-    return {}
+    return {
+      arrived: [],
+      notArrived: [],
+
+    }
   },
   created() {
-
+    mitt.on('brushCard', this.brushCard);
+  },
+  beforeUnmount() {
+    mitt.off('brushCard', this.brushCard);
   },
   methods: {
     goPage(name) {
       this.$router.push({
         name: ''
       })
-    }
+    },
+    brushCard(ic) {
+      service.post('classCard/signIn', {
+        ic,
+        lessonId: this.attendanceInfo.id
+      }).then(res => {
+
+      })
+    },
+
   }
 }
 </script>

@@ -134,7 +134,9 @@ export default {
       rightComponentName: 'ClassroomSelect',
       terminalInfo: {},
       activeWrap: 0,
-      componentArray: ['ClassroomSelect', 'DateSelect']
+      componentArray: ['ClassroomSelect', 'DateSelect'],
+      date: Date.now(),
+      timeSelect: []
     }
   },
   created() {
@@ -142,9 +144,11 @@ export default {
     this.formData.terminal = ls.get('terminalInfo');
 
     mitt.on('updateSelect', this.setTerminal)
+    mitt.on('changeDate', this.changeDate)
   },
   beforeUnmount() {
     mitt.off('updateSelect', this.setTerminal);
+    mitt.off('changeDate', this.changeDate)
   },
   mounted() {
     const userInfo = ls.get('userInfo');
@@ -162,6 +166,19 @@ export default {
     },
     setTerminal(item) {
       this.formData.terminal = item;
+      this.getBorrowTime();
+    },
+    changeDate(date) {
+      this.date = date
+      this.getBorrowTime()
+    },
+    getBorrowTime() {
+      this.timeSelect = []
+      service.post('course/getBorrowTerminalTime', {
+        date: this.date,
+        terminalId: this.terminalInfo.id
+      }).then(res => {
+      })
     }
   }
 }

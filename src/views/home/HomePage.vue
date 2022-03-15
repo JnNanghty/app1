@@ -31,10 +31,17 @@
 <template>
   <div class="main">
     <div class="main-left">
-      <component v-show="terminalId" :is="leftComponentName"  :inCourse="inCourse" :terminalInfo="terminalInfo" :currentCourse="currentCourse" :nextCourse="nextCourse" ></component>
+      <component v-show="terminalId && leftComponentName === 'ClassroomInfo'"
+                 :is="leftComponentName"
+                 :terminalInfo="terminalInfo"
+                 :currentCourse="currentCourse"
+                 :nextCourse="nextCourse"
+                 :inCourse="inCourse"></component>
     </div>
     <div class="main-right">
-      <component :is="rightComponentName" :currentCourse="currentCourse" :nextCourse="nextCourse"
+      <component :is="rightComponentName"
+                 :currentCourse="currentCourse"
+                 :nextCourse="nextCourse"
                  :inCourse="inCourse"></component>
     </div>
   </div>
