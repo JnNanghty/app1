@@ -3,10 +3,12 @@
 </style>
 <template>
   <div>
-    <template>
-      <iframe src=""></iframe>
+    <template v-if="contentType === 1">
+      <iframe :src="info.content"></iframe>
     </template>
-    <template></template>
+    <template v-else>
+      <div></div>
+    </template>
   </div>
 </template>
 
@@ -15,16 +17,27 @@ export default {
   name: "Information",
   data() {
     return {
-      info: {}
+      info: {
+        type: {}
+      }
+    }
+  },
+  computed: {
+    contentType() {
+      // 1 超链接
+      // 2 富文本
+      if (this.info.type && this.type.id === 1) {
+        return 1
+      } else {
+        return 2
+      }
     }
   },
   created() {
     let data = this.$route.params.data
     this.info = JSON.parse(data);
   },
-  methods: {
-
-  }
+  methods: {}
 }
 </script>
 

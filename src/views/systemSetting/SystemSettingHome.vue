@@ -188,11 +188,6 @@ export default {
     this.userInfo = ls.get('userInfo') || {}
   },
   methods: {
-    exitApp() {
-      if (window.cordova) {
-        cordova.plugins.exit();
-      }
-    },
     goHome() {
       this.$router.push({
         name: "Home"

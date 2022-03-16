@@ -84,10 +84,14 @@
   div {
     flex: 1
   }
-  .cancel-button {
-    get_background(input_background)
-  }
 }
+.cancel-button {
+  get_background(input_background)
+}
+.option-button
+  width: 50%
+  margin: 0 0 2rem 2rem
+
 </style>
 <template>
   <div class="main-content">
@@ -127,8 +131,9 @@
       </form>
     </div>
     <div class="main-right">
-      <h2 class="form-title">当前绑定教室信息</h2>
-
+      <h2 class="form-title">系统操作</h2>
+      <div class="option-button cancel-button  _button" @click="exit">退出应用</div>
+      <div class="option-button _button">显示底部工具栏</div>
     </div>
   </div>
 </template>
@@ -146,6 +151,12 @@ export default {
       }
     }
   },
-  methods: {}
+  methods: {
+    exit() {
+      if (window.cordova) {
+        cordova.plugins.exit();
+      }
+    }
+  }
 }
 </script>
