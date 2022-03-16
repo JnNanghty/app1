@@ -60,6 +60,14 @@
         background: #677181;
         box-sizing border-box
         margin-left: 10px
+        position relative
+        .close-icon
+          position absolute
+          top: 50%
+          right: 1rem;
+          img
+            width: 8px
+            height @width
 .wrap3
   display flex
 .reason-input
@@ -90,9 +98,10 @@
             <span style="font-size: 12px;">支持多选</span>
           </div>
           <div class="borrow-time-wrap">
-            <div class="borrow-time-item">
-              <div>第一节</div>
-              <div>09:00-09:40</div>
+            <div class="borrow-time-item" v-for="(item, index) in borrowTime">
+              <div>第{{index + 1}}节</div>
+              <div>{{ item.start }}-{{ item.end }}</div>
+              <div class="close-icon" @click="removeBorrowTime(item)"><img src="../../assets/close_icon.png" alt=""></div>
             </div>
           </div>
         </div>
@@ -114,12 +123,14 @@ import ls from "@/store/ls";
 import {msg} from "@/components/message";
 import ClassroomSelect from "@/views/classroomBorrow/components/ClassroomSelect";
 import DateSelect from "@/views/classroomBorrow/components/DateSelect";
+import Reason from "@/views/classroomBorrow/components/Reason";
 import mitt from "@/util/mitt";
 
 export default {
   components: {
     ClassroomSelect,
-    DateSelect
+    DateSelect,
+    Reason
   },
   data() {
     return {
@@ -134,7 +145,7 @@ export default {
       rightComponentName: 'ClassroomSelect',
       terminalInfo: {},
       activeWrap: 0,
-      componentArray: ['ClassroomSelect', 'DateSelect'],
+      componentArray: ['ClassroomSelect', 'DateSelect', 'Reason'],
       date: Date.now(),
       timeSelect: [],
       borrowTime: []
@@ -181,6 +192,7 @@ export default {
         date: this.date,
         terminalId: this.terminalInfo.id
       }).then(res => {
+        // 要被禁用的时间
       })
     },
     addBorrowTime(item) {

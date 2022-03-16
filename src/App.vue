@@ -45,17 +45,17 @@ export default {
     })
 
     mitt.on('mqttInfo', (data) => {
-      console.log(data);
+      this.$router.push({
+        name: 'Information',
+        params: {
+          data: JSON.stringify(data)
+        }
+      })
     })
 
     mitt.on('mqttRealTimeBroadcast', this.broadcast);
 
-    mitt.on('mqttConfig', (data) => {
-      const serviceUrl = ls.get('serviceUrl') || '';
-      if (data.background) {
-        // this.background = 'url(' + serviceUrl + data.background + ') 0/cover no-repeat';
-      }
-    });
+    mitt.on('mqttConfig', (data) => {});
 
   },
   methods: {

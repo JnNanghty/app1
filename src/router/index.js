@@ -6,12 +6,12 @@ import Patrol from '@/views/patrol/Patrol'
 import SystemSettingHome from '@/views/systemSetting/SystemSettingHome'
 import ClassroomBorrow from '@/views/classroomBorrow/ClassroomBorrow'
 import Repair from '@/views/repair/Repair'
-import Attendance from '@/views/attendance/Attendance'
 import ExamMode from '@/views/specialMode/ExamMode'
 import ProgrammeMode from '@/views/specialMode/ProgrammeMode'
 import Information from "@/views/information/Information";
 import Auth from "@/components/authPage/Auth";
 import Open from "@/views/open/Open";
+
 
 const routes = [
   {
@@ -47,12 +47,11 @@ const routes = [
       path: '/open',
       name: 'Open',
       component: Open
+    }, {
+      path: '/information',
+      name: 'Information',
+      component: Information
     }]
-  },
-  {
-    path: '/attendance',
-    name: 'Attendance',
-    component: Attendance
   }, {
     path: '/systemSettingHome',
     name: 'SystemSettingHome',
@@ -65,10 +64,6 @@ const routes = [
     path: '/programmeMode',
     name: 'ProgrammeMode',
     component: ProgrammeMode
-  }, {
-    path: '/information',
-    name: 'Information',
-    component: Information
   },
 ]
 

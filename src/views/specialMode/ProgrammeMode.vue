@@ -13,7 +13,7 @@ export default {
     }
   },
   created() {
-    const data = this.$route.params.data || {};
+    const data = this.$route.params.data;
     this.programmeData = JSON.parse(data);
     console.log('节目模式参数')
     console.log(this.programmeData);

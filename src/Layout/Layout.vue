@@ -328,22 +328,15 @@ export default {
     }
   },
   mounted() {
-
     // 绑定教室后需要刷新
     mitt.on('refresh', this.refresh);
-
     // 后台下发更新班牌设置
-    mitt.on('mqttConfig', (data) => {
-      ls.set('deviceConfig', data);
-      this.handleConfig(data);
-    });
-
+    mitt.on('mqttConfig', this.handleConfig);
+    // auth page 登录成功
     mitt.on('loginSuccess', this.loginSuccess);
+    // 切换主题
     mitt.on('changeTheme', this.changeTheme)
-
-
     this.refresh();
-
     let time = Date.now();
     this.timeInterval = setInterval(() => {
       time = Date.now();
@@ -351,7 +344,6 @@ export default {
       this.timeInfo.currentDate = timeUtil.formatDate(time);
       this.timeInfo.currentDay = timeUtil.getCurrentDay(time);
     }, 1e3);
-
   },
   updated() {
   },
@@ -359,6 +351,7 @@ export default {
     mitt.off('refresh', this.refresh);
     mitt.off('loginSuccess', this.loginSuccess);
     mitt.off('changeTheme', this.changeTheme)
+    mitt.off('mqttConfig', this.handleConfig);
     clearInterval(this.timeInterval);
   },
   methods: {
@@ -389,12 +382,6 @@ export default {
         name: path
       });
     },
-    handleLoginSuccess() {
-      // 需要登录的界面
-      this.$router.push({
-        name: this.loginToPath
-      });
-    },
     refresh() {
       console.log('Layout refresh')
       this.terminalId = ls.get('terminalId');
@@ -417,7 +404,6 @@ export default {
     getConfig() {
       service.post('classCard/getConfig').then((res) => {
         if (res.message === 'success') {
-          ls.set('deviceConfig', res.data);
           mitt.emit('mqttConfig', res.data);
           this.handleConfig(res.data);
         } else {
@@ -428,6 +414,7 @@ export default {
       });
     },
     handleConfig(data) {
+      ls.set('deviceConfig', data);
       const serviceUrl = ls.get('serviceUrl') || '';
       this.config.logo = serviceUrl + data.logo;
 

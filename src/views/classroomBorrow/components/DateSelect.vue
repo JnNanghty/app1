@@ -30,19 +30,22 @@
 .ds-content
   overflow-y scroll
   margin-top: 10px
-  padding: 1rem;
+  padding: 1rem 1rem 1rem 3rem;
   box-sizing border-box
   height: 16rem
+  position relative
   .time-item
     display flex
     justify-content space-between
     padding: 13px
     line-height 2rem;
-    &:nth-child(2n + 1)
+    &:nth-child(2n)
       get_background(borrow_date_item_background)
+
     .status1
       width: 5rem
       margin: 0
+
     .status2
       width: 5rem
       color #59B565
@@ -52,12 +55,15 @@
       line-height @height
       text-align center
       box-sizing border-box
+
       .icon
         margin-right: .5rem;
         vertical-align middle
+
         img
           width: .8rem
           height: @width
+
     .status3
       width: 5rem;
       height: 2rem
@@ -65,6 +71,36 @@
       text-align center
       border-radius 8px
       get_background(input_background)
+
+  .time-line-item
+    padding-top: 2rem
+    position relative
+    margin-bottom: 1rem
+    &::after
+      content: ''
+      display block
+      position absolute
+      top: 1rem;
+      left: -1.55rem;
+      width: 2px
+      height: 100%
+      background: #424851
+      //opacity .5;
+    .time-line
+      position absolute
+      top: 0
+      &::after
+        content: ''
+        position absolute
+        top: 50%;
+        transform: translateY(-50%);
+        left: -2rem
+        display block
+        border-radius 50%
+        border 2px solid #979797
+        width: 16px
+        height: @width
+
 </style>
 <template>
   <div class="ds-main">
@@ -74,17 +110,21 @@
       <div class="icon " @click="changeDate('next')"><img src="../../../assets/right_arrow.png" alt=""></div>
     </div>
     <div class="ds-content">
-      <div class="time-item" v-for="(item, index) in timeConfig" :key="item.id">
-        <div>第{{ index + 1 }}节 <span>{{ item.start }}</span> <span>-</span> <span>{{ item.end }}</span></div>
-        <template v-if="item.status === 1">
-          <div class="status1 _button" @click="borrow(item)">预约</div>
-        </template>
-        <template v-else-if="item.status === 2">
-          <div class="status2"><i class="icon"><img src="../../../assets/success_2.png" alt=""></i>已预约</div>
-        </template>
-        <template v-else>
-          <div class="status3">不可预约</div>
-        </template>
+      <div class="time-line-item" v-for="(timeItem, index1) in timeConfig" :key="index1">
+        <div class="time-line">{{ index1 === 'morning' ? '上午' : index1 === 'afternoon' ? '下午' : '晚上' }}</div>
+        <div class="time-item" v-for="(item, index) in timeItem" :key="index">
+          <div>第{{ index + 1 }}节 <span>{{ item.start }}</span> <span>-</span>
+            <span>{{ item.end }}</span></div>
+          <template v-if="item.status === 1">
+            <div class="status1 _button" @click="borrow(item)">预约</div>
+          </template>
+          <template v-else-if="item.status === 2">
+            <div class="status2"><i class="icon"><img src="../../../assets/success_2.png" alt=""></i>已预约</div>
+          </template>
+          <template v-else>
+            <div class="status3">不可预约</div>
+          </template>
+        </div>
       </div>
     </div>
   </div>
@@ -101,7 +141,7 @@ export default {
   data() {
     return {
       date: Date.now(),
-      timeConfig: [],
+      timeConfig: {},
       terminalId: null,
       sectionConfig: {
         morning: 5,
@@ -137,24 +177,28 @@ export default {
         id: this.terminalId
       }).then(res => {
         this.sectionConfig = res;
-        let temp = []
+        let temp = {
+          morning: [],
+          afternoon: [],
+          evening: []
+        }
         res.courseSection.forEach((item, index) => {
           let time = item.split('-')
           let start = time[0]
           let end = time[1]
-          let status = 1
-          if(index > 4) {
-            status = 2
-          }
-          if(index > 6) {
-            status = 3
-          }
-          temp.push({
+          let timeItem = {
             start,
             end,
-            status: status,
+            status: 1,
             id: index + 1
-          })
+          }
+          if (index < res.morning) {
+            temp.morning.push(timeItem)
+          } else if (index >= res.morning && index < res.morning + res.afternoon) {
+            temp.afternoon.push(timeItem)
+          } else {
+            temp.evening.push(timeItem)
+          }
         })
         this.timeConfig = temp;
       })

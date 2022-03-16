@@ -32,7 +32,7 @@ export default {
     }
   },
   created() {
-    const data = this.$route.params.data || {};
+    const data = this.$route.params.data;
     this.examData = JSON.parse(data);
   },
   mounted() {},
