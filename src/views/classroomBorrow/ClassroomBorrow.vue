@@ -51,23 +51,29 @@
   .w2-bottom
     display flex
     margin-top: 5px
+    white-space: nowrap;
     .borrow-time-wrap
+      flex: 1;
       overflow-x: scroll
-      .borrow-time-item
-        border-radius 6px;
-        padding: 4px 20px 4px 5px
-        height: 100%
-        background: #677181;
-        box-sizing border-box
-        margin-left: 10px
-        position relative
-        .close-icon
-          position absolute
-          top: 50%
-          right: 1rem;
-          img
-            width: 8px
-            height @width
+      .borrow-window
+        width: 1000%
+        display flex
+        .borrow-time-item
+          border-radius 6px;
+          padding: 4px 20px 4px 5px
+          height: 100%
+          get_background(borrow_date_selected_background)
+          box-sizing border-box
+          margin-left: 10px
+          position relative
+          .close-icon
+            position absolute
+            top: 50%
+            right: 5px;
+            transform translateY(-50%)
+            img
+              width: 16px
+              height @width
 .wrap3
   display flex
 .reason-input
@@ -88,27 +94,29 @@
       </div>
       <div @click="selectWrap(1)" :class="activeWrap === 1 ? 'wrap-active' : ''" class="wrap wrap2">
         <div class="w2-top">
-          <div>预约日期: {{formData.date}}</div>
-          <div class="change-button">切换教室</div>
+          <div>预约日期: <span style="font-size: 20px;margin-left: .5rem;">{{borrowDateText}}</span></div>
+          <div class="change-button">更改日期</div>
         </div>
         <div class="w2-bottom">
-          <div>
+          <div style="padding-top: 5px;padding-bottom: 15px;">
             <span>预约时段:</span>
             <br>
-            <span style="font-size: 12px;">支持多选</span>
+            <span style="font-size: 12px;color: #FDA45E;">支持多选</span>
           </div>
           <div class="borrow-time-wrap">
-            <div class="borrow-time-item" v-for="(item, index) in borrowTime">
-              <div>第{{index + 1}}节</div>
+            <div class="borrow-window" :style="windowWidth">
+              <div class="borrow-time-item" v-for="(item) in borrowTime" :key="item.id">
+              <div>第{{item.id}}节</div>
               <div>{{ item.start }}-{{ item.end }}</div>
               <div class="close-icon" @click="removeBorrowTime(item)"><img src="../../assets/close_icon.png" alt=""></div>
+            </div>
             </div>
           </div>
         </div>
       </div>
       <div @click="selectWrap(2)" :class="activeWrap === 2 ? 'wrap-active' : ''" class="wrap wrap3">
         <div>申请理由：</div>
-        <input class="_input reason-input" type="text" placeholder="选填">
+        <input v-model="formData.reason" class="_input reason-input" type="text" placeholder="选填">
       </div>
       <div class="_button" @click="submit">提交申请</div>
     </div>
@@ -126,6 +134,8 @@ import DateSelect from "@/views/classroomBorrow/components/DateSelect";
 import Reason from "@/views/classroomBorrow/components/Reason";
 import mitt from "@/util/mitt";
 import {myConfirm} from "@/components/confirm";
+import timeUtil from "@/util/timeUtil";
+import {computed} from 'vue'
 
 export default {
   components: {
@@ -147,9 +157,23 @@ export default {
       terminalInfo: {},
       activeWrap: 0,
       componentArray: ['ClassroomSelect', 'DateSelect', 'Reason'],
-      date: Date.now(),
-      timeSelect: [],
-      borrowTime: []
+      borrowTime: [],
+    }
+  },
+  provide() {
+    return {
+      reasonText: computed(() => this.formData.reason)
+    }
+  },
+  computed: {
+    borrowDateText() {
+      return timeUtil.formatDate(this.formData.date, '-');
+    },
+    windowWidth() {
+      let w = this.borrowTime.length * 6.5 + 0.5
+      return {
+        width: w + 'rem'
+      }
     }
   },
   created() {
@@ -184,22 +208,24 @@ export default {
       this.getBorrowTime();
     },
     changeDate(date) {
-      this.date = date
+      this.formData.date = date;
       this.getBorrowTime()
     },
     getBorrowTime() {
-      this.timeSelect = []
+      this.borrowTime = [];
       service.post('course/getBorrowTerminalTime', {
-        date: this.date,
+        date: this.formData.date,
         terminalId: this.terminalInfo.id
       }).then(res => {
         // 要被禁用的时间
       })
     },
     addBorrowTime(item) {
+      console.log(item)
       this.borrowTime.push(item)
     },
     removeBorrowTime(item) {
+      item.status = 1;
       this.borrowTime = this.borrowTime.filter(i => i.id !== item.id)
     },
     submit() {

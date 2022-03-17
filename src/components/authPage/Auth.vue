@@ -63,14 +63,9 @@ import ls from "@/store/ls";
 import {msg} from "@/components/message";
 export default {
   name: "Auth",
-  props: {
-    title: {
-      default: '请通过一下任一种方式进行身份验证',
-      type: String
-    }
-  },
   data() {
     return {
+      title: '请通过一下任一种方式进行身份验证',
       qrCodeUrl: ''
     }
   },

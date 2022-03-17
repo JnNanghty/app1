@@ -12,7 +12,6 @@
 </template>
 <script>
 import mitt from "@/util/mitt";
-import ls from "@/store/ls";
 
 export default {
   data() {

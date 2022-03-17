@@ -54,9 +54,7 @@ class storage {
       if(key === 'token') {
         router.replace({
           name: 'Home'
-        }).then(() => {
-
-        });
+        }).then(() => {});
       }
       return null;
     }

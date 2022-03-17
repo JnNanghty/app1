@@ -11,7 +11,7 @@ import ProgrammeMode from '@/views/specialMode/ProgrammeMode'
 import Information from "@/views/information/Information";
 import Auth from "@/components/authPage/Auth";
 import Open from "@/views/open/Open";
-
+import PasswordOpen from "@/views/open/PasswordOpen";
 
 const routes = [
   {
@@ -47,6 +47,10 @@ const routes = [
       path: '/open',
       name: 'Open',
       component: Open
+    }, {
+      path: '/passwordOpen',
+      name: 'PasswordOpen',
+      component: PasswordOpen
     }, {
       path: '/information',
       name: 'Information',

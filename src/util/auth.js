@@ -10,5 +10,6 @@ export function setToken(token) {
 }
 
 export function removeToken() {
-  return ls.remove(TokenKey)
+  ls.remove('userInfo')
+  ls.remove(TokenKey)
 }

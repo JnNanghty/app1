@@ -58,6 +58,12 @@
 .no-mode-fade-enter-from, .no-mode-fade-leave-to {
   opacity: 0
 }
+
+.calendar{
+  height: 100%
+  margin: 0 auto;
+  display block
+}
 </style>
 <template>
   <div class="main">
@@ -86,7 +92,7 @@
           </template>
         </div>
         <div class="tabs-pane-item" v-else-if="activeIndex === 3">
-          <img src="" alt="校历">
+          <img class="calendar" :src="calendar" alt="">
         </div>
       </transition>
     </div>
@@ -99,6 +105,7 @@ import PersonalCurriculum from "./components/PersonalCurriculum";
 import {getToken} from "@/util/auth";
 import mitt from "@/util/mitt";
 import Auth from "@/components/authPage/Auth";
+import ls from "@/store/ls";
 
 export default {
   name: 'Curriculum-index',
@@ -119,13 +126,17 @@ export default {
         icon: require('@/assets/curriculum_icon/year.png')
       }],
       activeIndex: 0,
-      token: null
+      token: null,
+      calendar: ''
     }
   },
   computed: {},
   created() {
     this.token = getToken();
     mitt.on('loginSuccess', this.loginSuccess);
+    let config = ls.get('deviceConfig')
+    let serviceUrl = ls.get('serviceUrl')
+    this.calendar = serviceUrl + config.calendar;
   },
   mounted() {
     this.$nextTick(() => {

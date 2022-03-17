@@ -97,6 +97,7 @@
 <script>
 import service from "@/api/services";
 import mitt from "@/util/mitt";
+import {msg} from "@/components/message";
 
 export default {
   name: "Attendance",
@@ -106,6 +107,10 @@ export default {
       default: {
         students: []
       }
+    },
+    nextCourse: {
+      type: Object,
+      default: {}
     }
   },
   data() {
@@ -122,6 +127,17 @@ export default {
     mitt.off('brushCard', this.brushCard);
   },
   methods: {
+    startSignIn() {
+      const terminalId = ls.get('terminalId')
+      service.post('classCard/startSignIn', {
+        courseId: this.nextCourse.courseId,
+        endSource: this.nextCourse.endSource,
+        startSource: this.nextCourse.startSource,
+        terminalId: terminalId
+      }).then(res => {
+
+      })
+    },
     goPage(name) {
       this.$router.push({
         name: ''
@@ -132,10 +148,12 @@ export default {
         ic,
         lessonId: this.attendanceInfo.id
       }).then(res => {
-
+        msg({
+          message: '签到成功',
+          type: 'success'
+        })
       })
     },
-
   }
 }
 </script>

@@ -206,7 +206,7 @@ export default {
     borrow(item) {
       // 添加预约时间
       item.status = 2;
-      this.$emit('addBorrowTime', item)
+      mitt.emit('addBorrowTime', item)
     }
   }
 }

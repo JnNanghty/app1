@@ -3,20 +3,24 @@
   width 100%
   height: 100%
   overflow: hidden;
+
   .main-window
     width 300%
     height: 100%
     transition all 1s ease;
+
     .main-c1,
     .main-c2,
     .main-c3
       width 50vw;
       height: 100%
       float left
+
     .main-c2
       display: flex;
       justify-content: center;
       align-items: center;
+
     .main-c1
       display: flex;
       align-items: center;
@@ -34,7 +38,7 @@
                :inCourse="inCourse"></clock>
       </div>
       <div class="main-c3">
-        <attendance></attendance>
+        <attendance :nextCourse="nextCourse"></attendance>
       </div>
     </div>
   </div>
@@ -145,12 +149,11 @@ export default {
       });
     },
     scrollWindow(status) {
-      if(status === 2 || status === 4) {
+      if (status === 2 || status === 4) {
         this.windowStyle.transform = 'translateX(-50vw)';
-      }else {
+      } else {
         this.windowStyle.transform = 'translateX(0)';
       }
-
     }
   }
 }
