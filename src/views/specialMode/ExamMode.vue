@@ -8,19 +8,15 @@
       考场号： {{ examData.examRoomNo }}
       考试科目： {{ examData.examSubject }}
     </div>
-    <button @click="show">123123123</button>
-    <Login ref="login"></Login>
   </div>
 </template>
 
 <script>
-import Login from "@/components/LoginPanel/Login";
 import timeUtil from "@/util/timeUtil";
 
 export default {
   name: 'Exam-Mode',
   components: {
-    Login
   },
   data() {
     return {
@@ -38,7 +34,6 @@ export default {
   mounted() {},
   methods: {
     show() {
-      this.$refs.login.visible = true;
     }
   }
 }

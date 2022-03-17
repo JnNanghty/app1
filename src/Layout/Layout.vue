@@ -327,7 +327,7 @@ export default {
       return label;
     }
   },
-  mounted() {
+  created() {
     // 绑定教室后需要刷新
     mitt.on('refresh', this.refresh);
     // 后台下发更新班牌设置
@@ -344,6 +344,7 @@ export default {
       this.timeInfo.currentDate = timeUtil.formatDate(time);
       this.timeInfo.currentDay = timeUtil.getCurrentDay(time);
     }, 1e3);
+
   },
   updated() {
   },

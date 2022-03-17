@@ -1,43 +1,54 @@
-function Confirm({message = '', duration, type = null}) {
+function Confirm({message = '', ok}) {
     const shadow = document.createElement('div')
     shadow.classList.add('__confirm-shadow')
 
     const wrap = document.createElement('div');
-    wrap.setAttribute('style', `
-      
-    `);
-    wrap.classList.add('__message-content')
+    wrap.classList.add('__confirm-wrap')
 
     const keyframe = [
         {opacity: 0},
         {opacity: 1}
     ];
-    wrap.animate(keyframe, {
+    shadow.animate(keyframe, {
         duration: 300,
         fill: 'forwards',
         easing: 'ease'
     });
-    const icon = document.createElement('img')
-    icon.setAttribute('style', `
-      margin-right: 1rem;
-      width: 1rem;
-      height: 1rem;
-      vertical-align: middle;
-    `)
-    icon.alt = ''
-    if (type === 'success') {
-        icon.src = require('@/assets/success.png')
-        wrap.appendChild(icon)
-    } else if (type === 'wrong') {
-        icon.src = require('@/assets/wrong.png')
-        wrap.appendChild(icon)
-    }
 
-    const content = document.createElement('span');
+    const content = document.createElement('div');
     content.innerText = message;
-    wrap.appendChild(content)
+    content.classList.add('__confirm-content')
 
-    document.body.appendChild(wrap);
+    const buttonWrap = document.createElement('div')
+    buttonWrap.classList.add('__confirm-button-wrap')
+    const okButton = document.createElement('div')
+    okButton.innerText = '确认'
+    okButton.classList.add('__confirm-ok')
+    const cancelButton = document.createElement('div')
+    cancelButton.innerText = '取消'
+    cancelButton.classList.add('__confirm-cancel')
+    okButton.addEventListener('click', () => {
+        ok && ok();
+        close();
+    })
+    cancelButton.addEventListener('click', () => {
+        close();
+    })
+    const closeIcon = document.createElement('img')
+    closeIcon.classList.add('__confirm-close')
+    closeIcon.alt = ''
+    closeIcon.src = require('@/assets/close.png');
+    closeIcon.addEventListener('click', () => {
+        close()
+    })
+
+    buttonWrap.appendChild(okButton)
+    buttonWrap.appendChild(cancelButton)
+    wrap.appendChild(closeIcon)
+    wrap.appendChild(content)
+    wrap.appendChild(buttonWrap)
+    shadow.appendChild(wrap)
+    document.body.appendChild(shadow);
 
 
     function close() {
@@ -45,7 +56,7 @@ function Confirm({message = '', duration, type = null}) {
             {opacity: 1},
             {opacity: 0}
         ];
-        const downAnimate = wrap.animate(keyframe, {
+        const downAnimate = shadow.animate(keyframe, {
             duration: 300,
             fill: 'forwards',
             easing: 'ease'
@@ -56,12 +67,12 @@ function Confirm({message = '', duration, type = null}) {
     }
 
     function destroy() {
-        document.body.removeChild(wrap);
+        document.body.removeChild(shadow);
     }
 }
 
-export function confirm(options) {
+export function myConfirm(options) {
     new Confirm(options);
 }
 
-window.confirm = confirm;
+// window.myConfirm = confirm;

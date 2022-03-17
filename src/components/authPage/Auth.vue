@@ -99,16 +99,19 @@ export default {
           setToken(res.token);
           ls.set('userInfo', res, 6e5);
           msg({
-            message: '登录成功！'
+            message: '登录成功！',
+            type: 'success'
           })
         } else {
           msg({
-            message: '未找到该用户！'
+            message: '未找到该用户！',
+            type: 'wrong'
           });
         }
       }, () => {
         msg({
-          message: '登录失败！'
+          message: '登录失败！',
+          type: 'wrong'
         });
       });
     },

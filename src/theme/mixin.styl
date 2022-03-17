@@ -67,5 +67,51 @@ get_background_image($name)
 }
 
 .__confirm-shadow{
-
+  position absolute
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+  background: rgba(0, 0, 0, 0.5)
+  z-index: 3000;
+  get_font_color(font_color)
+  .__confirm-wrap {
+    position absolute
+    top: 50%
+    left: 0
+    right: 0
+    margin: 0 auto;
+    transform: translateY(-60%);
+    border-radius 8px;
+    width: 12rem
+    background: #2D2D2D;
+    text-align center
+    display flex
+    flex-direction column
+    .__confirm-content{
+      padding: 2rem 1rem
+      flex: 1;
+    }
+    .__confirm-button-wrap{
+      display flex
+      border-top: 1px solid #1C1D1E
+      .__confirm-ok{
+        flex: 1;
+        padding: 1rem 0;
+        border-right:  1px solid #1C1D1E
+        color: #FDA45E;
+      }
+      .__confirm-cancel{
+        flex: 1;
+        padding: 1rem 0;
+      }
+    }
+    .__confirm-close{
+      position absolute
+      top: .5rem
+      right: .75rem
+      width: .5rem
+      height @width
+    }
+  }
 }

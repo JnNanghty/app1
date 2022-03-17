@@ -110,7 +110,7 @@
         <div>申请理由：</div>
         <input class="_input reason-input" type="text" placeholder="选填">
       </div>
-      <div class="_button">提交申请</div>
+      <div class="_button" @click="submit">提交申请</div>
     </div>
     <div class="right">
       <component :is="rightComponentName"></component>
@@ -125,6 +125,7 @@ import ClassroomSelect from "@/views/classroomBorrow/components/ClassroomSelect"
 import DateSelect from "@/views/classroomBorrow/components/DateSelect";
 import Reason from "@/views/classroomBorrow/components/Reason";
 import mitt from "@/util/mitt";
+import {myConfirm} from "@/components/confirm";
 
 export default {
   components: {
@@ -140,7 +141,7 @@ export default {
           label: ''
         },
         date: Date.now(),
-        reason: []
+        reason: ''
       },
       rightComponentName: 'ClassroomSelect',
       terminalInfo: {},
@@ -200,6 +201,30 @@ export default {
     },
     removeBorrowTime(item) {
       this.borrowTime = this.borrowTime.filter(i => i.id !== item.id)
+    },
+    submit() {
+      let self = this
+      myConfirm({
+        message: '确认提交吗？',
+        ok() {
+          service.post('course/applyTerminalBorrow', {
+            start: '',
+            end: '',
+            room: self.formData.terminal.id,
+            reason: ''
+          }).then(() => {
+            msg({
+              message: '提交成功',
+              type: 'success'
+            })
+          }, () => {
+            msg({
+              message: '提交失败',
+              type: 'wrong'
+            })
+          })
+        }
+      })
     }
   }
 }

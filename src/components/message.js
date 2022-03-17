@@ -79,4 +79,4 @@ export function msg(options) {
     new MessageBox(options);
 }
 
-window.msg = msg;
+// window.msg = msg;

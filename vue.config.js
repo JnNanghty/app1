@@ -14,7 +14,7 @@ function addStyleResource (rule) {
     })
 }
 module.exports = {
-  outputDir: 'D:\\project2\\myproj\\banpai\\www',
+  outputDir: 'D:\\project\\banpai\\www',
   devServer: {
     proxy: {
       '/rest': {

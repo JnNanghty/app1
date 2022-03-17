@@ -140,7 +140,6 @@
         <div class="submit-button" @click="bind">切换绑定</div>
       </form>
     </div>
-    <message :message="message"></message>
   </div>
 </template>
 
@@ -155,7 +154,7 @@ import {initMqtt} from "@/util/mqttUtil";
 export default {
   name: "BindClassroom",
   data() {
-    let mac = 'xxxxxxxx'
+    let mac = 'xxxxxxxxxxx'
     if (window.device) {
       mac = window.device.uuid;
     }
@@ -197,7 +196,7 @@ export default {
   mounted() {
     if (this.serviceUrl) {
       this.getTerminal();
-      this.getSchool();
+      // this.getSchool();
     }
   },
   methods: {
@@ -256,7 +255,8 @@ export default {
           resolve();
         }, () => {
           msg({
-            message: '没有权限！请重新登录！'
+            message: '没有权限！请重新登录！',
+            type: 'wrong'
           });
           removeToken()
           ls.remove('userInfo');
@@ -270,7 +270,8 @@ export default {
       service.post('classCard/testLink').then(res => {
         if (res.message === 'success') {
           msg({
-            message: '连接成功!'
+            message: '连接成功!',
+            type: 'success'
           });
           mitt.emit('refresh');
           this.getTerminal();
@@ -278,7 +279,8 @@ export default {
         } else {
           ls.remove('serviceUrl');
           msg({
-            message: '连接服务器失败!'
+            message: '连接服务器失败!',
+            type: 'wrong'
           });
         }
       })
@@ -297,16 +299,19 @@ export default {
         terminal: this.schoolInfo.terminal,
         mac: this.mac
       }).then(res => {
+        console.log(res);
         if (res.message === 'success') {
-          ls.set('terminalId', id);
+          ls.set('terminalId', this.schoolInfo.terminal);
           mitt.emit('refresh');
           msg({
-            message: '绑定成功！'
+            message: '绑定成功！',
+            type: 'success'
           });
         }
       }, () => {
         msg({
-          message: '绑定失败！'
+          message: '绑定失败！',
+          type: 'wrong'
         });
       })
     },
@@ -316,15 +321,17 @@ export default {
         mac: this.mac
       }).then((res) => {
         if (res.message === 'success') {
-          ls.set('terminalId', id);
+          ls.set('terminalId', this.schoolInfo.terminal);
           mitt.emit('refresh');
           msg({
-            message: '绑定成功！'
+            message: '绑定成功！',
+            type: 'success'
           });
         }
       }, () => {
         msg({
-          message: '绑定失败！'
+          message: '绑定失败！',
+          type: 'wrong'
         });
       })
     }

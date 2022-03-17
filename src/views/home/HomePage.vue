@@ -1,48 +1,41 @@
 <style lang="stylus" scoped>
-.main {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-}
-
-.main-left {
-  margin-right: 1rem;
-  flex: 1;
-}
-
-.main-left-bottom {
-  width: fit-content;
-  margin-top: 1rem;
-  border-radius: 1rem;
-  padding: .25rem 1rem;
-  background: rgb(146 148 171 / 70%);
-}
-
-.location-logo {
-  font-size: 2rem;
-  color: #ffd400;
-}
-
-.main-right {
-  flex: 1;
-}
+.main
+  width 100%
+  height: 100%
+  overflow: hidden;
+  .main-window
+    width 300%
+    height: 100%
+    transition all 1s ease;
+    .main-c1,
+    .main-c2,
+    .main-c3
+      width 50vw;
+      height: 100%
+      float left
+    .main-c2
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    .main-c1
+      display: flex;
+      align-items: center;
 </style>
 <template>
   <div class="main">
-    <div class="main-left">
-      <component v-show="terminalId && leftComponentName === 'ClassroomInfo'"
-                 :is="leftComponentName"
-                 :terminalInfo="terminalInfo"
-                 :currentCourse="currentCourse"
-                 :nextCourse="nextCourse"
-                 :inCourse="inCourse"></component>
-    </div>
-    <div class="main-right">
-      <component :is="rightComponentName"
-                 :currentCourse="currentCourse"
-                 :nextCourse="nextCourse"
-                 :inCourse="inCourse"></component>
+    <div class="main-window" :style="windowStyle">
+      <div class="main-c1">
+        <classroom-info v-show="terminalId"
+                        :terminalInfo="terminalInfo"></classroom-info>
+      </div>
+      <div class="main-c2">
+        <clock :currentCourse="currentCourse"
+               :nextCourse="nextCourse"
+               :inCourse="inCourse"></clock>
+      </div>
+      <div class="main-c3">
+        <attendance></attendance>
+      </div>
     </div>
   </div>
 </template>
@@ -54,6 +47,7 @@ import {msg} from "@/components/message";
 import ClassroomInfo from "@/views/home/components/ClassroomInfo";
 import Clock from "@/views/home/components/Clock";
 import Attendance from "@/views/home/components/Attendance";
+import mitt from "@/util/mitt";
 
 export default {
   name: 'HomePage',
@@ -68,12 +62,14 @@ export default {
       endOfClassText: '空闲中',
       terminalInfo: {},
       countDownInterval: null,
-      leftComponentName: 'Clock',
-      rightComponentName: 'Attendance',
-      flag: false
+      flag: false,
+      windowStyle: {
+        transform: 'translateX(0)'
+      }
     };
   },
   created() {
+    mitt.on('courseStatus', this.scrollWindow)
   },
   mounted() {
     this.terminalId = ls.get('terminalId');
@@ -90,6 +86,7 @@ export default {
     }
   },
   beforeUnmount() {
+    mitt.off('courseStatus', this.scrollWindow)
     if (this.countDownInterval !== null) {
       clearInterval(this.countDownInterval)
       this.countDownInterval = null;
@@ -146,6 +143,14 @@ export default {
       this.$router.push({
         name: pageName
       });
+    },
+    scrollWindow(status) {
+      if(status === 2 || status === 4) {
+        this.windowStyle.transform = 'translateX(-50vw)';
+      }else {
+        this.windowStyle.transform = 'translateX(0)';
+      }
+
     }
   }
 }

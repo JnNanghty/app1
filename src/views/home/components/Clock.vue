@@ -205,6 +205,7 @@ export default {
           // 4 为 课前考勤中
           status = 4;
         }
+        mitt.emit('courseStatus', status)
         return status; // 显示即将上课
       }
     },

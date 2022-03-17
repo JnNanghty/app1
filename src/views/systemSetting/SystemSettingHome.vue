@@ -138,13 +138,12 @@ main {
 
 <script>
 import ls from "@/store/ls";
-import PasswordLogin from "@/components/LoginPanel/PasswordLogin";
 import BindClassroom from "@/views/systemSetting/settingItem/BindClassroom";
 import SystemSetting from "@/views/systemSetting/settingItem/SystemSetting";
 
 export default {
   components: {
-    PasswordLogin, SystemSetting, BindClassroom
+    SystemSetting, BindClassroom
   },
   data() {
     return {
