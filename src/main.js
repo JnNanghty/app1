@@ -32,11 +32,7 @@ app.directive('doubleclick', {
   }
 });
 
-import Message from "@/components/Message.vue";
-import Confirm from "@/components/Confirm";
 import UserInfo from "@/components/UserInfo";
-app.component(Message.name, Message);
-app.component(Confirm.name, Confirm);
 app.component(UserInfo.name, UserInfo);
 
 router.isReady().then(() => app.mount('#app'));

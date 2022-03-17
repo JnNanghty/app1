@@ -140,6 +140,7 @@
         <div class="submit-button" @click="bind">切换绑定</div>
       </form>
     </div>
+    <message :message="message"></message>
   </div>
 </template>
 
@@ -154,7 +155,7 @@ import {initMqtt} from "@/util/mqttUtil";
 export default {
   name: "BindClassroom",
   data() {
-    let mac = 'xxxxxx'
+    let mac = 'xxxxxxxx'
     if (window.device) {
       mac = window.device.uuid;
     }
@@ -169,7 +170,8 @@ export default {
         terminal: '' // 教室
       },
       campus: [],
-      mac
+      mac,
+      message: ''
     }
   },
   created() {
@@ -271,6 +273,7 @@ export default {
             message: '连接成功!'
           });
           mitt.emit('refresh');
+          this.getTerminal();
           initMqtt();
         } else {
           ls.remove('serviceUrl');

@@ -147,15 +147,10 @@ export default {
     PasswordLogin, SystemSetting, BindClassroom
   },
   data() {
-    let mac = 'xxxxxx'
-    if (window.device) {
-      mac = window.device.uuid;
-    }
     return {
       config: {
         log: ''
       },
-      mac: mac,
       componentName: 'BindClassroom',
       activeTabIndex: 0,
       terminalId: null,
