@@ -82,11 +82,11 @@
         <img src="../../../assets/brush.png" alt="">
         <div class="desc">一卡通刷卡</div>
       </div>
-      <div class="auth-item" @click="goPage('wx')">
+      <div class="auth-item">
         <img src="../../../assets/wx_code.png" alt="">
         <div class="desc">微信扫码</div>
       </div>
-      <div class="auth-item" @click="goPage('face')">
+      <div class="auth-item" >
         <img src="../../../assets/face.png" alt="">
         <div class="desc">人脸识别</div>
       </div>
@@ -98,6 +98,7 @@
 import service from "@/api/services";
 import mitt from "@/util/mitt";
 import {msg} from "@/components/message";
+import ls from "@/store/ls";
 
 export default {
   name: "Attendance",
@@ -122,9 +123,11 @@ export default {
   },
   created() {
     mitt.on('brushCard', this.brushCard);
+    mitt.on('startSignIn', this.startSignIn)
   },
   beforeUnmount() {
     mitt.off('brushCard', this.brushCard);
+    mitt.off('startSignIn', this.startSignIn)
   },
   methods: {
     startSignIn() {
@@ -135,12 +138,9 @@ export default {
         startSource: this.nextCourse.startSource,
         terminalId: terminalId
       }).then(res => {
-
-      })
-    },
-    goPage(name) {
-      this.$router.push({
-        name: ''
+        msg({
+          message: '开始签到!'
+        })
       })
     },
     brushCard(ic) {

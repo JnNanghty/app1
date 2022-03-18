@@ -14,6 +14,7 @@ import Open from "@/views/open/Open";
 import PasswordOpen from "@/views/open/PasswordOpen";
 import NoPermission from "@/components/NoPermission";
 import ls from "@/store/ls";
+import InformationDetail from "@/views/information/InformationDetail";
 
 const routes = [
   {
@@ -77,6 +78,10 @@ const routes = [
       path: '/information',
       name: 'Information',
       component: Information
+    },{
+      path: '/informationDetail',
+      name: 'InformationDetail',
+      component: InformationDetail
     }, {
       path: '/noPermission',
       name: 'NoPermission',
@@ -85,9 +90,7 @@ const routes = [
   }, {
     path: '/systemSettingHome',
     name: 'SystemSettingHome',
-    component: SystemSettingHome,
-    beforeEnter(to, from) {
-    }
+    component: SystemSettingHome
   }, {
     path: '/examMode',
     name: 'ExamMode',

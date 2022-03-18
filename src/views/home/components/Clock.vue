@@ -185,7 +185,7 @@ export default {
         // 当前时间 + 考勤时间 >= 下节课上课时间  深橙色 + 浅橙色
         const {startSource, endSource} = this.nextCourse;
         const {signInForwardOffset} = this.deviceConfig
-        let status = 3;  // 3 为空闲时间内
+        let status = 3;  // 3 为空闲时间内 但下节有课
         if (currentSource + signInForwardOffset < startSource) {
           // 空闲
           let start = (currentSource % 720) / 720;

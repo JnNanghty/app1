@@ -159,6 +159,10 @@ export default {
     },
     scrollWindow(status) {
       if (status === 2 || status === 4) {
+        if(status === 4 && this.windowStyle.transform === 'translateX(-50vw)') {
+          // 如果为课前考勤， 且考勤界面已经显示
+          mitt.emit('startSignIn')
+        }
         this.windowStyle.transform = 'translateX(-50vw)';
       } else {
         this.windowStyle.transform = 'translateX(0)';

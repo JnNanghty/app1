@@ -32,19 +32,19 @@
   <div class="auth-main">
     <div class="auth-title">{{ title }}</div>
     <div class="auth-content">
-      <div class="card" @click="loginSuccess">
+      <div class="card" v-show="showCard" @click="loginSuccess">
         <div class="login-item">
           <img src="../../assets/brush.png" alt="">
         </div>
         <div class="login-desc">一卡通刷卡</div>
       </div>
-      <div class="code">
+      <div class="code" v-show="showQrCode">
         <div class="login-item">
           <img style="border-radius: 6px" :src="qrCodeUrl" alt="">
         </div>
         <div class="login-desc">微信扫码</div>
       </div>
-      <div class="face">
+      <div class="face" v-show="showFace">
         <div class="login-item">
           <div class="face-box"></div>
         </div>
@@ -65,14 +65,46 @@ export default {
   name: "Auth",
   data() {
     return {
-      title: '请通过一下任一种方式进行身份验证',
-      qrCodeUrl: ''
+      title: '请通过以下方式进行身份验证',
+      qrCodeUrl: '',
+      config: []
     }
   },
   created() {
     this.wxQrCode()
     mitt.on('brushCard', this.brushCard);
     mitt.emit('showBackButton')
+    let config = ls.get('deviceConfig');
+    this.config = JSON.parse(config.signInTypes)
+  },
+  computed: {
+    showCard() {
+      let show = false;
+      this.config.forEach(item => {
+        if(item.name === 'card') {
+          show = item.value
+        }
+      });
+      return show;
+    },
+    showQrCode() {
+      let show = false;
+      this.config.forEach(item => {
+        if(item.name === 'code') {
+          show = item.value
+        }
+      });
+      return show;
+    },
+    showFace() {
+      let show = false;
+      this.config.forEach(item => {
+        if(item.name === 'face') {
+          show = item.value
+        }
+      });
+      return show;
+    }
   },
   beforeUnmount() {
     mitt.off('brushCard', this.brushCard);

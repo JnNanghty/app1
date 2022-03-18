@@ -208,14 +208,14 @@ export default {
       })
     },
     getCurriculum() {
-      service.post('course/terminalCurriculum', {
+      service.post('classCard/personalCurriculum', {
         id: this.terminalId,
         weekNo: this.currentWeek
       }).then(res => {
         // 空格子
         const sectionLen = this.sectionTime.length;
         let data = [];
-        res.result.forEach((item, index) => {
+        res.data.forEach((item, index) => {
           let temp = [];
           for (let i = 1; i <= sectionLen; i++) {
             let hasPush = false;

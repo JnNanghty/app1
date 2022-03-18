@@ -154,6 +154,9 @@
 }
 
 .app-item-icon > img {
+  position absolute
+  left: 0
+  z-index 10;
   width: 100%;
   height: 100%;
 }
@@ -246,6 +249,7 @@ export default {
       appList: [
         {
           src: require('../assets/icon/home_dark.png'),
+          icon: 'home',
           label: '主页',
           name: 'home',
           path: 'Home',
@@ -254,6 +258,7 @@ export default {
         },
         {
           src: require('../assets/icon/curriculum_dark.png'),
+          icon: 'curriculum',
           label: '课程表',
           name: 'timetable',
           path: 'Curriculum',
@@ -262,6 +267,7 @@ export default {
         },
         {
           src: require('../assets/icon/patrol_dark.png'),
+          icon: 'patrol',
           label: '巡课',
           name: 'patrol',
           path: 'Patrol',
@@ -269,7 +275,17 @@ export default {
           visible: false
         },
         {
+          src: require('../assets/icon/zixun_dark.png'),
+          icon: 'zixun',
+          label: '资讯',
+          name: 'news', // 跟后台配置匹配
+          path: 'Information',
+          needLogin: false,
+          visible: true // 是否默认显示
+        },
+        {
           src: require('../assets/icon/borrow_dark.png'),
+          icon: 'borrow',
           label: '预约',
           name: 'borrow',
           path: 'ClassroomBorrow',
@@ -278,6 +294,7 @@ export default {
         },
         {
           src: require('../assets/icon/repair_dark.png'),
+          icon: 'repair',
           label: '报修',
           name: 'repair',
           path: 'Repair',
@@ -286,12 +303,13 @@ export default {
         },
         {
           src: require('../assets/icon/open_dark.png'),
+          icon: 'open',
           label: '开门',
           name: 'open',
           path: 'Open',
           needLogin: false,
           visible: true
-        },
+        }
       ],
       terminalInfo: {}, // 教室信息  label
       timeInterval: null, // 用于右上角时间
@@ -428,6 +446,15 @@ export default {
       let theme = window.document.documentElement.dataset.theme
 
       this.activeClass = 'app-item-icon-active-' + theme
+      let suffix = 'dark'
+      let suffix2 = ''
+      if(theme === 'bright') {
+        suffix = 'bright'
+        suffix2 = '_bright'
+      }
+      this.appList.forEach(item => {
+        item.src = require(`../assets/icon${suffix2}/${item.icon}_${suffix}.png`);
+      })
     },
     loginSuccess() {
       if (this.loginToPath) {
