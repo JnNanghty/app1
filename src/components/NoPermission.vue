@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import mitt from "@/util/mitt";
+
 export default {
   name: "NoPermission",
   components: {},
@@ -20,10 +22,12 @@ export default {
   },
   computed: {},
   created() {
+    mitt.emit('showBackButton')
   },
   mounted() {
   },
   beforeUnmount() {
+    mitt.emit('hideBackButton')
   },
   methods: {}
 }

@@ -72,9 +72,11 @@ export default {
   created() {
     this.wxQrCode()
     mitt.on('brushCard', this.brushCard);
+    mitt.emit('showBackButton')
   },
   beforeUnmount() {
     mitt.off('brushCard', this.brushCard);
+    mitt.emit('hideBackButton')
   },
   methods: {
     wxQrCode() {
@@ -85,6 +87,7 @@ export default {
     loginSuccess() {
       setToken('6669282:61646D696E36363639323130:1652167051808:F7353F580F31DF479A3D75B0A931164A');
       mitt.emit('loginSuccess');
+      this.getUserPermission();
     },
     icLogin(ic) {
       service.post('auth/icLogin', {
@@ -97,6 +100,7 @@ export default {
             message: '登录成功！',
             type: 'success'
           })
+          this.loginSuccess();
         } else {
           msg({
             message: '未找到该用户！',
@@ -112,6 +116,11 @@ export default {
     },
     brushCard(res) {
       this.icLogin(res);
+    },
+    getUserPermission() {
+      service.post('permission/getUserPermission').then(res => {
+        ls.set('permission', res, 6e5);
+      })
     }
   }
 }

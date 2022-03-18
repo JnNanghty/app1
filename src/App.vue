@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app-main">
     <router-view v-slot="{Component}" v-doubleclick="changeTheme">
       <transition name="up">
         <component :is="Component"></component>
@@ -7,6 +7,9 @@
     </router-view>
     <div class="notice" v-show="showNotice">
       <div ref="scrollText" class="notice-text">{{ noticeText }}</div>
+    </div>
+    <div class="back-button" v-show="showBackButton" @click="$router.back">
+      <img src="./assets/back_button.png" alt="">
     </div>
   </div>
 </template>
@@ -17,13 +20,12 @@ export default {
   data() {
     return {
       showNotice: false,
-      noticeText: ''
+      noticeText: '',
+      showBackButton: false
     }
   },
   created() {
     window.document.documentElement.setAttribute('data-theme', 'dark');
-  },
-  mounted() {
 
     mitt.on('mqttExam', (data) => {
       this.$router.push({
@@ -54,7 +56,19 @@ export default {
 
     mitt.on('mqttRealTimeBroadcast', this.broadcast);
 
-    mitt.on('mqttConfig', (data) => {});
+    mitt.on('mqttConfig', (data) => {
+    });
+
+    mitt.on('showBackButton', () => {
+      this.showBackButton = true;
+    })
+
+    mitt.on('hideBackButton', () => {
+      this.showBackButton = false;
+    })
+  },
+  mounted() {
+
 
   },
   methods: {
@@ -94,7 +108,7 @@ export default {
 </script>
 <style lang="stylus">
 
-#app {
+#app-main {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -148,4 +162,18 @@ export default {
   line-height: 1.5rem;
   letter-spacing: 3px;
 }
+
+.back-button {
+  position absolute
+  left: 0
+  bottom: 0
+  height: 10rem
+  z-index 100
+  img {
+    height 100%
+  }
+}
+
+
+
 </style>

@@ -12,6 +12,7 @@ import Information from "@/views/information/Information";
 import Auth from "@/components/authPage/Auth";
 import Open from "@/views/open/Open";
 import PasswordOpen from "@/views/open/PasswordOpen";
+import NoPermission from "@/components/NoPermission";
 
 const routes = [
   {
@@ -55,6 +56,10 @@ const routes = [
       path: '/information',
       name: 'Information',
       component: Information
+    }, {
+      path: '/noPermission',
+      name: 'NoPermission',
+      component: NoPermission
     }]
   }, {
     path: '/systemSettingHome',

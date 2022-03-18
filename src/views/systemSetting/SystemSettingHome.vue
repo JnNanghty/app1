@@ -18,7 +18,7 @@ header {
   }
   .right-content {
     position relative
-    padding-top: 0.8rem
+    padding-top: 0.5rem
     padding-left: 1rem;
     box-sizing border-box
     &::after{
@@ -31,7 +31,7 @@ header {
       background-image: linear-gradient(#17191A00, #232323)
     }
   }
-  .back-button {
+  .back-home-button {
     width: 1rem
     height @width
     get_background_image(back_button_background_image)
@@ -120,7 +120,7 @@ main {
         <user-info></user-info>
       </div>
       <div class="right-content">
-        <div class="back-button" @click="goHome"></div>
+        <div class="back-home-button" @click="goHome"></div>
       </div>
     </header>
     <main>
@@ -183,7 +183,7 @@ export default {
   },
   methods: {
     goHome() {
-      this.$router.push({
+      this.$router.replace({
         name: "Home"
       })
     },

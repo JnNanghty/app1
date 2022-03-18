@@ -82,7 +82,8 @@ export default {
       this.countDownInterval = setInterval(() => {
         this.resolveData()
       }, 6e4);
-      this.terminalInfo = ls.get('terminalInfo');
+      console.log('HomePage: get terminalInfo');
+      this.getTerminalInfo();
     } else {
       msg({
         message: '请先在设置中绑定班级！'
@@ -97,6 +98,14 @@ export default {
     }
   },
   methods: {
+    getTerminalInfo() {
+      service.post('classCard/terminalInfo', {
+        id: this.terminalId
+      }).then(res => {
+        this.terminalInfo = res.data ? res.data : {};
+        ls.set('terminalInfo', this.terminalInfo);
+      })
+    },
     getDailyCurriculum() {
       service.post('classCard/dailyCurriculum', {
         id: this.terminalId

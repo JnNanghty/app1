@@ -50,25 +50,50 @@
   .table-row
     min-height: 2.5rem;
     box-sizing: border-box;
-    border-right: 1px solid #2F333A;
+    //border-right: 1px solid #2F333A;
     display flex
     justify-content center
     align-items center
     position relative
-    overflow: hidden
-    .course-info
-      position absolute
-      bottom: 10px
-      &::after
-        content: ''
-        position absolute
-        display block
+
+  //overflow: hidden
+
   .course-item
     get_background(patrol_bottom_background)
     border-radius 4px;
     margin-left: .25rem
     margin-right: .25rem
     margin-bottom: .5rem
+    border-right: none;
+    position relative
+
+    .course-detail
+      position absolute
+      top: 53%
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius 8px;
+      width: 200px
+      get_background(curriculum_course_detail_background)
+      box-shadow: 0 8px 10px rgba(43, 51, 69, 0.208523);
+      z-index 10
+      text-align left
+      padding: 5px 20px;
+      font-size 12px;
+
+      &::after
+        position absolute
+        top: -10px;
+        left: 50%
+        content ''
+        display block
+        width: 0
+        height: 0
+        border: 5px solid #000;
+        border-top-color: transparent;
+        border-bottom-color: #575D67;
+        border-left-color: transparent;
+        border-right-color: transparent;
 
   .table-title
     get_background(curriculum_section_background)
@@ -118,9 +143,17 @@
       </div>
       <div class="table-col" v-for="(item, index) in curriculum" :key="item">
         <div class="table-row table-title">星期{{ simplifyNumberArray[index] }}</div>
-        <div class="table-row" :class="!!course.courseName ? 'course-item' : ''" v-for="(course, courseIndex) in curriculum[index]"
-             :key="courseIndex" :style="course && course.style" @click="selectItem(course, courseIndex)">
+        <div class="table-row" :class="!!course.courseName ? 'course-item' : ''"
+             v-for="(course, courseIndex) in curriculum[index]"
+             :key="courseIndex" :style="course && course.style" @click="selectItem(course)">
           {{ course && course.courseName }}
+          <div class="course-detail" v-if="course.courseName && course.showDetail">
+            <div style="font-size: 18px;">{{ course.courseName }}</div>
+            <div>{{ course.teacherName }} <span
+                style="margin-left: 1rem;">{{ calcTime(course.startSession, course.endSession) }}</span></div>
+            <div style="margin-bottom: 10px;">{{ course.college }}</div>
+            <div>{{ course.courseClass }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -141,6 +174,7 @@ export default {
       curriculum: [],
       simplifyNumberArray: ['一', '二', '三', '四', '五', '六', '日'],
       simplifyNum: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九'],
+      closeTimeout: null
     }
   },
   mounted() {
@@ -151,6 +185,12 @@ export default {
       msg({
         message: '请先在设置中绑定班级！'
       });
+    }
+  },
+  beforeUnmount() {
+    if (this.closeTimeout) {
+      clearTimeout(this.closeTimeout)
+      this.closeTimeout = null;
     }
   },
   methods: {
@@ -184,7 +224,8 @@ export default {
                 temp.push(Object.assign(course, {
                   style: {
                     height: (2.5 * (course.endSession - course.startSession + 1) - 0.5) + 'rem'
-                  }
+                  },
+                  showDetail: false
                 }));
                 i = course.endSession;
                 hasPush = true;
@@ -198,7 +239,8 @@ export default {
               endSession: i,
               style: {
                 height: '2.5rem'
-              }
+              },
+              showDetail: false
             });
           }
           data.push(temp);
@@ -219,14 +261,36 @@ export default {
       this.currentWeek = week;
       this.getCurriculum();
     },
-    selectItem(item, index) {
-      console.log(item, index);
+    selectItem(item) {
+      if (this.closeTimeout) {
+        clearTimeout(this.closeTimeout)
+        this.closeTimeout = null;
+      }
+      this.closeOther()
+      item.showDetail = true;
+      this.closeTimeout = setTimeout(() => {
+        this.closeOther();
+        this.closeTimeout = null
+      }, 5e3)
     },
     scrollLeft() {
       this.$refs.weekWrap.scrollBy({
         left: (this.currentWeek - 1) * 100,
         behavior: "smooth"
       })
+    },
+    // 根据开始节次和结束节次 计算开始时间和结束时间
+    calcTime(startSession, endSession) {
+      let start = this.sectionTime[startSession - 1]
+      let end = this.sectionTime[endSession - 1]
+      let startTime = start.split('-')[0]
+      let endTime = end.split('-')[1];
+      return startTime + '-' + endTime;
+    },
+    closeOther() {
+      this.curriculum.forEach(item => {
+        item.forEach(i => i.showDetail = false)
+      });
     }
   }
 }

@@ -273,7 +273,6 @@ export default {
             message: '连接成功!',
             type: 'success'
           });
-          mitt.emit('refresh');
           this.getTerminal();
           initMqtt();
         } else {
@@ -302,7 +301,6 @@ export default {
         console.log(res);
         if (res.message === 'success') {
           ls.set('terminalId', this.schoolInfo.terminal);
-          mitt.emit('refresh');
           msg({
             message: '绑定成功！',
             type: 'success'
@@ -322,7 +320,6 @@ export default {
       }).then((res) => {
         if (res.message === 'success') {
           ls.set('terminalId', this.schoolInfo.terminal);
-          mitt.emit('refresh');
           msg({
             message: '绑定成功！',
             type: 'success'

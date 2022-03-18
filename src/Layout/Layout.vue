@@ -329,7 +329,6 @@ export default {
   },
   created() {
     // 绑定教室后需要刷新
-    mitt.on('refresh', this.refresh);
     // 后台下发更新班牌设置
     mitt.on('mqttConfig', this.handleConfig);
     // auth page 登录成功
@@ -349,14 +348,12 @@ export default {
   updated() {
   },
   beforeUnmount() {
-    mitt.off('refresh', this.refresh);
     mitt.off('loginSuccess', this.loginSuccess);
     mitt.off('changeTheme', this.changeTheme)
     mitt.off('mqttConfig', this.handleConfig);
     clearInterval(this.timeInterval);
   },
   methods: {
-    // 用name导航  传参用params
     goItem(item) {
       if (this.$route.name === item.path) return;
       const token = getToken();
@@ -384,7 +381,6 @@ export default {
       });
     },
     refresh() {
-      console.log('Layout refresh')
       this.terminalId = ls.get('terminalId');
       if (this.terminalId) {
         this.getTerminalInfo()
@@ -400,16 +396,17 @@ export default {
       }).then(res => {
         this.terminalInfo = res.data ? res.data : {};
         ls.set('terminalInfo', this.terminalInfo);
+        console.log('Layout: set terminalInfo')
       })
     },
     getConfig() {
       service.post('classCard/getConfig').then((res) => {
         if (res.message === 'success') {
-          mitt.emit('mqttConfig', res.data);
           this.handleConfig(res.data);
         } else {
           msg({
-            message: '获取班牌信息失败！'
+            message: '获取班牌信息失败！',
+            type: 'wrong'
           });
         }
       });
