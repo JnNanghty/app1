@@ -152,6 +152,9 @@ export default {
     },
     changeActiveIndex(index) {
       this.activeIndex = index;
+      this.$nextTick(() => {
+        mitt.emit('hideBackButton')
+      })
     },
   }
 }

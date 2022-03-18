@@ -33,11 +33,10 @@ const routes = [
       path: 'patrol',
       name: 'Patrol',
       component: Patrol,
-      beforeEnter(to, from, next) {
+      beforeEnter(to, from) {
         const permission = ls.get('permission') || {};
         console.log(to, from)
         if (permission.supervisoryPatrol) {
-          next()
         } else {
           return {
             name: 'NoPermission'
@@ -52,11 +51,10 @@ const routes = [
       path: '/repair',
       name: 'Repair',
       component: Repair,
-      beforeEnter(to, from, next) {
+      beforeEnter(to, from) {
         const permission = ls.get('permission') || {};
         console.log(to, from)
         if (permission.faultHanding) {
-          next()
         } else {
           return {
             name: 'NoPermission'
@@ -88,8 +86,7 @@ const routes = [
     path: '/systemSettingHome',
     name: 'SystemSettingHome',
     component: SystemSettingHome,
-    beforeEnter(to, from, next) {
-      next()
+    beforeEnter(to, from) {
     }
   }, {
     path: '/examMode',

@@ -34,11 +34,13 @@
   box-sizing border-box
   height: 16rem
   position relative
+
   .time-item
     display flex
     justify-content space-between
     padding: 13px
     line-height 2rem;
+
     &:nth-child(2n)
       get_background(borrow_date_item_background)
 
@@ -76,6 +78,7 @@
     padding-top: 2rem
     position relative
     margin-bottom: 1rem
+
     &::after
       content: ''
       display block
@@ -85,10 +88,13 @@
       width: 2px
       height: 100%
       background: #424851
-      //opacity .5;
+
+    //opacity .5;
+
     .time-line
       position absolute
       top: 0
+
       &::after
         content: ''
         position absolute
@@ -151,6 +157,7 @@ export default {
       }
     }
   },
+  inject: ['cantBorrowTime'],
   computed: {
     currentTime() {
       return timeUtil.formatDate(this.date, '-') + '  (' + timeUtil.getCurrentDay(this.date) + ')';
@@ -162,6 +169,12 @@ export default {
     // this.getTimeConfig() // 查可借用的时间配置
   },
   mounted() {
+    console.log(this.cantBorrowTime)
+  },
+  watch: {
+    cantBorrowTime() {
+      this.reset()
+    }
   },
   methods: {
     changeDate(name) {
@@ -186,10 +199,21 @@ export default {
           let time = item.split('-')
           let start = time[0]
           let end = time[1]
+          let startSource = this.calcSource(start)
+          let endSource = this.calcSource(end)
+          let duration = endSource - startSource;
+          let can = this.cantBorrowTime.every(item2 => {
+            let itemDuration = item2.endSource - item2.startSource;
+            let max = Math.max(item2.endSource, endSource);
+            let min = Math.min(item2.startSource, startSource)
+            let cha = max - min;
+            return cha >= (itemDuration + duration);
+          });
+          // 1 可预约  2 已被预约 3不可预约
           let timeItem = {
             start,
             end,
-            status: 1,
+            status: can ? 1 : 3,
             id: index + 1
           }
           if (index < res.morning) {
@@ -207,6 +231,28 @@ export default {
       // 添加预约时间
       item.status = 2;
       mitt.emit('addBorrowTime', item)
+    },
+    calcSource(time) {
+      const h = +time.split(':')[0]
+      const m = +time.split(':')[1]
+      return h * 60 + m;
+    },
+    reset() {
+      for(let key in this.timeConfig) {
+        this.timeConfig[key].forEach(item => {
+          let startSource = this.calcSource(item.start)
+          let endSource = this.calcSource(item.end)
+          let duration = endSource - startSource;
+          let can = this.cantBorrowTime.every(item2 => {
+            let itemDuration = item2.endSource - item2.startSource;
+            let max = Math.max(item2.endSource, endSource);
+            let min = Math.min(item2.startSource, startSource)
+            let cha = max - min;
+            return cha >= (itemDuration + duration);
+          });
+          item.status = can ? 1 : 3
+        })
+      }
     }
   }
 }

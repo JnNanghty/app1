@@ -212,7 +212,7 @@ export default {
       if (!this.player) {
         return;
       }
-      if (this.player instanceof window.flvjs.FlvPlayer) {
+      if (this.player instanceof flvjs.FlvPlayer) {
         clearTimeout(this.player.timeoutChecker);
         this.player.unload();
         this.player.detachMediaElement();
@@ -224,9 +224,7 @@ export default {
     }
   },
   beforeUnmount() {
-    if (this.player) {
-      this.player.dispose();
-    }
+    this.destroyPlayer()
   }
 };
 </script>

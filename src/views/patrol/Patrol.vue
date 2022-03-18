@@ -15,7 +15,10 @@
       .device-list
         width 30%
         margin-left:1rem;
+        height: 100%
+        overflow-y scroll
         .device-item
+          height: 5rem
           margin-bottom: 1rem
     .top-right
       width: 24%
@@ -66,10 +69,10 @@
         <div class="device-list" v-show="filterDevices.length > 0">
           <div class="device-item" v-for="item in filterDevices" :key="item.id" @click="setItemActive(item)">
             <template v-if="item.type.id === 5">
-              <camera-player :camera="activeDevice"></camera-player>
+              <camera-player :camera="item"></camera-player>
             </template>
             <template v-else-if="item.type.id === 2">
-              <computer-player :computer="activeDevice" :power="true"></computer-player>
+              <computer-player :computer="item" :power="true"></computer-player>
             </template>
           </div>
         </div>
@@ -141,6 +144,7 @@ export default {
   created() {
     this.currentCourse = ls.get('currentCourse') || {};
     this.terminalId = ls.get('terminalId')
+
     this.getTerminal();
     this.getDeviceList();
   },
@@ -249,7 +253,9 @@ export default {
     },
     selectTerminal() {
       if (this.schoolInfo.terminal !== -1) {
+        this.terminalId = this.schoolInfo.terminal
         this.getDailyCurriculum()
+        this.getDeviceList()
       }
     },
     getDailyCurriculum() {

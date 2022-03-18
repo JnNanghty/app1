@@ -12,7 +12,8 @@ import {initMqtt} from "@/util/mqttUtil";
 
 const app = createApp(App)
 app.use(router)
-
+// 取消inject的.value
+app.config.unwrapInjectedRef = true
 app.directive('doubleclick', {
   mounted(el, binding) {
     let clicked = false;

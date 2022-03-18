@@ -158,11 +158,13 @@ export default {
       activeWrap: 0,
       componentArray: ['ClassroomSelect', 'DateSelect', 'Reason'],
       borrowTime: [],
+      cantBorrowDuration: []
     }
   },
   provide() {
     return {
-      reasonText: computed(() => this.formData.reason)
+      reasonText: computed(() => this.formData.reason),
+      cantBorrowTime: computed(() => this.cantBorrowDuration)
     }
   },
   computed: {
@@ -180,6 +182,7 @@ export default {
     this.terminalInfo = ls.get('terminalInfo'); // 默认值
     this.formData.terminal = ls.get('terminalInfo');
 
+    this.getBorrowTime();
     mitt.on('updateSelect', this.setTerminal)
     mitt.on('changeDate', this.changeDate)
     mitt.on('addBorrowTime', this.addBorrowTime)
@@ -205,12 +208,14 @@ export default {
       this.getBorrowTime()
     },
     getBorrowTime() {
+      // 清空已经借用的时间
       this.borrowTime = [];
       service.post('course/getBorrowTerminalTime', {
         date: this.formData.date,
-        terminalId: this.terminalInfo.id
+        terminalId: this.formData.terminal.id
       }).then(res => {
         // 要被禁用的时间
+        this.cantBorrowDuration = res;
       })
     },
     addBorrowTime(item) {

@@ -13,12 +13,13 @@
     width: 100%
     padding: 1rem 1.5rem;
     box-sizing border-box
+    overflow-y: scroll;
 </style>
 <template>
   <div class="r-main">
     <div style="margin-left: 1rem;">申请理由:</div>
     <div class="reason-content">
-      <span>{{reasonText.value}}</span>
+      <span>{{reasonText}}</span>
     </div>
   </div>
 </template>

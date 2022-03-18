@@ -51,7 +51,6 @@
       </p>
       <p v-else>
         暂无电脑画面
-        <i class="fa fa-refresh pc-refresh" @click.stop="refreshPC"></i>
       </p>
     </div>
   </div>
