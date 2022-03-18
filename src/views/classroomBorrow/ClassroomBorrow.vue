@@ -190,13 +190,6 @@ export default {
     mitt.off('addBorrowTime', this.addBorrowTime)
   },
   mounted() {
-    const userInfo = ls.get('userInfo');
-    if (userInfo) {
-    } else {
-      msg({
-        message: '请先登录!'
-      });
-    }
   },
   methods: {
     selectWrap(index) {

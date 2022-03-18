@@ -3,6 +3,8 @@
   position: relative;
   width: 100%;
   height: 100%;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .camera-player-container {

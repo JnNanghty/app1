@@ -214,9 +214,9 @@
           <span>{{ item.label }}</span>
         </div>
 
-        <div class="brush-tip">
-          刷卡区
-        </div>
+<!--        <div class="brush-tip">-->
+<!--          刷卡区-->
+<!--        </div>-->
         <div class="mj-logo"><img src="../assets/mj_logo.png" alt=""></div>
       </footer>
     </div>
@@ -241,8 +241,7 @@ export default {
       loginToPath: null,
       terminalId: null,
       config: {
-        logo: '',
-        label: ''
+        logo: ''
       },
       appList: [
         {
@@ -427,6 +426,7 @@ export default {
     },
     changeTheme() {
       let theme = window.document.documentElement.dataset.theme
+
       this.activeClass = 'app-item-icon-active-' + theme
     },
     loginSuccess() {

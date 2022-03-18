@@ -11,9 +11,14 @@
     .top-left
       flex: 1
       margin-right: 10px
-
+      display flex
+      .device-list
+        width 30%
+        margin-left:1rem;
+        .device-item
+          margin-bottom: 1rem
     .top-right
-      width: 30%
+      width: 24%
 
       .course-info
         min-height 60%
@@ -38,22 +43,36 @@
     display flex
 
     .form-select
-      width: 8rem
       margin-right: 1rem
+      min-width: 8rem;
+      width: fit-content;
+      padding-right: 1rem;
 </style>
 <template>
   <div class="main">
     <div class="top">
       <div class="top-left">
-        <template v-if="activeDevice.type.id === 5">
-          <camera-player :camera="activeDevice"></camera-player>
-        </template>
-        <template v-else-if="activeDevice.type.id === 2">
-          <computer-player :computer="activeDevice" :power="true"></computer-player>
-        </template>
-        <template v-else>
-          <div>没有设备！</div>
-        </template>
+        <div style="flex: 1;">
+          <template v-if="activeDevice.type.id === 5">
+            <camera-player :camera="activeDevice"></camera-player>
+          </template>
+          <template v-else-if="activeDevice.type.id === 2">
+            <computer-player :computer="activeDevice" :power="true"></computer-player>
+          </template>
+          <template v-else>
+            <div></div>
+          </template>
+        </div>
+        <div class="device-list" v-show="filterDevices.length > 0">
+          <div class="device-item" v-for="item in filterDevices" :key="item.id" @click="setItemActive(item)">
+            <template v-if="item.type.id === 5">
+              <camera-player :camera="activeDevice"></camera-player>
+            </template>
+            <template v-else-if="item.type.id === 2">
+              <computer-player :computer="activeDevice" :power="true"></computer-player>
+            </template>
+          </div>
+        </div>
       </div>
       <div class="top-right">
         <user-info></user-info>
@@ -116,10 +135,12 @@ export default {
         floor: -1, // 楼层
         terminal: -1 // 教室
       },
+      terminalId: null
     }
   },
   created() {
     this.currentCourse = ls.get('currentCourse') || {};
+    this.terminalId = ls.get('terminalId')
     this.getTerminal();
     this.getDeviceList();
   },
@@ -187,6 +208,7 @@ export default {
           }]
         }).then(res => {
           this.campus = res.list;
+          this.setCurrentTerminal();
           resolve();
         }, () => {
           msg({
@@ -206,7 +228,7 @@ export default {
           children: [{
             field: 'terminal.id',
             match: 'EQ',
-            value: ls.get('terminalId')
+            value: this.terminalId
           }, {
             field: 'type',
             match: 'IN',
@@ -245,6 +267,23 @@ export default {
             i.endTime = timeUtil.formatTime(i.start)
             this.currentCourse = i;
           }
+        })
+      })
+    },
+    setCurrentTerminal() {
+      // 根据当前的terminalId 找出对应的楼层教学楼校区等.
+      this.campus.forEach(cam => {
+        cam.children.forEach(cat => {
+          cat.children.forEach(flo => {
+            flo.children.forEach(ter => {
+              if(ter.id === this.terminalId) {
+                this.schoolInfo.campus = cam.id;
+                this.schoolInfo.category = cat.id;
+                this.schoolInfo.floor = flo.id;
+                this.schoolInfo.terminal = ter.id;
+              }
+            })
+          })
         })
       })
     }

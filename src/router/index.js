@@ -13,6 +13,7 @@ import Auth from "@/components/authPage/Auth";
 import Open from "@/views/open/Open";
 import PasswordOpen from "@/views/open/PasswordOpen";
 import NoPermission from "@/components/NoPermission";
+import ls from "@/store/ls";
 
 const routes = [
   {
@@ -31,15 +32,37 @@ const routes = [
     }, {
       path: 'patrol',
       name: 'Patrol',
-      component: Patrol
+      component: Patrol,
+      beforeEnter(to, from, next) {
+        const permission = ls.get('permission') || {};
+        console.log(to, from)
+        if (permission.supervisoryPatrol) {
+          next()
+        } else {
+          return {
+            name: 'NoPermission'
+          }
+        }
+      }
     }, {
       path: '/classroomBorrow',
       name: 'ClassroomBorrow',
-      component: ClassroomBorrow
+      component: ClassroomBorrow,
     }, {
       path: '/repair',
       name: 'Repair',
-      component: Repair
+      component: Repair,
+      beforeEnter(to, from, next) {
+        const permission = ls.get('permission') || {};
+        console.log(to, from)
+        if (permission.faultHanding) {
+          next()
+        } else {
+          return {
+            name: 'NoPermission'
+          }
+        }
+      }
     }, {
       path: '/auth',
       name: 'Auth',
@@ -64,7 +87,10 @@ const routes = [
   }, {
     path: '/systemSettingHome',
     name: 'SystemSettingHome',
-    component: SystemSettingHome
+    component: SystemSettingHome,
+    beforeEnter(to, from, next) {
+      next()
+    }
   }, {
     path: '/examMode',
     name: 'ExamMode',

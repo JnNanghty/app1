@@ -15,6 +15,7 @@
   }
 
   .exit-button {
+    margin-left: 2rem
     padding: 8px 30px;
     text-align center
     border-radius 8px;

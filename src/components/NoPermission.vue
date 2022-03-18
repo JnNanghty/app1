@@ -7,7 +7,7 @@
 <template>
   <div class="main">
     <div><img src="../assets/noPermission.png" alt=""></div>
-    <div>您当前无权限请先联系管理员为您开通</div>
+    <div>您当前无访问权限请先联系管理员为您开通</div>
   </div>
 </template>
 
@@ -22,12 +22,12 @@ export default {
   },
   computed: {},
   created() {
-    mitt.emit('showBackButton')
+    // mitt.emit('showBackButton')
   },
   mounted() {
   },
   beforeUnmount() {
-    mitt.emit('hideBackButton')
+    // mitt.emit('hideBackButton')
   },
   methods: {}
 }
