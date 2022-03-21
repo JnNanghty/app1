@@ -4,15 +4,16 @@
   width: 100%
   height: 100%
   display flex
-
+  padding: 0.65rem;
+  box-sizing border-box
   .main-left,
   .main-right
     flex: 1;
     get_background(setting_panel_bancground)
-    border-radius .35rem;
     padding-top: .7rem
     padding-left: 1.25rem
     position relative
+    border-radius 8px;
 
     .form-input
       max-width: 19.5rem;

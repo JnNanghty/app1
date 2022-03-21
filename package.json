@@ -19,7 +19,8 @@
     "video.js": "^7.17.0",
     "videojs-flash": "^2.2.1",
     "vue": "^3.2.29",
-    "vue-router": "4"
+    "vue-router": "4",
+    "vue3-cookies": "^1.0.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

@@ -18,6 +18,7 @@ service.interceptors.request.use(config => {
   config.baseURL = serviceUrl + '/rest/';
 
   const token = getToken();
+
   if (token) {
     config.headers['token'] = token;
   }

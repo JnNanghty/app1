@@ -133,6 +133,7 @@ export default {
       }).then(res => {
         if (res) {
           setToken(res.token);
+          this.$cookies.set('token', res.token, 6e5);
           ls.set('userInfo', res, 6e5);
           msg({
             message: '登录成功！',

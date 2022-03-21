@@ -9,9 +9,10 @@ import './util/serialPort';
 
 import ls from "@/store/ls";
 import {initMqtt} from "@/util/mqttUtil";
+import VueCookies from 'vue3-cookies'
 
 const app = createApp(App)
-app.use(router)
+app.use(router).use(VueCookies)
 // 取消inject的.value
 app.config.unwrapInjectedRef = true
 app.directive('doubleclick', {
