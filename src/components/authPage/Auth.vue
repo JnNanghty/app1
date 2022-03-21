@@ -124,7 +124,6 @@ export default {
     },
     loginSuccess() {
       setToken('6669282:61646D696E36363639323130:1652167051808:F7353F580F31DF479A3D75B0A931164A');
-      mitt.emit('loginSuccess');
       this.getUserPermission();
     },
     icLogin(ic) {
@@ -159,6 +158,7 @@ export default {
     getUserPermission() {
       service.post('permission/getUserPermission').then(res => {
         ls.set('permission', res, 6e5);
+        mitt.emit('loginSuccess');
       })
     }
   }

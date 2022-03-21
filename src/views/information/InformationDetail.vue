@@ -2,7 +2,16 @@
 .main
   padding: 1rem 2rem
   get_font_color(font_color)
-
+  position relative
+  box-sizing border-box
+  width: 100%
+  height: 100%
+  iframe
+    width: 100%
+    height: 100%
+  .info
+    width: 100%
+    height: 100%
 </style>
 <template>
   <div class="main">
@@ -10,7 +19,7 @@
       <iframe :src="info.content"></iframe>
     </template>
     <template v-else>
-      <div v-html="info.content"></div>
+      <div class="info" v-html="info.content"></div>
     </template>
   </div>
 </template>

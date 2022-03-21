@@ -228,14 +228,33 @@ export default {
     },
     submit() {
       let self = this
+      if(this.borrowTime < 0) {
+        msg({
+          message: '请选择借用时间',
+          type: 'wrong'
+        });
+        return ;
+      }
       myConfirm({
         message: '确认提交吗？',
         ok() {
+          let start = self.borrowTime[0].start.split(':');
+          let end = self.borrowTime[self.borrowTime.length - 1].end.split(':');
+          let sh = start[0]
+          let sm = start[1]
+          let eh = end[0]
+          let em = end[1]
+          let date = new Date(self.formData.date)
+          date.setHours(sh)
+          date.setMinutes(sm)
+          let date2 = new Date(self.formData.date)
+          date2.setHours(eh)
+          date2.setMinutes(em)
           service.post('course/applyTerminalBorrow', {
-            start: '',
-            end: '',
+            start: date,
+            end: date2,
             room: self.formData.terminal.id,
-            reason: ''
+            reason: self.formData.reason
           }).then(() => {
             msg({
               message: '提交成功',

@@ -39,6 +39,8 @@ export function initMqtt() {
                 mitt.emit('mqttExam', data.data); // 考试，考试科目，考场号 考试开始结束时间
               } else if(data.type === 'info') {
                 mitt.emit('mqttInfo', data.data) // 资讯
+              } else if(data.type === '') {
+                mitt.emit('mqtt')
               }
             })
 

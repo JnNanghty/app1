@@ -233,11 +233,12 @@ export default {
       })
     },
     submit() {
+      let self = this
       myConfirm({
         message: '是否确认上报？',
         ok() {
           service.post('deviceAlarm/report', {
-            entity: this.form
+            entity: self.form
           }).then(() => {
             msg({
               message: '上报成功',

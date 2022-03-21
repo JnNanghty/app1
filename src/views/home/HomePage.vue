@@ -68,7 +68,7 @@ export default {
       countDownInterval: null,
       flag: false,
       windowStyle: {
-        transform: 'translateX(-50vw)'
+        transform: 'translateX(0)'
       }
     };
   },
