@@ -3,11 +3,13 @@
   get_font_color(font_color)
   height: 100%
   overflow: hidden;
+
 .auth-title
   text-align center
   margin-top: 50px
   margin-bottom: 50px
   font-size 24px
+
 .auth-content
   display flex
   justify-content space-around
@@ -15,12 +17,15 @@
 .login-item
   width: 140px
   height @width
+
   img
     width: 100%
+
 .login-desc
   margin-top: 1.5rem;
   text-align center
   font-size 24px;
+
 .face-box
   width: 100%
   height: 100%
@@ -61,6 +66,7 @@ import {setToken} from "@/util/auth";
 import service from "@/api/services";
 import ls from "@/store/ls";
 import {msg} from "@/components/message";
+
 export default {
   name: "Auth",
   data() {
@@ -81,7 +87,7 @@ export default {
     showCard() {
       let show = false;
       this.config.forEach(item => {
-        if(item.name === 'card') {
+        if (item.name === 'card') {
           show = item.value
         }
       });
@@ -90,7 +96,7 @@ export default {
     showQrCode() {
       let show = false;
       this.config.forEach(item => {
-        if(item.name === 'code') {
+        if (item.name === 'code') {
           show = item.value
         }
       });
@@ -99,7 +105,7 @@ export default {
     showFace() {
       let show = false;
       this.config.forEach(item => {
-        if(item.name === 'face') {
+        if (item.name === 'face') {
           show = item.value
         }
       });

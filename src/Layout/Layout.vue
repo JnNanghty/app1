@@ -387,14 +387,14 @@ export default {
       }
     },
     goSetting() {
-      let t = getToken()
-      let path = 'SystemSettingHome'
-      if (!t) {
-        this.loginToPath = 'SystemSettingHome';
-        path = 'Auth'
-      }
+      // let t = getToken()
+      // let path = 'SystemSettingHome'
+      // if (!t) {
+      //   this.loginToPath = 'SystemSettingHome';
+      //   path = 'Auth'
+      // }
       this.$router.push({
-        name: path
+        name: 'AuthAdmin'
       });
     },
     refresh() {

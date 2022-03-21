@@ -15,6 +15,8 @@ import PasswordOpen from "@/views/open/PasswordOpen";
 import NoPermission from "@/components/NoPermission";
 import ls from "@/store/ls";
 import InformationDetail from "@/views/information/InformationDetail";
+import AuthAdmin from "@/components/authPage/AuthAdmin";
+import FirstSetting from "@/views/systemSetting/settingItem/FirstSetting";
 
 const routes = [
   {
@@ -67,6 +69,14 @@ const routes = [
       name: 'Auth',
       component: Auth
     }, {
+      path: '/authAdmin',
+      name: 'AuthAdmin',
+      component: AuthAdmin
+    }, {
+      path: '/firstSetting',
+      name: 'FirstSetting',
+      component: FirstSetting
+    }, {
       path: '/open',
       name: 'Open',
       component: Open
@@ -78,7 +88,7 @@ const routes = [
       path: '/information',
       name: 'Information',
       component: Information
-    },{
+    }, {
       path: '/informationDetail',
       name: 'InformationDetail',
       component: InformationDetail
