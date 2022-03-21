@@ -305,7 +305,7 @@ export default {
           src: require('../assets/icon/open_dark.png'),
           icon: 'open',
           label: '开门',
-          name: 'open',
+          name: 'access',
           path: 'Open',
           needLogin: false,
           visible: false
