@@ -281,7 +281,7 @@ export default {
           name: 'news', // 跟后台配置匹配
           path: 'Information',
           needLogin: false,
-          visible: true // 是否默认显示
+          visible: false // 是否默认显示
         },
         {
           src: require('../assets/icon/borrow_dark.png'),
@@ -299,7 +299,7 @@ export default {
           name: 'repair',
           path: 'Repair',
           needLogin: true,
-          visible: true
+          visible: false
         },
         {
           src: require('../assets/icon/open_dark.png'),
@@ -308,7 +308,7 @@ export default {
           name: 'open',
           path: 'Open',
           needLogin: false,
-          visible: true
+          visible: false
         }
       ],
       terminalInfo: {}, // 教室信息  label
@@ -390,7 +390,7 @@ export default {
       // let t = getToken()
       // let path = 'SystemSettingHome'
       // if (!t) {
-      //   this.loginToPath = 'SystemSettingHome';
+        this.loginToPath = 'SystemSettingHome';
       //   path = 'Auth'
       // }
       this.$router.push({

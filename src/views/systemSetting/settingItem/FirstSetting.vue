@@ -62,6 +62,7 @@ import service from "@/api/services";
 import {msg} from "@/components/message";
 import {initMqtt} from "@/util/mqttUtil";
 import Auth from "@/components/authPage/Auth";
+import mitt from "@/util/mitt";
 
 export default {
   name: "FirstSetting",
@@ -102,7 +103,7 @@ export default {
     getConfig() {
       service.post('classCard/getConfig').then((res) => {
         if (res.message === 'success') {
-          ls.set('deviceConfig', data);
+          ls.set('deviceConfig', res.data);
           this.ipChecked = true;
         } else {
           msg({

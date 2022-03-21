@@ -40,6 +40,7 @@ const routes = [
         const permission = ls.get('permission') || {};
         console.log(to, from)
         if (permission.supervisoryPatrol) {
+          return true;
         } else {
           return {
             name: 'NoPermission'
@@ -58,6 +59,7 @@ const routes = [
         const permission = ls.get('permission') || {};
         console.log(to, from)
         if (permission.faultHanding) {
+          return true;
         } else {
           return {
             name: 'NoPermission'
