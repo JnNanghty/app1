@@ -29,7 +29,6 @@
 }
 
 .list-item {
-  color: #ffffff;
   display: flex;
   text-align center
 

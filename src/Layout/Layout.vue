@@ -85,6 +85,7 @@
   justify-content: center;
   height: 5rem;
   overflow-x: scroll;
+  overflow-y: hidden;
   position relative
   get_font_color(font_color)
 
@@ -192,7 +193,7 @@
           </div>
         </transition>
         <div class="header-right">
-          <div class="setting-icon" @click="goSetting"></div>
+          <div class="setting-icon" :style="settingIcon" @click="goSetting"></div>
           <div class="header-time">{{ timeInfo.currentDate }}&nbsp;&nbsp;&nbsp;{{
               timeInfo.currentDay
             }}&nbsp;{{ timeInfo.currentTime }}
@@ -217,9 +218,9 @@
           <span>{{ item.label }}</span>
         </div>
 
-<!--        <div class="brush-tip">-->
-<!--          刷卡区-->
-<!--        </div>-->
+        <!--        <div class="brush-tip">-->
+        <!--          刷卡区-->
+        <!--        </div>-->
         <div class="mj-logo"><img src="../assets/mj_logo.png" alt=""></div>
       </footer>
     </div>
@@ -327,7 +328,10 @@ export default {
         {id: 5, name: 'art', label: '功能教室'},
         {id: 6, name: 'other', label: '其他'}
       ],
-      activeClass: 'app-item-icon-active-dark'
+      activeClass: 'app-item-icon-active-dark',
+      settingIcon: {
+        background: `url(${require('@/assets/icon/setting_dark.png')}) center/contain no-repeat`
+      }
     }
   },
   computed: {
@@ -390,7 +394,7 @@ export default {
       // let t = getToken()
       // let path = 'SystemSettingHome'
       // if (!t) {
-        this.loginToPath = 'SystemSettingHome';
+      this.loginToPath = 'SystemSettingHome';
       //   path = 'Auth'
       // }
       this.$router.push({
@@ -448,9 +452,13 @@ export default {
       this.activeClass = 'app-item-icon-active-' + theme
       let suffix = 'dark'
       let suffix2 = ''
-      if(theme === 'bright') {
+      if (theme === 'bright') {
         suffix = 'bright'
         suffix2 = '_bright'
+      }
+
+      this.settingIcon = {
+        background: `url(${require('@/assets/icon' + suffix2 + '/setting_' + suffix + '.png')}) center/contain no-repeat`
       }
       this.appList.forEach(item => {
         item.src = require(`../assets/icon${suffix2}/${item.icon}_${suffix}.png`);

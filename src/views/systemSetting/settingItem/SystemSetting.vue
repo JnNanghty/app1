@@ -100,33 +100,34 @@
       <form class="form-content">
         <div class="form-item-inline">
           <div class="form-label">ip获取</div>
-          <select class="form-select _select form-select-big-size" v-model="systemInfo.ip">
-            <option v-for="item in selectOption.school" :value="item.id" :label="item.label"></option>
+          <select class="form-select _select form-select-big-size" v-model="systemInfo.ipGetWay">
+            <option value="1" label="自动"></option>
+            <option value="2" label="手动"></option>
           </select>
         </div>
         <div class="form-item-inline">
           <div class="form-label">ip地址</div>
-          <input class="form-input _input">
+          <input class="form-input _input" v-model="systemInfo.ip">
         </div>
         <div class="form-item-inline">
           <div class="form-label">子网掩码</div>
-          <input class="form-input _input">
+          <input class="form-input _input" v-model="systemInfo.mask">
         </div>
         <div class="form-item-inline">
           <div class="form-label">网关</div>
-          <input class="form-input _input">
+          <input class="form-input _input" v-model="systemInfo.gateWay">
         </div>
         <div class="form-item-inline">
           <div class="form-label">首选DNS</div>
-          <input class="form-input _input">
+          <input class="form-input _input" v-model="systemInfo.dns">
         </div>
-        <div class="form-item-inline">
-          <div class="form-label">备用DNS</div>
-          <input class="form-input _input">
-        </div>
+<!--        <div class="form-item-inline">-->
+<!--          <div class="form-label">备用DNS</div>-->
+<!--          <input class="form-input _input">-->
+<!--        </div>-->
         <div class="submit-button">
-          <div class="_button cancel-button">取消</div>
-          <div class="_button" style="margin-left: 2rem">保存</div>
+          <div class="_button cancel-button" @click="cancel">取消</div>
+          <div class="_button" style="margin-left: 2rem" @click="save">保存</div>
         </div>
       </form>
     </div>
@@ -139,16 +140,26 @@
 </template>
 
 <script>
+import ls from "@/store/ls";
+import {msg} from "@/components/message";
+
 export default {
   name: "SystemSetting",
   data() {
     return {
       systemInfo: {
-        ip: ''
-      },
-      selectOption: {
-        ip: []
+        ipGetWay:'',
+        ip: '',
+        dns: '',
+        mask: '',
+        gateWay: ''
       }
+    }
+  },
+  created() {
+    let info = ls.get('systemInfo')
+    if(info) {
+      this.systemInfo = JSON.parse(info);
     }
   },
   methods: {
@@ -156,6 +167,18 @@ export default {
       if (window.cordova) {
         cordova.plugins.exit();
       }
+    },
+    cancel() {
+      for(let i in this.systemInfo) {
+        this.systemInfo[i] = ''
+      }
+    },
+    save() {
+      ls.set('systemInfo', JSON.stringify(this.systemInfo))
+      msg({
+        message: '保存成功！',
+        type: 'success'
+      });
     }
   }
 }

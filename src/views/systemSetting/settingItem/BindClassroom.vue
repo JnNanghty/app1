@@ -170,11 +170,13 @@ export default {
       },
       campus: [],
       mac,
-      message: ''
+      message: '',
+      terminalId: null
     }
   },
   created() {
     this.serviceUrl = ls.get('serviceUrl') || '';
+    this.terminalId = ls.get('terminalId')
   },
   computed: {
     category() {
@@ -252,6 +254,9 @@ export default {
         }).then(res => {
           console.log(res);
           this.campus = res.list;
+          if(this.terminalId) {
+            this.setCurrentTerminal();
+          }
           resolve();
         }, () => {
           msg({
@@ -330,6 +335,23 @@ export default {
           message: '绑定失败！',
           type: 'wrong'
         });
+      })
+    },
+    setCurrentTerminal() {
+      // 根据当前的terminalId 找出对应的楼层教学楼校区等.
+      this.campus.forEach(cam => {
+        cam.children.forEach(cat => {
+          cat.children.forEach(flo => {
+            flo.children.forEach(ter => {
+              if(ter.id === this.terminalId) {
+                this.schoolInfo.campus = cam.id;
+                this.schoolInfo.category = cat.id;
+                this.schoolInfo.floor = flo.id;
+                this.schoolInfo.terminal = ter.id;
+              }
+            })
+          })
+        })
       })
     }
   }

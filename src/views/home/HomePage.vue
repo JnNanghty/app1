@@ -81,7 +81,10 @@ export default {
       this.getDailyCurriculum();
       this.countDownInterval = setInterval(() => {
         this.resolveData()
-      }, 6e4);
+        if (this.currentCourse.courseId) {
+          this.windowStyle.transform = 'translateX(-50vw)';
+        }
+      }, 3e3);
       console.log('HomePage: get terminalInfo');
       this.getTerminalInfo();
     } else {
@@ -112,6 +115,9 @@ export default {
       }).then(res => {
         this.curriculumData = res.data;
         this.resolveData();
+        if (this.currentCourse.courseId) {
+          this.windowStyle.transform = 'translateX(-50vw)';
+        }
       });
     },
     resolveData() {
@@ -131,18 +137,20 @@ export default {
         const {hour, minute, second, currentSource} = timeUtil.getNowTime();
         if (item.startSource <= currentSource && item.endSource >= currentSource) {
           // 上课中
-          this.currentCourse = item;
-          this.nextCourse = nextItem;
+          this.currentCourse = JSON.parse(JSON.stringify(item));
+          this.nextCourse = nextItem ? JSON.parse(JSON.stringify(nextItem)) : {};
           // 减去秒数  把误差控制在1s以内
           ls.set('currentCourse', item, (item.endSource - (hour * 60 + minute)) * 60 * 1000 - second * 1000);
           this.inCourse = true;
+          break;
         } else if ((item.endSource < currentSource && currentSource < nextItem.startSource) ||
             (i === 0 && currentSource < item.startTime)) {
           // 课间 或者 第一节课前
           this.currentCourse = {};
-          this.nextCourse = nextItem;
+          this.nextCourse = JSON.parse(JSON.stringify(nextItem));
           this.inCourse = false;
           ls.remove('currentCourse');
+          break;
         } else {
           // 一天的课上完了
           this.currentCourse = {};
@@ -159,7 +167,7 @@ export default {
     },
     scrollWindow(status) {
       if (status === 2 || status === 4) {
-        if(status === 4 && this.windowStyle.transform === 'translateX(-50vw)') {
+        if (status === 4 && this.windowStyle.transform === 'translateX(-50vw)') {
           // 如果为课前考勤， 且考勤界面已经显示
           mitt.emit('startSignIn')
         }

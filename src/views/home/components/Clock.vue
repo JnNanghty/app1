@@ -14,9 +14,13 @@
     left: 0
     width: 320px;
     text-align: center;
-
+    .c-image
+      margin-top: 100px
+      img
+        width: 46px
+        height: 40px
     .c-nocourse
-      margin-top: 163px
+      margin-top: 23px
       font-size 32px
       color #59B565;
 
@@ -42,6 +46,7 @@
     .current-status-active
       color #FDA45E
       font-size 16px
+      margin-top: 80px
       margin-bottom: 5px
 
     .current-status
@@ -83,6 +88,9 @@
     </div>
     <div class="c-course-info">
       <template v-if="clockStatus === 1">
+        <div class="c-image">
+          <img src="../../../assets/icon/clock_eye.png" alt="">
+        </div>
         <div class="c-nocourse">当前空闲</div>
       </template>
       <template v-else-if="clockStatus === 2">
@@ -161,6 +169,7 @@ export default {
       // 1 2 4都显示空闲
       // 3 7 显示当前课节
       // 5 6 8 显示下节课
+      console.log('clock status: in')
       if (!this.ctx) return 1;
       this.clearCanvas();
       const {currentSource} = timeUtil.getNowTime();
@@ -168,6 +177,7 @@ export default {
       this.pointStyle.transform = `rotate(${angle}deg)`;
       if ((!this.currentCourse.courseId && !this.nextCourse.courseId) ||
           (!this.inCourse && !this.nextCourse.courseId)) {
+        console.log('clock status: 1 空闲')
         return 1; // 空闲
       } else if (!!this.currentCourse.courseId && this.inCourse) {
         // 先draw灰色，再draw橙色
@@ -178,6 +188,7 @@ export default {
         let start1 = (currentSource % 720) / 720;
         let end1 = (endSource % 720) / 720;
         this.drawClock(start1, end1, this.clockColor[2])
+        console.log('clock status: 2 上课')
         return 2; // 当前正在上课
       } else if ((!this.currentCourse.courseId && !!this.nextCourse.courseId) ||
           (!this.inCourse && !!this.nextCourse.courseId)) {
@@ -206,6 +217,7 @@ export default {
           status = 4;
         }
         mitt.emit('courseStatus', status)
+        console.log('clock status: 3 4 下节有课或者课前考勤')
         return status; // 显示即将上课
       }
     },
@@ -231,9 +243,9 @@ export default {
       }
       this.loadImageAndDraw(img, 20, 20, 280, 280)
 
-      if (!this.currentCourse.courseId) {
-        this.loadImageAndDraw(require('@/assets/icon/clock_eye.png'), 137, 100, 46, 40)
-      }
+      // if (!this.currentCourse.courseId) {
+      //   this.loadImageAndDraw(require('@/assets/icon/clock_eye.png'), 137, 100, 46, 40)
+      // }
       this.ctx.save();
     },
     changeTheme() {
@@ -270,6 +282,9 @@ export default {
       if (this.ctx) {
         // this.ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
         this.ctx.restore()
+
+        // this.ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
+        // this.init();
       }
     }
   }

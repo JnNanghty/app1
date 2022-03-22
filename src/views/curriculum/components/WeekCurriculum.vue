@@ -1,5 +1,4 @@
 <style scoped lang="stylus">
-@import "~@/theme/mixin.styl";
 .week-curriculum-main
   overflow-y: scroll;
   height: 100%;
@@ -9,19 +8,21 @@
 
   .change-week
     overflow-x scroll
-    margin-bottom: 0.25rem;
+    margin-bottom: 1rem;
 
     &::-webkit-scrollbar
       height: 0
 
     .scroll-wrap
-      itemWidth = 100px;
+      itemWidth = 13rem;
       width 19 * itemWidth
 
       .week-item
         float left
-        width: itemWidth
-        height: 48px
+        width itemWidth
+        box-sizing border-box
+        padding: 10px 25px 0;
+        height: 58px
         line-height @height
         text-align center
 
@@ -50,13 +51,11 @@
   .table-row
     min-height: 2.5rem;
     box-sizing: border-box;
-    //border-right: 1px solid #2F333A;
     display flex
     justify-content center
     align-items center
     position relative
-
-  //overflow: hidden
+    font-size 9px;
 
   .course-item
     get_background(patrol_bottom_background)
@@ -129,7 +128,7 @@
       <div class="scroll-wrap">
         <div class="week-item" :class="currentWeek === item ? 'week-item-active' : ''"
              v-for="item in 19" :ref="'week-item-' + item" @click="changeWeek(item)">
-          第{{ simplifyNum[item - 1] }}周
+          第{{ simplifyNum[item - 1] }}周 <span style="margin-left: 10px;">{{ getTimeRange(item) }}</span>
         </div>
       </div>
     </div>
@@ -174,7 +173,8 @@ export default {
       curriculum: [],
       simplifyNumberArray: ['一', '二', '三', '四', '五', '六', '日'],
       simplifyNum: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九'],
-      closeTimeout: null
+      closeTimeout: null,
+      firstWeek: null
     }
   },
   mounted() {
@@ -199,6 +199,7 @@ export default {
         id: this.terminalId
       }).then(res => {
         this.currentWeek = this.calcCurrentWeek(res.data.firstWeek);
+        this.firstWeek = res.data.firstWeek;
         this.scrollLeft()
         this.sectionTime = res.data.sessionSourceList.map(i => {
           return `${timeUtil.sourceToTime(i.startSource)}-${timeUtil.sourceToTime(i.endSource)}`;
@@ -275,7 +276,7 @@ export default {
     },
     scrollLeft() {
       this.$refs.weekWrap.scrollBy({
-        left: (this.currentWeek - 1) * 100,
+        left: (this.currentWeek - 1) * 200,
         behavior: "smooth"
       })
     },
@@ -291,6 +292,20 @@ export default {
       this.curriculum.forEach(item => {
         item.forEach(i => i.showDetail = false)
       });
+    },
+    getTimeRange(index) {
+      let d = new Date(this.firstWeek).getTime()
+      let start = d + (index - 1) * 7 * 24 * 60 * 60 * 1000;
+      let end = start + 7 * 24 * 60 * 60 * 1000
+      let sm = new Date(start).getMonth() + 1;
+      let em = new Date(end).getMonth() + 1;
+      let sd = new Date(start).getDate();
+      let ed = new Date(end).getDate();
+      if (sm < 10) sm = '0' + sm;
+      if (sd < 10) sd = '0' + sd;
+      if (em < 10) em = '0' + em;
+      if (ed < 10) ed = '0' + ed;
+      return sm + '/' + sd + ' - ' + em + '/' + ed
     }
   }
 }

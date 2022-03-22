@@ -15,13 +15,15 @@
       height: 0
 
     .scroll-wrap
-      itemWidth = 100px;
+      itemWidth = 13rem;
       width 19 * itemWidth
 
       .week-item
         float left
         width: itemWidth
-        height: 48px
+        box-sizing border-box
+        padding: 10px 25px 0;
+        height: 58px
         line-height @height
         text-align center
 
@@ -52,6 +54,7 @@
     box-sizing: border-box;
     //border-right: 1px solid #2F333A;
     display flex
+    font-size 9px;
     justify-content center
     align-items center
     position relative
@@ -129,7 +132,7 @@
       <div class="scroll-wrap">
         <div class="week-item" :class="currentWeek === item ? 'week-item-active' : ''"
              v-for="item in 19" :ref="'week-item-' + item" @click="changeWeek(item)">
-          第{{ simplifyNum[item - 1] }}周
+          第{{ simplifyNum[item - 1] }}周 <span style="margin-left: 10px;">{{ getTimeRange(item) }}</span>
         </div>
       </div>
     </div>
@@ -175,7 +178,8 @@ export default {
       curriculum: [],
       simplifyNumberArray: ['一', '二', '三', '四', '五', '六', '日'],
       simplifyNum: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九'],
-      closeTimeout: null //5s后关闭课程详情
+      closeTimeout: null, //5s后关闭课程详情
+      firstWeek: null
     }
   },
   mounted() {
@@ -200,6 +204,7 @@ export default {
         id: this.terminalId
       }).then(res => {
         this.currentWeek = this.calcCurrentWeek(res.data.firstWeek);
+        this.firstWeek = res.data.firstWeek
         this.scrollLeft()
         this.sectionTime = res.data.sessionSourceList.map(i => {
           return `${timeUtil.sourceToTime(i.startSource)}-${timeUtil.sourceToTime(i.endSource)}`;
@@ -291,6 +296,20 @@ export default {
       this.curriculum.forEach(item => {
         item.forEach(i => i.showDetail = false)
       });
+    },
+    getTimeRange(index) {
+      let d = new Date(this.firstWeek).getTime()
+      let start = d + (index - 1) * 7 * 24 * 60 * 60 * 1000;
+      let end = start + 7 * 24 * 60 * 60 * 1000
+      let sm = new Date(start).getMonth() + 1;
+      let em = new Date(end).getMonth() + 1;
+      let sd = new Date(start).getDate();
+      let ed = new Date(end).getDate();
+      if (sm < 10) sm = '0' + sm;
+      if (sd < 10) sd = '0' + sd;
+      if (em < 10) em = '0' + em;
+      if (ed < 10) ed = '0' + ed;
+      return sm + '/' + sd + ' - ' + em + '/' + ed
     }
   }
 }
