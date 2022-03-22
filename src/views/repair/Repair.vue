@@ -94,7 +94,7 @@
         </template>
         <template v-else>
           <div style="text-align: center">
-            <img class="qr-code" src="../../assets/clock.png" alt="">
+            <img class="qr-code" :src="code" alt="">
             <div style="font-size: .6rem;">微信扫描左侧二维码进行语音报修</div>
           </div>
         </template>
@@ -110,6 +110,7 @@ import ClassroomSelect from "@/views/classroomBorrow/components/ClassroomSelect"
 import mitt from "@/util/mitt";
 import {myConfirm} from "@/components/confirm";
 import {msg} from "@/components/message";
+import QRCode from 'qrcode'
 export default {
   components: {ClassroomSelect},
   data() {
@@ -146,7 +147,8 @@ export default {
       ],
       devices: [],
       terminalInfo: {},
-      showChangeTerminal: false
+      showChangeTerminal: false,
+      code: null
     }
   },
   created() {
@@ -164,6 +166,7 @@ export default {
 
     this.getTerminal();
     this.getDevices();
+    this.generateCode()
   },
   mounted() {
   },
@@ -251,6 +254,14 @@ export default {
     },
     selectTerminal(terminal) {
       this.terminalInfo = terminal;
+      this.generateCode();
+    },
+    generateCode() {
+      QRCode.toDataURL(JSON.stringify({
+        terminalId: this.terminalInfo.id
+      })).then(url => {
+        this.code = url;
+      })
     }
   }
 }
