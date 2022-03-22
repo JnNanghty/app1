@@ -23,6 +23,7 @@
 
     p
       opacity .6
+      font-size .6rem;
 
     .number
       font-size 1.6rem;
@@ -96,13 +97,11 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
-    .desc
-      text-align center
-
     img
       width: 100%
-
+.desc
+  text-align center
+  font-size 0.8rem;
 .a-bottom-mini
   display flex
   justify-content space-around
@@ -128,6 +127,7 @@
   .next-course
     color #FDA45E
     margin-right: 1.5rem
+    font-size .8rem;
 
   .next-course-info
     text-align left

@@ -37,7 +37,7 @@
     right: 0
     margin: 0 auto;
     width: 2.6rem;
-    height: 8px
+    height: .4rem;
     background: #FDA45E;
   }
 }
@@ -56,8 +56,8 @@
 }
 
 .setting-icon {
-  width: 25px;
-  height: 25px;
+  width: 1.25rem;
+  height: @width;
   background: url("../assets/icon/setting_dark.png") no-repeat center;
   background-size: contain;
 }
@@ -122,8 +122,8 @@
   content: '';
   position: absolute;
   display: block;
-  width: 100px;
-  height: 100px;
+  width: 5rem;
+  height: @width
   top: 50%;
   left: 50%;
   transform translate(-50%, -40%)
@@ -136,8 +136,8 @@
   content: '';
   position: absolute;
   display: block;
-  width: 100px;
-  height: 200px;
+  width: 5rem;
+  height: 10rem
   border-radius: 15px 15px 0 0;
   top: 0
   left: 50%;
@@ -222,7 +222,7 @@
                :class="$router.currentRoute.value.name === item.path ? activeClass : ''">
             <img class="app-item-icon-img" :src="item.src" alt="">
           </div>
-          <span>{{ item.label }}</span>
+          <span style="font-size: 0.6rem;">{{ item.label }}</span>
         </div>
 
         <!--        <div class="brush-tip">-->

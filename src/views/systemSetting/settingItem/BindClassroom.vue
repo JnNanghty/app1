@@ -26,6 +26,7 @@
 
 .form-title {
   margin-bottom: 1.15rem
+  font-size 1rem;
 }
 
 .form-row {
@@ -97,7 +98,7 @@
           <div class="form-label">迈杰云平台</div>
           <input class="form-input _input" v-model="serviceUrl" style="width: 19.5rem">
         </div>
-        <div class="submit-button" @click="checkIp">保存</div>
+        <div class="submit-button _button" @click="checkIp">保存</div>
       </form>
     </div>
     <div class="ss-main-right">
@@ -137,7 +138,7 @@
             </select>
           </div>
 <!--        </div>-->
-        <div class="submit-button" @click="bind">切换绑定</div>
+        <div class="submit-button _button" @click="bind">切换绑定</div>
       </form>
     </div>
   </div>

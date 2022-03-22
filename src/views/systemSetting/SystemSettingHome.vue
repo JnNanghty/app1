@@ -13,8 +13,8 @@ header {
   box-sizing border-box
 
   .logo{
-    width: 193px
-    height: 55px
+    width: 9.65rem;
+    height: 2.75rem;
   }
   .right-content {
     position relative
@@ -54,7 +54,7 @@ header {
       right: 0
       margin: 0 auto;
       width: 2.6rem;
-      height: 8px
+      height: .4rem
       background: #FDA45E;
     }
   }

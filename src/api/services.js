@@ -36,8 +36,8 @@ service.interceptors.request.use(config => {
   extraData.key = md5.digest().toHex().toUpperCase();
 
   const data = config.data || {};
-  config.data = Object.assign(data, extraData);
 
+  config.data = Object.assign(data, extraData);
 
   return config;
 });

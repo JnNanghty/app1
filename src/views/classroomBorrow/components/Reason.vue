@@ -17,7 +17,7 @@
 </style>
 <template>
   <div class="r-main">
-    <div style="margin-left: 1rem;">申请理由:</div>
+    <div style="margin-left: 1rem;font-size: .8rem;">申请理由:</div>
     <div class="reason-content">
       <span>{{reasonText}}</span>
     </div>

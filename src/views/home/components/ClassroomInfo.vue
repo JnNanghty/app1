@@ -2,15 +2,15 @@
 
 .ci-main {
   position relative;
-  height: 150px;
-  padding-left: 36px;
-  max-width: 450px;
+  height: 7.5rem;
+  padding-left: 1.8rem;
+  max-width: 22.5rem;
   get_font_color(font_color);
 
   &::before {
     content: '';
     display: block;
-    width: 12px;
+    width: .6rem;
     height: 100%;
     background: #FDA45E;
     position: absolute;

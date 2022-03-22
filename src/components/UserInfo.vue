@@ -16,10 +16,11 @@
 
   .exit-button {
     margin-left: 2rem
-    padding: 8px 30px;
+    padding: .4rem 1.5rem;
     text-align center
     border-radius 8px;
     get_background(input_background)
+    font-size .7rem;
   }
 }
 </style>

@@ -58,6 +58,7 @@
     flex 1;
     text-align center
     font-weight 200
+    font-size .6rem;
     .course-item-desc {
       flex: 1
       display flex

@@ -26,6 +26,7 @@
 
 .form-title {
   margin-bottom: 1.15rem
+  font-size 1rem;
 }
 
 .form-row {

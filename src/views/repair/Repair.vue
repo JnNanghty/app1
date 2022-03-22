@@ -16,7 +16,7 @@
     .terminal
       display flex
       .change-terminal
-        background: #000
+        get_background(borrow_change_button_background)
         width 5rem;
         margin-left: 2.5rem
   .bottom
@@ -40,6 +40,7 @@
 
 .form-item
   margin-bottom: 1rem
+  font-size .8rem;
 
 .form-select
   width 70%

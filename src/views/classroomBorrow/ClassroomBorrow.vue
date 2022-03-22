@@ -6,8 +6,9 @@
   height: 100%;
   get_font_color(font_color)
   display flex
-  padding: 10px 40px 0;
+  padding: .5rem 2rem 0;
   box-sizing border-box
+  font-size .6rem;
 .left
   width: 50%
   display: flex;
@@ -19,15 +20,15 @@
 .wrap
   get_background(borrow_wrap_background)
   border-radius 8px
-  padding: 15px 25px
+  padding: .75rem 1.25rem
   box-sizing border-box
-  margin-bottom: 10px
+  margin-bottom: .5rem
   border 2px solid rgba(0,0,0,0)
 .change-button
   border-radius 8px
   get_background(borrow_change_button_background)
   text-align center
-  padding: 6px 20px;
+  padding: .3rem 1rem
   font-size .7rem;
 
 .wrap-active
@@ -63,7 +64,7 @@
         display flex
         .borrow-time-item
           border-radius 6px;
-          padding: 4px 20px 4px 5px
+          padding: .2rem 1rem .2rem .25rem;
           height: 100%
           get_background(borrow_date_selected_background)
           box-sizing border-box
@@ -102,7 +103,7 @@
         </div>
         <div class="w2-bottom">
           <div style="padding-top: 5px;padding-bottom: 15px;">
-            <span>预约时段:</span>
+            <span style="font-size: .8rem">预约时段:</span>
             <br>
             <span style="font-size: .6rem;color: #FDA45E;">支持多选</span>
           </div>
@@ -118,7 +119,7 @@
         </div>
       </div>
       <div @click="selectWrap(2)" :class="activeWrap === 2 ? 'wrap-active' : ''" class="wrap wrap3">
-        <div>申请理由：</div>
+        <div style="font-size: .8rem;">申请理由：</div>
         <input v-model="formData.reason" class="_input reason-input" type="text" placeholder="选填">
       </div>
       <div class="_button" @click="submit">提交申请</div>

@@ -6,8 +6,8 @@
 
 .auth-title
   text-align center
-  margin-top: 50px
-  margin-bottom: 50px
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
   font-size 1.2rem
 
 .auth-content
@@ -15,7 +15,7 @@
   justify-content space-around
 
 .login-item
-  width: 140px
+  width: 7rem
   height @width
 
   img
@@ -24,7 +24,7 @@
 .login-desc
   margin-top: 1.5rem;
   text-align center
-  font-size 1.2rempx;
+  font-size 1.2rem;
 
 .face-box
   width: 100%
@@ -66,6 +66,7 @@ import {setToken} from "@/util/auth";
 import service from "@/api/services";
 import ls from "@/store/ls";
 import {msg} from "@/components/message";
+import axios from "axios";
 
 export default {
   name: "Auth",
@@ -73,15 +74,19 @@ export default {
     return {
       title: '请通过以下方式进行身份验证',
       qrCodeUrl: '',
-      config: []
+      config: [],
+      timer: null,
+      key: null,
+      getTokenKey: null
     }
   },
   created() {
-    this.wxQrCode()
+    this.getKey()
     mitt.on('brushCard', this.brushCard);
     mitt.emit('showBackButton')
     let config = ls.get('deviceConfig');
     this.config = config.signInTypes ? JSON.parse(config.signInTypes) : []
+    this.timer = setInterval(this.getQrToken, 1e3);
   },
   computed: {
     showQrCode() {
@@ -106,15 +111,34 @@ export default {
   beforeUnmount() {
     mitt.off('brushCard', this.brushCard);
     mitt.emit('hideBackButton')
+    clearInterval(this.timer)
   },
   methods: {
+    getKey() {
+      service.post('device/getQrLoginKey').then(res => {
+        this.key = res.key;
+        this.getTokenKey = res.getTokenKey;
+        this.wxQrCode()
+      })
+    },
     wxQrCode() {
-      QRCode.toDataURL('nb').then(url => {
-        this.qrCodeUrl = url;
-      });
+      let url = ls.get('serviceUrl')
+      let para = {
+        page: 'pages/qrLogin/qrLogin',
+        scene: this.key
+      };
+      axios.post(url + '/rest/weChatApp/getWxAppQrCode', JSON.stringify(para), {
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8'
+        }
+      }).then(res => {
+        this.key = res.data.key;
+        this.getTokenKey = res.data.getTokenKey
+        this.qrCodeUrl = 'data:;base64,' + res.data.buffer;
+      })
     },
     loginSuccess() {
-      setToken('6669282:61646D696E36363639323130:1652167051808:F7353F580F31DF479A3D75B0A931164A');
+      // setToken('6669282:61646D696E36363639323130:1652167051808:F7353F580F31DF479A3D75B0A931164A');
       this.getUserPermission();
     },
     icLogin(ic) {
@@ -122,15 +146,7 @@ export default {
         ic: ic
       }).then(res => {
         if (res) {
-          setToken(res.token);
-          this.$cookies.set('token', res.token, 6e5);
-          ls.set('userInfo', res, 6e5);
-          ls.set('companyId', '6669210')
-          msg({
-            message: '登录成功！',
-            type: 'success'
-          })
-          this.loginSuccess();
+          this.afterLogin(res);
         } else {
           msg({
             message: '未找到该用户！',
@@ -152,6 +168,35 @@ export default {
         ls.set('permission', res, 6e5);
         mitt.emit('loginSuccess');
       })
+    },
+    getQrToken() {
+      let para = {
+        getTokenKey: this.getTokenKey,
+        key: this.key
+      }
+      let url = ls.get('serviceUrl')
+      axios.post(url + '/rest/device/getQrLoginToken', JSON.stringify(para), {
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8'
+        }
+      }).then(res => {
+        if (JSON.stringify(res.data) === '{}' || !res.data) {
+          console.log(1)
+        } else {
+          console.log(2)
+          this.afterLogin(res.data);
+        }
+      })
+    },
+    afterLogin(res) {
+      setToken(res.token);
+      this.$cookies.set('token', res.token, 6e5);
+      ls.set('userInfo', res, 6e5);
+      msg({
+        message: '登录成功！',
+        type: 'success'
+      })
+      this.loginSuccess();
     }
   }
 }

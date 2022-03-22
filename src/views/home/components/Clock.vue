@@ -15,12 +15,12 @@
     width: 16rem;
     text-align: center;
     .c-image
-      margin-top: 100px
+      margin-top: 5rem
       img
-        width: 46px
-        height: 40px
+        width: 2.3rem;
+        height: 2rem
     .c-nocourse
-      margin-top: 23px
+      margin-top: 1.15rem
       font-size 1.6rem
       color #59B565;
 
@@ -75,8 +75,8 @@
     transform-origin bottom center
 
     img
-      width: 24px
-      height: 24px
+      width: 1.2rem
+      height: @width
       transform rotate(105deg)
       transform-origin center center
 

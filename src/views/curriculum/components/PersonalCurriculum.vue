@@ -9,13 +9,13 @@
 
   .change-week
     overflow-x scroll
-    margin-bottom: 0.25rem;
+    margin-bottom: 1rem;
 
     &::-webkit-scrollbar
       height: 0
 
     .scroll-wrap
-      itemWidth = 13rem;
+      itemWidth = 11rem;
       width 19 * itemWidth
 
       .week-item
@@ -23,7 +23,8 @@
         width: itemWidth
         box-sizing border-box
         padding: 10px 25px 0;
-        height: 58px
+        height: 2.9rem
+        font-size .7rem;
         line-height @height
         text-align center
 
@@ -280,7 +281,7 @@ export default {
     },
     scrollLeft() {
       this.$refs.weekWrap.scrollBy({
-        left: (this.currentWeek - 1) * 100,
+        left: (this.currentWeek - 1) * window.rem * 11,
         behavior: "smooth"
       })
     },

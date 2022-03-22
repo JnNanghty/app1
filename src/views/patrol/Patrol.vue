@@ -5,7 +5,8 @@
 
   .top
     height: 80%
-    margin-bottom: 10px
+    margin-bottom: .5rem
+    margin-top: .5rem
     display flex
 
     .top-left
@@ -25,22 +26,25 @@
 
       .course-info
         min-height 60%
+        max-height: 13rem;
+        box-sizing border-box
+        overflow-y scroll
         margin-top: 1rem
-        padding: 10px
+        padding: .5rem;
         border-radius 8px
         get_background(patrol_course_info_background)
 
         .course-info-course-name
-          font-size .8rem
-          margin-bottom: 2rem
+          font-size 1rem
+          margin-bottom: 1rem
 
         .course-info-item
-          font-size .6rem;
-          margin-bottom: 10px
+          font-size .8rem;
+          margin-bottom: .5rem;
 
   .bottom
     //display none
-    padding: 10px
+    padding: .5rem;
     border-radius 8px
     get_background(patrol_bottom_background)
     display flex
