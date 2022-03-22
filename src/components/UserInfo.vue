@@ -4,6 +4,7 @@
   display flex
 
   .user-info-top {
+    font-size .8rem;
     flex: 1;
 
     .exit-text {
@@ -21,6 +22,7 @@
     border-radius 8px;
     get_background(input_background)
     font-size .7rem;
+    height fit-content
   }
 }
 </style>
