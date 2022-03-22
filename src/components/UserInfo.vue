@@ -7,7 +7,7 @@
     flex: 1;
 
     .exit-text {
-      font-size: 12px;
+      font-size: .6rem;
       color: #FDA45E;
       transform: scale(.85);
       transform-origin: left;

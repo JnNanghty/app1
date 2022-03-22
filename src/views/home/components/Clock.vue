@@ -12,7 +12,7 @@
     position absolute;
     top: 0
     left: 0
-    width: 320px;
+    width: 16rem;
     text-align: center;
     .c-image
       margin-top: 100px
@@ -21,55 +21,56 @@
         height: 40px
     .c-nocourse
       margin-top: 23px
-      font-size 32px
+      font-size 1.6rem
       color #59B565;
 
     .teacher-name
       get_font_color(font_color)
-      font-size 20px
+      font-size 1rem
 
     .course-name
       get_font_color(font_color)
-      font-size 20px
+      font-size 1rem
 
     .title-time
       get_font_color(font_color)
-      font-size 32px
+      font-size 1.6rem
       font-weight 900
       margin-bottom: 5px
 
     .title
       get_font_color(font_color)
-      font-size 20px
+      font-size 1rem
       margin-bottom: 5px
 
     .current-status-active
       color #FDA45E
-      font-size 16px
-      margin-top: 80px
+      font-size .8rem
+      margin-top: 4rem
       margin-bottom: 5px
 
     .current-status
       get_font_color(font_color)
-      font-size 16px
+      font-size .8rem
+      margin-top: 4rem
       margin-bottom: 5px
 
     .next-tip
       get_font_color(font_color)
-      font-size 16px
+      font-size .8rem
 
     .next-time
       color #F3A568
-      font-size 32px
+      font-size 1.25rem
       font-weight 900
 
 
   .point
     position absolute
-    top: -5px
-    left: 148px
-    width: 24px
-    height: 165px
+    top: -.25rem
+    left: 7.4rem
+    width: 1.2rem
+    height: 8.25rem
     transform rotate(90deg)
     transform-origin bottom center
 
@@ -132,7 +133,7 @@ export default {
   data() {
     return {
       ctx: null,
-      canvasSize: 320,
+      canvasSize: window.rem * 16,
       check: false,
       deviceConfig: {
         signInForwardOffset: 5 // 考勤时间 分钟
@@ -169,7 +170,6 @@ export default {
       // 1 2 4都显示空闲
       // 3 7 显示当前课节
       // 5 6 8 显示下节课
-      console.log('clock status: in')
       if (!this.ctx) return 1;
       this.clearCanvas();
       const {currentSource} = timeUtil.getNowTime();
@@ -177,7 +177,6 @@ export default {
       this.pointStyle.transform = `rotate(${angle}deg)`;
       if ((!this.currentCourse.courseId && !this.nextCourse.courseId) ||
           (!this.inCourse && !this.nextCourse.courseId)) {
-        console.log('clock status: 1 空闲')
         return 1; // 空闲
       } else if (!!this.currentCourse.courseId && this.inCourse) {
         // 先draw灰色，再draw橙色
@@ -188,7 +187,6 @@ export default {
         let start1 = (currentSource % 720) / 720;
         let end1 = (endSource % 720) / 720;
         this.drawClock(start1, end1, this.clockColor[2])
-        console.log('clock status: 2 上课')
         return 2; // 当前正在上课
       } else if ((!this.currentCourse.courseId && !!this.nextCourse.courseId) ||
           (!this.inCourse && !!this.nextCourse.courseId)) {
@@ -217,7 +215,6 @@ export default {
           status = 4;
         }
         mitt.emit('courseStatus', status)
-        console.log('clock status: 3 4 下节有课或者课前考勤')
         return status; // 显示即将上课
       }
     },
@@ -235,13 +232,14 @@ export default {
   watch: {},
   methods: {
     init() {
+      this.ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
       let img = require('@/assets/clock.png');
       this.pointSrc = require('@/assets/icon/point_dark.svg')
       if (window.document.documentElement.dataset.theme === 'bright') {
         img = require('@/assets/clock_bright.png');
         this.pointSrc = require('@/assets/icon_bright/point_bright.png')
       }
-      this.loadImageAndDraw(img, 20, 20, 280, 280)
+      this.loadImageAndDraw(img, this.canvasSize * 0.0625, this.canvasSize * 0.0625, this.canvasSize * 0.875, this.canvasSize * 0.875)
 
       // if (!this.currentCourse.courseId) {
       //   this.loadImageAndDraw(require('@/assets/icon/clock_eye.png'), 137, 100, 46, 40)
@@ -262,8 +260,8 @@ export default {
     drawClock(start, end, color) {
       let {ctx} = this
       ctx.strokeStyle = color;
-      let sR = 5  // 小圆弧的半径
-      let bR = 125 // 大圆弧外圈的半径
+      let sR = this.canvasSize * 0.0208  // 小圆弧的半径
+      let bR = this.canvasSize * (0.875 - 0.0625) / 2 // 大圆弧外圈的半径
       let width = this.canvasSize;
       let height = this.canvasSize;
       let bX = width / 2  // 大圆弧的圆心坐标  x

@@ -17,21 +17,21 @@
   get_font_color(font_color);
   text-align center
   white-space nowrap
-  font-size 12px;
+  font-size .6rem;
 
 
   .tabs-icon {
     text-align center
     margin: 0 auto 9px;
-    width: 40px
-    height: 40px
-    padding: 10px;
+    width: 2rem
+    height: @width
+    padding: .5rem
     box-sizing border-box
     border-radius 4px
 
     img {
-      width: 20px
-      height: 20px
+      width: 1rem
+      height: @width
     }
   }
 }

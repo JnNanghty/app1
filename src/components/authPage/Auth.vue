@@ -8,7 +8,7 @@
   text-align center
   margin-top: 50px
   margin-bottom: 50px
-  font-size 24px
+  font-size 1.2rem
 
 .auth-content
   display flex
@@ -24,7 +24,7 @@
 .login-desc
   margin-top: 1.5rem;
   text-align center
-  font-size 24px;
+  font-size 1.2rempx;
 
 .face-box
   width: 100%
@@ -37,7 +37,7 @@
   <div class="auth-main">
     <div class="auth-title">{{ title }}</div>
     <div class="auth-content">
-      <div class="card" v-show="showCard" @click="loginSuccess">
+      <div class="card" @click="loginSuccess">
         <div class="login-item">
           <img src="../../assets/brush.png" alt="">
         </div>
@@ -81,18 +81,9 @@ export default {
     mitt.on('brushCard', this.brushCard);
     mitt.emit('showBackButton')
     let config = ls.get('deviceConfig');
-    this.config = JSON.parse(config.signInTypes)
+    this.config = config.signInTypes ? JSON.parse(config.signInTypes) : []
   },
   computed: {
-    showCard() {
-      let show = false;
-      this.config.forEach(item => {
-        if (item.name === 'card') {
-          show = item.value
-        }
-      });
-      return show;
-    },
     showQrCode() {
       let show = false;
       this.config.forEach(item => {
@@ -134,6 +125,7 @@ export default {
           setToken(res.token);
           this.$cookies.set('token', res.token, 6e5);
           ls.set('userInfo', res, 6e5);
+          ls.set('companyId', '6669210')
           msg({
             message: '登录成功！',
             type: 'success'

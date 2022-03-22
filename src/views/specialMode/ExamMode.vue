@@ -1,5 +1,6 @@
-<style scoped>
-
+<style lang="stylus" scoped>
+.main
+  get_font_color(font_color)
 </style>
 <template>
   <div class="main">

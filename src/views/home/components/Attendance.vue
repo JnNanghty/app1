@@ -5,6 +5,7 @@
   box-sizing border-box
   display flex
   flex-direction column
+  justify-content: center;
   height: 100%
 
 .a-top
@@ -24,7 +25,7 @@
       opacity .6
 
     .number
-      font-size 32px;
+      font-size 1.6rem;
       font-weight 900
       margin-top: .5rem
 
@@ -131,10 +132,10 @@
   .next-course-info
     text-align left
     flex 1;
-    font-size 20px;
+    font-size 1rem;
   .next-course-info-item
     width: 100%
-    font-size 30px;
+    font-size 1.5rem;
     margin-top: 10px
 </style>
 <template>

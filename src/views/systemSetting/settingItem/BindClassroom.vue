@@ -154,7 +154,7 @@ import {initMqtt} from "@/util/mqttUtil";
 export default {
   name: "BindClassroom",
   data() {
-    let mac = 'z'
+    let mac = 'zzzz'
     if (window.device) {
       mac = window.device.uuid;
     }
@@ -304,6 +304,7 @@ export default {
         mac: this.mac
       }).then(res => {
         console.log(res);
+        ls.set('companyId', res.data);
         if (res.message === 'success') {
           ls.set('terminalId', this.schoolInfo.terminal);
           msg({

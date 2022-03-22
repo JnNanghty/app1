@@ -31,11 +31,11 @@
         get_background(patrol_course_info_background)
 
         .course-info-course-name
-          font-size 16px;
+          font-size .8rem
           margin-bottom: 2rem
 
         .course-info-item
-          font-size 12px;
+          font-size .6rem;
           margin-bottom: 10px
 
   .bottom

@@ -20,7 +20,7 @@
 }
 
 .ci-terminal-label {
-  font-size 56px;
+  font-size 2.8rem;
   font-weight 200;
   margin-bottom: 7px
   white-space nowrap
@@ -29,13 +29,13 @@
 }
 
 .ci-classdesc {
-  font-size 20px;
+  font-size 1rem;
   font-weight 200
   margin-bottom: 8px
 }
 
 .ci-manager {
-  font-size 20px;
+  font-size 1rem;
 }
 </style>
 <template>

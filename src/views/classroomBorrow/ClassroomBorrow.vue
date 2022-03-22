@@ -10,6 +10,9 @@
   box-sizing border-box
 .left
   width: 50%
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 .right
   flex 1
   margin-left: 1rem
@@ -25,7 +28,7 @@
   get_background(borrow_change_button_background)
   text-align center
   padding: 6px 20px;
-  font-size 14px;
+  font-size .7rem;
 
 .wrap-active
   border 2px solid #FDA45E
@@ -35,7 +38,7 @@
   .w1-left
     width: 70%;
     .w1-room-name
-      font-size 32px;
+      font-size 1.6rem;
       white-space nowrap
       overflow: hidden;
       text-overflow ellipsis;
@@ -94,14 +97,14 @@
       </div>
       <div @click="selectWrap(1)" :class="activeWrap === 1 ? 'wrap-active' : ''" class="wrap wrap2">
         <div class="w2-top">
-          <div>预约日期: <span style="font-size: 20px;margin-left: .5rem;">{{borrowDateText}}</span></div>
+          <div>预约日期: <span style="font-size: 1rem;margin-left: .5rem;">{{borrowDateText}}</span></div>
           <div class="change-button">更改日期</div>
         </div>
         <div class="w2-bottom">
           <div style="padding-top: 5px;padding-bottom: 15px;">
             <span>预约时段:</span>
             <br>
-            <span style="font-size: 12px;color: #FDA45E;">支持多选</span>
+            <span style="font-size: .6rem;color: #FDA45E;">支持多选</span>
           </div>
           <div class="borrow-time-wrap">
             <div class="borrow-window" :style="windowWidth">

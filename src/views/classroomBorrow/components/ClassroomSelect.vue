@@ -9,18 +9,18 @@
 
 .cs-select
   display flex
-  margin-bottom: 10px
+  margin-bottom: .5rem
 
   .select-item
-    margin-right: 15px
+    margin-right: .75rem
 
 .cs-content
   overflow-y scroll
-  margin-top: 10px
+  margin-top: .5rem
   display flex
   flex-wrap wrap
   .terminal-item
-    font-size 12px
+    font-size .6rem
     white-space nowrap
     text-overflow ellipsis
     overflow: hidden;
@@ -28,7 +28,7 @@
     margin: 5px
     background: #424851;
     border-radius 8px
-    padding: 10px 10px;
+    padding: .5rem;
 </style>
 <template>
   <div class="cs-warp">
@@ -42,7 +42,7 @@
         <option v-for="item in building" :key="item.id" :value="item.id" :label="item.label"></option>
       </select>
     </div>
-    <span style="font-size: 12px;opacity: 0.5;font-weight: 200;">全部教室</span>
+    <span style="font-size: .6rem;opacity: 0.5;font-weight: 200;">全部教室</span>
     <div class="cs-content">
       <div class="terminal-item" v-for="item in terminal" :key="item.id" @click="selectTerminal(item)">
         {{item.label}}

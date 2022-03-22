@@ -55,7 +55,7 @@
     justify-content center
     align-items center
     position relative
-    font-size 9px;
+    font-size .45rem;
 
   .course-item
     get_background(patrol_bottom_background)
@@ -78,7 +78,7 @@
       z-index 10
       text-align left
       padding: 5px 20px;
-      font-size 12px;
+      font-size .6rem
 
       &::after
         position absolute
@@ -98,7 +98,7 @@
     get_background(curriculum_section_background)
     padding: 8px 0;
     margin-bottom: 2px
-    font-size 14px;
+    font-size .7rem
     min-height: auto;
     border-right: none
 
@@ -115,10 +115,10 @@
     display block
 
     .section-label
-      font-size 16px
+      font-size .8rem
 
     .section-time
-      font-size 12px
+      font-size .6rem
       transform scale(0.8)
 
 </style>
@@ -147,7 +147,7 @@
              :key="courseIndex" :style="course && course.style" @click="selectItem(course)">
           {{ course && course.courseName }}
           <div class="course-detail" v-if="course.courseName && course.showDetail">
-            <div style="font-size: 18px;">{{ course.courseName }}</div>
+            <div style="font-size: .9rem;">{{ course.courseName }}</div>
             <div>{{ course.teacherName }} <span
                 style="margin-left: 1rem;">{{ calcTime(course.startSession, course.endSession) }}</span></div>
             <div style="margin-bottom: 10px;">{{ course.college }}</div>
@@ -276,7 +276,7 @@ export default {
     },
     scrollLeft() {
       this.$refs.weekWrap.scrollBy({
-        left: (this.currentWeek - 1) * 200,
+        left: (this.currentWeek - 1) * window.rem * 16,
         behavior: "smooth"
       })
     },

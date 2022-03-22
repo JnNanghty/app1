@@ -11,7 +11,7 @@
     .info-time
       margin-right: 2rem
     .info-content
-      font-size 16px;
+      font-size .8rem
       flex 1;
       padding: 1rem
       overflow hidden
@@ -22,8 +22,8 @@
   <div class="main">
     <div v-for="item in infoList" :key="item.id" class="info-item" @click="goDetail(item)">
       <div class="info-time">
-        <div style="font-size: 48px">{{item.d}}</div>
-        <div style="font-size: 12px">{{item.ym}}</div>
+        <div style="font-size: 2.4rem">{{item.d}}</div>
+        <div style="font-size: .6rem">{{item.ym}}</div>
       </div>
       <div class="info-content">{{item.title}}</div>
     </div>

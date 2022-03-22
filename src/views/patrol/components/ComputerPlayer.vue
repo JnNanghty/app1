@@ -21,7 +21,7 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  font-size: 18px;
+  font-size: .9rem;
   color: #000;
   background-color: #999;
 }
@@ -29,7 +29,7 @@
 .pc-refresh {
   background-color: #FFF;
   position: absolute;
-  font-size: 16px;
+  font-size: .8rem;
   top: 2px;
   right: 2px;
   padding: 5px;

@@ -84,8 +84,7 @@ export default {
         if (this.currentCourse.courseId) {
           this.windowStyle.transform = 'translateX(-50vw)';
         }
-      }, 3e3);
-      console.log('HomePage: get terminalInfo');
+      }, 2e3);
       this.getTerminalInfo();
     } else {
       msg({
@@ -167,7 +166,7 @@ export default {
     },
     scrollWindow(status) {
       if (status === 2 || status === 4) {
-        if (status === 4 && this.windowStyle.transform === 'translateX(-50vw)') {
+        if (status === 4 && this.windowStyle.transform === 'translateX(0)') {
           // 如果为课前考勤， 且考勤界面已经显示
           mitt.emit('startSignIn')
         }

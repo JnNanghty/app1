@@ -7,8 +7,8 @@
     margin-top: 5rem
 
     .form-item
-      margin: 20px 0;
-      font-size 20px;
+      margin: 1rem 0;
+      font-size 1rem;
 
       .form-input
         height: 2rem
@@ -41,6 +41,7 @@
 // 验证是否是管理员
 import {msg} from "@/components/message";
 import ls from "@/store/ls";
+import mitt from "@/util/mitt";
 
 export default {
   name: "AuthAdmin",
@@ -53,10 +54,12 @@ export default {
   },
   computed: {},
   created() {
+    mitt.emit('showBackButton')
   },
   mounted() {
   },
   beforeUnmount() {
+    mitt.emit('hideBackButton')
   },
   methods: {
     auth() {

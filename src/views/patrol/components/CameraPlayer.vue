@@ -20,7 +20,7 @@
   width: 100%;
   height: 100%;
   color: #333;
-  font-size: 18px;
+  font-size: .9rem;
   background-color: #999;
 }
 

@@ -83,6 +83,7 @@
 .footer {
   display: flex;
   justify-content: center;
+  align-items center
   height: 5rem;
   overflow-x: scroll;
   overflow-y: hidden;
@@ -99,6 +100,12 @@
     position absolute
     left: 8px;
     bottom: 8px;
+    width: 6rem
+    height: 1.2rem
+    img {
+      width: 100%
+      height: 100%
+    }
   }
 }
 
@@ -149,9 +156,9 @@
 
 .app-item-icon {
   position: relative;
-  width: 25px;
-  height: 25px;
-  margin: 25px auto 8px;
+  width: 1.25rem;
+  height: @width;
+  margin: 0 auto 8px;
 }
 
 .app-item-icon > img {
@@ -331,7 +338,8 @@ export default {
       activeClass: 'app-item-icon-active-dark',
       settingIcon: {
         background: `url(${require('@/assets/icon/setting_dark.png')}) center/contain no-repeat`
-      }
+      },
+
     }
   },
   computed: {
@@ -457,12 +465,13 @@ export default {
         suffix2 = '_bright'
       }
 
-      this.settingIcon = {
-        background: `url(${require('@/assets/icon' + suffix2 + '/setting_' + suffix + '.png')}) center/contain no-repeat`
-      }
+
       this.appList.forEach(item => {
         item.src = require(`../assets/icon${suffix2}/${item.icon}_${suffix}.png`);
       })
+      this.settingIcon = {
+        background: `url(${require('../assets/icon' + suffix2 + '/setting_' + suffix + '.png')}) center/contain no-repeat`
+      }
     },
     loginSuccess() {
       if (this.loginToPath) {

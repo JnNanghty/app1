@@ -51,7 +51,7 @@
   <div class="main">
     <div class="top">
       <div class="terminal">
-        <div style="flex: 1;font-size: 32px;">{{terminalInfo.label}}</div>
+        <div style="flex: 1;font-size: 1.6rem;">{{terminalInfo.label}}</div>
         <div class="change-terminal _button" @click="showChangeTerminal = true">切换教室</div>
       </div>
       <user-info></user-info>
@@ -94,7 +94,7 @@
         <template v-else>
           <div style="text-align: center">
             <img class="qr-code" src="../../assets/clock.png" alt="">
-            <div style="font-size: 12px;">微信扫描左侧二维码进行语音报修</div>
+            <div style="font-size: .6rem;">微信扫描左侧二维码进行语音报修</div>
           </div>
         </template>
       </div>

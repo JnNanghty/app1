@@ -16,11 +16,11 @@
   border-top-right-radius 8px;
   margin-bottom: 2px
   justify-content space-around
-  font-size 14px;
+  font-size .7rem;
   text-align center
 
   .table-title-item-first {
-    width: 90px
+    width: 4.5rem
   }
 
   .table-title-item {
@@ -35,17 +35,17 @@
 
   .section-item {
     padding: 11px
-    width: 90px
+    width: 4.5rem
     box-sizing border-box
     white-space nowrap
     get_background(curriculum_section_background)
 
     .section-label {
-      font-size 16px
+      font-size .7rem
     }
 
     .section-time {
-      font-size 12px
+      font-size .6rem
       transform scale(0.8)
     }
   }
@@ -65,7 +65,7 @@
       justify-content center
     }
     .course-class{
-      font-size 12px
+      font-size .6rem
     }
   }
 

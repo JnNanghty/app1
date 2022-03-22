@@ -35,7 +35,7 @@
         padding: 1rem;
         box-sizing border-box
         text-align center
-        font-size 24px;
+        font-size 1.2rem;
         get_background(open_number_background)
 </style>
 <template>
