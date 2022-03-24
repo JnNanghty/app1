@@ -149,8 +149,7 @@
           {{ course && course.courseName }}
           <div class="course-detail" v-if="course.courseName && course.showDetail">
             <div style="font-size: .9rem;">{{ course.courseName }}</div>
-            <div>{{ course.teacherName }} <span
-                style="margin-left: 1rem;">{{ calcTime(course.startSession, course.endSession) }}</span></div>
+            <div>{{ course.teacherName }} <span style="margin-left: 1rem;">{{ calcTime(course.startSession, course.endSession) }}</span></div>
             <div style="margin-bottom: 10px;">{{ course.college }}</div>
             <div>{{ course.courseClass }}</div>
           </div>

@@ -4,11 +4,12 @@
   height: 100%
   text-align center
   get_font_color(font_color)
+  font-size 1rem;
 }
 </style>
 <template>
   <div class="main">
-    <div style="margin-top: 2rem;"><img src="../assets/noPermission.png" alt=""></div>
+    <div style="margin-top: 5rem;"><img src="../assets/noPermission.png" alt=""></div>
     <div style="margin-top: 2rem;">您当前无访问权限请先联系管理员为您开通</div>
   </div>
 </template>

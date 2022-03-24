@@ -4,6 +4,7 @@
   .title
     text-align center
     margin: 1rem 0
+    font-size .8rem;
   .keyboard
     width: 50%
     margin: 0 auto
