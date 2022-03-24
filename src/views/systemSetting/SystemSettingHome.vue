@@ -110,7 +110,7 @@ main {
   <div class="main">
     <header>
       <div class="logo">
-        <img style="height: 100%;" :src="config.logo" alt="">
+        <img style="height: 100%;" src="../../assets/school_logo.png" alt="">
       </div>
       <div class="header-center">
         <div style="font-weight: 300">{{ terminalInfo.label }}</div>

@@ -73,12 +73,12 @@
       left: 50%;
       transform: translateX(-50%);
       border-radius 8px;
-      width: 200px
+      width: 10rem;
       get_background(curriculum_course_detail_background)
       box-shadow: 0 8px 10px rgba(43, 51, 69, 0.208523);
       z-index 10
       text-align left
-      padding: 5px 20px;
+      padding: .5rem 1rem;
       font-size .6rem
 
       &::after
@@ -178,14 +178,7 @@ export default {
     }
   },
   mounted() {
-    this.terminalId = ls.get('terminalId');
-    if (this.terminalId) {
-      this.getFirstWeek();
-    } else {
-      msg({
-        message: '请先在设置中绑定班级！'
-      });
-    }
+    this.getFirstWeek();
   },
   beforeUnmount() {
     if (this.closeTimeout) {
@@ -448,10 +441,7 @@ export default {
       }, 5e3)
     },
     scrollLeft() {
-      this.$refs.weekWrap.scrollBy({
-        left: (this.currentWeek - 1) * window.rem * 11,
-        behavior: "smooth"
-      })
+      this.$refs.weekWrap.scrollLeft = (this.currentWeek - 1) * window.rem * 11
     },
     // 根据开始节次和结束节次 计算开始时间和结束时间
     calcTime(startSession, endSession) {

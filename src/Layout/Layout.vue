@@ -191,7 +191,7 @@
     <div class="app-main-content">
       <header class="header">
         <div class="logo">
-          <img style="height: 100%;" :src="config.logo" alt="">
+          <img style="height: 100%;" src="../assets/school_logo.png" alt="">
         </div>
         <transition name="fade">
           <div class="header-center" v-show="showHeader && terminalId">
