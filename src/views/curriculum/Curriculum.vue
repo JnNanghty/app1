@@ -92,7 +92,7 @@
           </template>
         </div>
         <div class="tabs-pane-item" v-else-if="activeIndex === 3">
-          <img class="calendar" :src="calendar" alt="">
+          <img class="calendar" src="../../assets/xiaoli.png" alt="">
         </div>
       </transition>
     </div>
@@ -134,9 +134,6 @@ export default {
   created() {
     this.token = getToken();
     mitt.on('loginSuccess', this.loginSuccess);
-    let config = ls.get('deviceConfig')
-    let serviceUrl = ls.get('serviceUrl')
-    this.calendar = serviceUrl + config.calendar;
   },
   mounted() {
     this.$nextTick(() => {
