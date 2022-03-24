@@ -221,9 +221,9 @@ export default {
         filter: {
           relation: 'AND',
           children: [{
-            field: 'terminal',
+            field: 'terminal.id',
             match: 'EQ',
-            value: this.form.terminal.id
+            value: +this.form.terminal.id
           }, {
             field: 'type',
             match: 'NE',
