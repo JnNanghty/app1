@@ -247,12 +247,19 @@ export default {
   data() {
     let time = Date.now();
     return {
-      showNotice: false,
-      noticeText: '',
       loginToPath: null,
-      terminalId: null,
+      terminalId: 6669946,
       config: {
-        logo: ''
+        background: "/public/6669210/classcard/hxP0TRjJv587486i3rgs.jpg",
+        calendar: "/public/6669210/classcard/oWIiO6Ivs125066pr41e.png",
+        custom: "[{\"name\":\"timetable\",\"label\":\"课表查询\",\"value\":true},{\"name\":\"patrol\",\"label\":\"在线巡课\",\"value\":true},{\"name\":\"attendance\",\"label\":\"课表考勤\",\"value\":true},{\"name\":\"borrow\",\"label\":\"教室借用\",\"value\":true},{\"name\":\"news\",\"label\":\"校园资讯\",\"value\":true},{\"name\":\"access\",\"label\":\"门禁\",\"value\":true},{\"name\":\"repair\",\"label\":\"报修\",\"value\":true}]",
+        id: 10774801,
+        label: "迈杰大学",
+        logo: "/public/6669210/classcard/u2rWzejKE784309r2z1y.png",
+        signInForwardOffset: 3,
+        signInLateOffset: 5,
+        signInTypes: "[{\"name\":\"card\",\"label\":\"刷卡\",\"value\":true},{\"name\":\"code\",\"label\":\"扫码\",\"value\":true},{\"name\":\"face\",\"label\":\"人脸识别\",\"value\":false}]",
+        theme: "dark",
       },
       appList: [
         {
@@ -271,7 +278,7 @@ export default {
           name: 'timetable',
           path: 'Curriculum',
           needLogin: false,
-          visible: false
+          visible: true
         },
         {
           src: require('../assets/icon/patrol_dark.png'),
@@ -280,7 +287,7 @@ export default {
           name: 'patrol',
           path: 'Patrol',
           needLogin: true,
-          visible: false
+          visible: true
         },
         {
           src: require('../assets/icon/zixun_dark.png'),
@@ -289,7 +296,7 @@ export default {
           name: 'news', // 跟后台配置匹配
           path: 'Information',
           needLogin: false,
-          visible: false // 是否默认显示
+          visible: true // 是否默认显示
         },
         {
           src: require('../assets/icon/borrow_dark.png'),
@@ -298,7 +305,7 @@ export default {
           name: 'borrow',
           path: 'ClassroomBorrow',
           needLogin: true,
-          visible: false
+          visible: true
         },
         {
           src: require('../assets/icon/repair_dark.png'),
@@ -307,7 +314,7 @@ export default {
           name: 'repair',
           path: 'Repair',
           needLogin: true,
-          visible: false
+          visible: true
         },
         {
           src: require('../assets/icon/open_dark.png'),
@@ -316,10 +323,43 @@ export default {
           name: 'access',
           path: 'Open',
           needLogin: false,
-          visible: false
+          visible: true
         }
       ],
-      terminalInfo: {}, // 教室信息  label
+      terminalInfo: {
+        address: null,
+        alarmStatus: 1,
+        builtin: null,
+        canBorrow: true,
+        companyId_: 6669210,
+        config: null,
+        createTime: "2021-08-12T00:09:26.000Z",
+        creator: 6669930,
+        deshiId: null,
+        deshiIp: null,
+        enableCoursePower: false,
+        enableSelfInspect: true,
+        favorite: null,
+        group: null,
+        id: 6669946,
+        label: "101-金智（会议室1800壁挂机）",
+        lastOnlineTime: "2022-03-24T03:57:31.000Z",
+        lastUpdate_: 16480944677820000,
+        parent: 6669944,
+        remark: null,
+        repair: 6669284,
+        scene: null,
+        scenePhoto: "",
+        seatCount: 120,
+        showInControl: true,
+        showInTour: true,
+        sn: null,
+        status: 3,
+        things: null,
+        thirdPartyType: null,
+        threshold: null,
+        type: 1,
+      }, // 教室信息  label
       timeInterval: null, // 用于右上角时间
       timeInfo: {
         currentTime: timeUtil.formatTime(time),
@@ -339,7 +379,6 @@ export default {
       settingIcon: {
         background: `url(${require('@/assets/icon/setting_dark.png')}) center/contain no-repeat`
       },
-
     }
   },
   computed: {
@@ -364,7 +403,7 @@ export default {
     mitt.on('loginSuccess', this.loginSuccess);
     // 切换主题
     mitt.on('changeTheme', this.changeTheme)
-    this.refresh();
+    // this.refresh();
     let time = Date.now();
     this.timeInterval = setInterval(() => {
       time = Date.now();

@@ -111,65 +111,7 @@ export default {
   },
   methods: {
     init() {
-      if (this.noCamera || this.errorCamera) {
-        return;
-      }
-      this.$nextTick(() => {
-        if (this.camera.cameraHttpFlvPlayUrl) {
-          this.initFlvPlayer();
-        } else if (this.camera.cameraRtmpPlayUrl || this.camera.cameraPlayUrl) {
-          this.initVideoPlay();
-        }
-      });
-    },
-    initFlvPlayer() {
-      let options = {
-        type: 'flv',
-        hasVideo: true,
-        hasAudio: this.camera.cameraHasAudio || false,
-        url: this.camera.cameraHttpFlvPlayUrl,
-        enableWorker: false,
-        lazyLoadMaxDuration: 3 * 60,
-        seekType: 'range'
-      };
-
-      let player = flvjs.createPlayer(options, {
-        enableWorker: false,
-        lazyLoadMaxDuration: 3 * 60,
-        seekType: 'range'
-      });
-      try {
-        player.videoEle = document.getElementById(this.elementId);
-        player.videoEle.controls = this.controls;
-        player.canPlay = false;
-        player.videoEle.addEventListener('canplay', () => {
-          this.canPlayListener(player);
-        });
-
-        player.attachMediaElement(player.videoEle);
-        player.load();
-        // 属性静音 或者本身静音 都是静音状态
-        player.muted = this.muted || !this.camera.cameraHasAudio;
-        player.timeoutChecker = setTimeout(() => {
-          if (player && !player.canPlay) {
-            // 10s尚未第一次可播放 出现问题
-            console.log('player source error');
-            // 重置播放流
-            service.post('device/camera/resetStream', {
-              deviceId: this.camera.id
-            });
-            setTimeout(() => {
-              this.resetCamera();
-            }, 2000);
-          } else if (player && player.canPlay) {
-            console.log('player source working');
-          }
-        }, 10 * 1000);
-        this.player = player;
-      } catch (error) {
-        // 防止初始化进行到一半的时候 组件被销毁
-        console.log('组件已销毁');
-      }
+      this.initVideoPlay();
     },
     initVideoPlay() {
       let video_options = {
@@ -182,7 +124,7 @@ export default {
       let self = this;
       this.player = videojs(this.elementId, video_options, function onPlayerReady() {
         let src = {
-          src: self.camera.cameraRtmpPlayUrl || self.camera.cameraPlayUrl
+          src: 'test.mp4'
         };
         let keys = Object.keys(VIDEO_TYPE_REGEX);
         for (let i = 0; i < keys.length; i++) {

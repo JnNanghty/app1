@@ -43,24 +43,26 @@ export default {
   name: "UserInfo",
   data() {
     return {
-      userInfo: {},
-      expireTime: 0,
+      userInfo: {
+        label: '谢佳文'
+      },
+      expireTime: 360,
       exitInterval: null
     }
   },
   created() {
-    this.userInfo = ls.get('userInfo') || {};
-    let expires = +ls.get('userInfo__expires__') || 0;
-    // this.exitInterval = setInterval(() => {
-    //   let now = Date.now();
-    //   this.expireTime = Math.floor((expires - now) / 1000);
-    //   if (now >= this.expireTime) {
-    //     clearInterval(this.exitInterval);
-    //     this.$router.replace({
-    //       name: 'Home'
-    //     });
-    //   }
-    // }, 1e3);
+    let now1 = Date.now();
+    now1 = now1 + 360 * 1000
+    this.exitInterval = setInterval(() => {
+      let now = Date.now();
+      this.expireTime --;
+      if (now >= now1) {
+        clearInterval(this.exitInterval);
+        this.$router.replace({
+          name: 'Home'
+        });
+      }
+    }, 1e3);
   },
   mounted() {
   },

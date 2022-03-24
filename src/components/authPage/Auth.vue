@@ -86,7 +86,7 @@ export default {
     mitt.emit('showBackButton')
     let config = ls.get('deviceConfig');
     this.config = config.signInTypes ? JSON.parse(config.signInTypes) : []
-    this.timer = setInterval(this.getQrToken, 1e3);
+    // this.timer = setInterval(this.getQrToken, 1e3);
   },
   computed: {
     showQrCode() {
@@ -115,78 +115,47 @@ export default {
   },
   methods: {
     getKey() {
-      service.post('device/getQrLoginKey').then(res => {
-        this.key = res.key;
-        this.getTokenKey = res.getTokenKey;
-        this.wxQrCode()
-      })
+      this.key = '';
+      this.getTokenKey = '';
+      this.wxQrCode()
     },
     wxQrCode() {
-      let url = ls.get('serviceUrl')
-      let para = {
-        page: 'pages/qrLogin/qrLogin',
-        scene: this.key
-      };
-      axios.post(url + '/rest/weChatApp/getWxAppQrCode', JSON.stringify(para), {
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8'
-        }
-      }).then(res => {
-        this.key = res.data.key;
-        this.getTokenKey = res.data.getTokenKey
-        this.qrCodeUrl = 'data:;base64,' + res.data.buffer;
+      this.key = ''
+      this.getTokenKey = ''
+      QRCode.toDataURL(JSON.stringify({
+        terminalId: 6669946
+      })).then(url => {
+        this.qrCodeUrl = url;
       })
     },
     loginSuccess() {
       setToken('6669282:61646D696E36363639323130:1652167051808:F7353F580F31DF479A3D75B0A931164A');
       this.getUserPermission();
     },
-    icLogin(ic) {
-      service.post('auth/icLogin', {
-        ic: ic
-      }).then(res => {
-        if (res) {
-          this.afterLogin(res);
-        } else {
-          msg({
-            message: '未找到该用户！',
-            type: 'wrong'
-          });
-        }
-      }, () => {
-        msg({
-          message: '登录失败！',
-          type: 'wrong'
-        });
+    icLogin() {
+      this.afterLogin({
+        token: '6669282:61646D696E36363639323130:1652167051808:F7353F580F31DF479A3D75B0A931164A'
       });
     },
     brushCard(res) {
       this.icLogin(res);
     },
     getUserPermission() {
-      service.post('permission/getUserPermission').then(res => {
-        ls.set('permission', res, 6e5);
-        mitt.emit('loginSuccess');
-      })
+      ls.set('permission', {
+        "terminalControl": true,
+        "assetManagement": true,
+        "courseLive": true,
+        "listenTeaching": true,
+        "course": true,
+        "faultHanding": true,
+        "guardControl": true,
+        "educationalData": true,
+        "supervisoryPatrol": true,
+        "dataCentre": true
+      }, 6e5);
+      mitt.emit('loginSuccess');
     },
     getQrToken() {
-      let para = {
-        getTokenKey: this.getTokenKey,
-        key: this.key
-      }
-      let url = ls.get('serviceUrl')
-      axios.post(url + '/rest/device/getQrLoginToken', JSON.stringify(para), {
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8'
-        }
-      }).then(res => {
-        if (JSON.stringify(res.data) === '{}' || !res.data) {
-          console.log(1)
-        } else {
-          console.log(2)
-          this.afterLogin(res.data);
-        }
-      })
     },
     afterLogin(res) {
       setToken(res.token);

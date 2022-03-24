@@ -161,14 +161,142 @@ export default {
   },
   methods: {
     getDailyCurriculum() {
-      service.post('classCard/dailyCurriculum', {
-        id: this.terminalId
-      }).then(res => {
-        this.list = res.data.map(i => {
-          i.startTime = timeUtil.sourceToTime(i.startSource)
-          i.endTime = timeUtil.sourceToTime(i.endSource)
-          return i;
-        });
+      let data = [
+        {
+          "teacherName": "俞嘉陈",
+          "courseId": 10775141,
+          "college": "工程造价学院",
+          "courseClass": "造价19-6",
+          "courseName": "BIM图形算量实务",
+          "courseNumber": "(2020-2021-2)-22533020-000103-1",
+          "startSource": 480,
+          "endSource": 520
+        },
+        {
+          "teacherName": "俞嘉陈",
+          "courseId": 10775141,
+          "college": "工程造价学院",
+          "courseClass": "造价19-6",
+          "courseName": "BIM图形算量实务",
+          "courseNumber": "(2020-2021-2)-22533020-000103-1",
+          "startSource": 530,
+          "endSource": 570
+        },
+        {
+          "teacherName": null,
+          "courseId": null,
+          "college": null,
+          "courseClass": null,
+          "courseName": null,
+          "courseNumber": null,
+          "startSource": 580,
+          "endSource": 620
+        },
+        {
+          "teacherName": "李修强(经管)",
+          "courseId": 10775124,
+          "college": "工程造价学院",
+          "courseClass": "造价20-7",
+          "courseName": "BIM基础与实务",
+          "courseNumber": "(2020-2021-2)-22005020-000116-1",
+          "startSource": 630,
+          "endSource": 665
+        },
+        {
+          "teacherName": "李修强(经管)",
+          "courseId": 10775124,
+          "college": "工程造价学院",
+          "courseClass": "造价20-7",
+          "courseName": "BIM基础与实务",
+          "courseNumber": "(2020-2021-2)-22005020-000116-1",
+          "startSource": 670,
+          "endSource": 770
+        },
+        {
+          "teacherName": "应佐萍",
+          "courseId": 10775117,
+          "college": "工程造价学院",
+          "courseClass": "房地产19-1",
+          "courseName": "房地产经营管理",
+          "courseNumber": "(2020-2021-2)-22026040-160125-1",
+          "startSource": 780,
+          "endSource": 820
+        },
+        {
+          "teacherName": "应佐萍",
+          "courseId": 10775117,
+          "college": "工程造价学院",
+          "courseClass": "房地产19-1",
+          "courseName": "房地产经营管理",
+          "courseNumber": "(2020-2021-2)-22026040-160125-1",
+          "startSource": 830,
+          "endSource": 870
+        },
+        {
+          "teacherName": null,
+          "courseId": null,
+          "college": null,
+          "courseClass": null,
+          "courseName": null,
+          "courseNumber": null,
+          "startSource": 880,
+          "endSource": 960
+        },
+        {
+          "teacherName": null,
+          "courseId": null,
+          "college": null,
+          "courseClass": null,
+          "courseName": null,
+          "courseNumber": null,
+          "startSource": 970,
+          "endSource": 1010
+        },
+        {
+          "teacherName": null,
+          "courseId": null,
+          "college": null,
+          "courseClass": null,
+          "courseName": null,
+          "courseNumber": null,
+          "startSource": 1020,
+          "endSource": 1070
+        },
+        {
+          "teacherName": null,
+          "courseId": null,
+          "college": null,
+          "courseClass": null,
+          "courseName": null,
+          "courseNumber": null,
+          "startSource": 1080,
+          "endSource": 1120
+        },
+        {
+          "teacherName": null,
+          "courseId": null,
+          "college": null,
+          "courseClass": null,
+          "courseName": null,
+          "courseNumber": null,
+          "startSource": 1120,
+          "endSource": 1190
+        },
+        {
+          "teacherName": null,
+          "courseId": null,
+          "college": null,
+          "courseClass": null,
+          "courseName": null,
+          "courseNumber": null,
+          "startSource": 1205,
+          "endSource": 1245
+        }
+      ]
+      this.list = data.map(i => {
+        i.startTime = timeUtil.sourceToTime(i.startSource)
+        i.endTime = timeUtil.sourceToTime(i.endSource)
+        return i;
       });
     }
   },

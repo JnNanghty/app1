@@ -176,81 +176,185 @@ export default {
   },
   methods: {
     getTerminal() {
-      return new Promise((resolve, reject) => {
-        service.post('model/getEntityTree', {
-          nodes: [{
-            subnodes: [{
-              type: 'terminal',
-              filter: {
-                field: 'parent',
-                match: 'EQ',
-                value: null
-              }
-            }, {
-              type: 'terminalCategory',
-              filter: {
-                field: 'parent',
-                match: 'EQ',
-                value: null
-              }
-            }]
-          }, {
-            type: 'terminal'
-          }, {
-            type: 'terminalCategory',
-            subnodes: [{
-              type: 'terminal',
-              filter: {
-                field: 'parent',
-                match: 'EQ',
-                value: '$parentId'
-              }
-            }, {
-              type: 'terminalCategory',
-              filter: {
-                field: 'parent',
-                match: 'EQ',
-                value: '$parentId'
-              }
-            }]
-          }]
-        }).then(res => {
-          this.campus = res.list;
-          this.setCurrentTerminal();
-          resolve();
-        }, () => {
-          msg({
-            message: '没有权限！请重新登录！'
-          });
-          removeToken()
-          ls.remove('userInfo');
-          reject();
-        });
-      })
+      this.campus = [
+        {
+          "parent": null,
+          "children": [
+            {
+              "parent": {
+                "id": 6669935,
+                "label": "杭州校区"
+              },
+              "children": [
+                {
+                  "parent": {
+                    "id": 6669941,
+                    "label": "行政楼"
+                  },
+                  "children": [
+                    {
+                      "parent": {
+                        "id": 6669944,
+                        "label": "1L"
+                      },
+                      "id": 6669946,
+                      "label": "101-金智（会议室1800壁挂机）",
+                      "$type": "terminal"
+                    },
+                    {
+                      "parent": {
+                        "id": 6669944,
+                        "label": "1L"
+                      },
+                      "id": 6669949,
+                      "label": "103-云智（样板间后墙飞机头）",
+                      "$type": "terminal"
+                    },
+                    {
+                      "parent": {
+                        "id": 6669944,
+                        "label": "1L"
+                      },
+                      "id": 6669954,
+                      "label": "102-睿智（样板间前墙飞机头）",
+                      "$type": "terminal"
+                    },
+                    {
+                      "parent": {
+                        "id": 6669944,
+                        "label": "1L"
+                      },
+                      "id": 10123262,
+                      "label": "测试",
+                      "$type": "terminal"
+                    }
+                  ],
+                  "$more": false,
+                  "id": 6669944,
+                  "label": "1L",
+                  "$type": "terminalCategory"
+                }
+              ],
+              "$more": false,
+              "id": 6669941,
+              "label": "行政楼",
+              "$type": "terminalCategory"
+            },
+            {
+              "parent": {
+                "id": 6669935,
+                "label": "杭州校区"
+              },
+              "children": [
+                {
+                  "parent": {
+                    "id": 6669983,
+                    "label": "4号楼"
+                  },
+                  "children": [
+                    {
+                      "parent": {
+                        "id": 6669991,
+                        "label": "1L"
+                      },
+                      "id": 6669999,
+                      "label": "101-报告厅拼接屏",
+                      "$type": "terminal"
+                    },
+                    {
+                      "parent": {
+                        "id": 6669991,
+                        "label": "1L"
+                      },
+                      "id": 6670003,
+                      "label": "102-大风实验室",
+                      "$type": "terminal"
+                    },
+                    {
+                      "parent": {
+                        "id": 6669991,
+                        "label": "1L"
+                      },
+                      "id": 10220449,
+                      "label": "103-阶梯教室展示区",
+                      "$type": "terminal"
+                    },
+                    {
+                      "parent": {
+                        "id": 6669991,
+                        "label": "1L"
+                      },
+                      "id": 10220451,
+                      "label": "104-功能教室展示区（融合屏）",
+                      "$type": "terminal"
+                    }
+                  ],
+                  "$more": false,
+                  "id": 6669991,
+                  "label": "1L",
+                  "$type": "terminalCategory"
+                }
+              ],
+              "$more": false,
+              "id": 6669983,
+              "label": "4号楼",
+              "$type": "terminalCategory"
+            }
+          ],
+          "$more": false,
+          "id": 6669935,
+          "label": "杭州校区",
+          "$type": "terminalCategory",
+          "$hasChildren": true
+        }
+      ]
     },
     getDeviceList() {
-      service.post('model/getEntities', {
-        target: 'device',
-        filter: {
-          relation: 'AND',
-          children: [{
-            field: 'terminal.id',
-            match: 'EQ',
-            value: this.terminalId
-          }, {
-            field: 'type',
-            match: 'IN',
-            value: [2, 5]
-          }]
+      this.devices = [
+        {
+          "cameraHasAudio": null,
+          "cameraAccount": null,
+          "ip": null,
+          "label": null,
+          "type": {
+            "id": 2,
+            "label": "电脑"
+          },
+          "cameraPassword": null,
+          "cameraHttpFlvPlayUrl": null,
+          "hardwareId": "14b31f1b6f62",
+          "port": null,
+          "cameraRtmpPlayUrl": null,
+          "id": 8263008,
+          "cameraPlayUrl": null,
+          "workstatus": {
+            "id": 2,
+            "label": "工作正常"
+          }
         },
-        retFields: ["type", "ip", "hardwareId", "cameraAccount", "cameraPassword", "port",
-          "cameraPlayUrl", "cameraRtmpPlayUrl", "cameraHttpFlvPlayUrl", "cameraHasAudio", "workstatus"]
-      }).then(res => {
-        this.devices = res.list;
-        if (res.totalCount > 0) {
-          this.setItemActive(this.devices[0]);
+        {
+          "cameraHasAudio": false,
+          "cameraAccount": null,
+          "ip": null,
+          "label": "学生全景",
+          "type": {
+            "id": 5,
+            "label": "摄像头"
+          },
+          "cameraPassword": null,
+          "cameraHttpFlvPlayUrl": "https://192.168.5.203:9501/live?port=1985&app=live&stream=hik-com6669210-dev9958203",
+          "hardwareId": null,
+          "port": null,
+          "cameraRtmpPlayUrl": "rtmp://192.168.5.203:1985/live/hik-com6669210-dev9958203",
+          "id": 9958203,
+          "cameraPlayUrl": "rtsp://192.168.5.204:554/live/ch4_1",
+          "workstatus": {
+            "id": 2,
+            "label": "工作正常"
+          }
         }
-      });
+      ];
+      this.setItemActive(this.devices[0]);
     },
     setItemActive(item) {
       this.activeDevice = item;
@@ -258,8 +362,8 @@ export default {
     selectTerminal() {
       if (this.schoolInfo.terminal !== -1) {
         this.terminalId = this.schoolInfo.terminal
-        this.getDailyCurriculum()
-        this.getDeviceList()
+        // this.getDailyCurriculum()
+        // this.getDeviceList()
       }
     },
     getDailyCurriculum() {

@@ -10,6 +10,7 @@ import './util/serialPort';
 import ls from "@/store/ls";
 import {initMqtt} from "@/util/mqttUtil";
 import VueCookies from 'vue3-cookies'
+import '@/util/mock'
 
 const app = createApp(App)
 app.use(router).use(VueCookies)

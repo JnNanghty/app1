@@ -203,92 +203,153 @@ export default {
     }
   },
   methods: {
-    getSchool() {
-      service.post('model/getSubCompanies', {
-        target: 'company_',
-        start: 0,
-        count: 100
-      }).then(res => {
-        console.log(res);
-      })
-    },
     // 查教室树
     getTerminal() {
-      return new Promise((resolve, reject) => {
-        service.post('model/getEntityTree', {
-          nodes: [{
-            subnodes: [{
-              type: 'terminal',
-              filter: {
-                field: 'parent',
-                match: 'EQ',
-                value: null
-              }
-            }, {
-              type: 'terminalCategory',
-              filter: {
-                field: 'parent',
-                match: 'EQ',
-                value: null
-              }
-            }]
-          }, {
-            type: 'terminal'
-          }, {
-            type: 'terminalCategory',
-            subnodes: [{
-              type: 'terminal',
-              filter: {
-                field: 'parent',
-                match: 'EQ',
-                value: '$parentId'
-              }
-            }, {
-              type: 'terminalCategory',
-              filter: {
-                field: 'parent',
-                match: 'EQ',
-                value: '$parentId'
-              }
-            }]
-          }]
-        }).then(res => {
-          console.log(res);
-          this.campus = res.list;
-          if(this.terminalId) {
-            this.setCurrentTerminal();
-          }
-          resolve();
-        }, () => {
-          msg({
-            message: '没有权限！请重新登录！',
-            type: 'wrong'
-          });
-          removeToken()
-          ls.remove('userInfo');
-          reject();
-        });
-      })
+      this.campus = [
+        {
+          "parent": null,
+          "children": [
+            {
+              "parent": {
+                "id": 6669935,
+                "label": "杭州校区"
+              },
+              "children": [
+                {
+                  "parent": {
+                    "id": 6669941,
+                    "label": "行政楼"
+                  },
+                  "children": [
+                    {
+                      "parent": {
+                        "id": 6669944,
+                        "label": "1L"
+                      },
+                      "id": 6669946,
+                      "label": "101-金智（会议室1800壁挂机）",
+                      "$type": "terminal"
+                    },
+                    {
+                      "parent": {
+                        "id": 6669944,
+                        "label": "1L"
+                      },
+                      "id": 6669949,
+                      "label": "103-云智（样板间后墙飞机头）",
+                      "$type": "terminal"
+                    },
+                    {
+                      "parent": {
+                        "id": 6669944,
+                        "label": "1L"
+                      },
+                      "id": 6669954,
+                      "label": "102-睿智（样板间前墙飞机头）",
+                      "$type": "terminal"
+                    },
+                    {
+                      "parent": {
+                        "id": 6669944,
+                        "label": "1L"
+                      },
+                      "id": 10123262,
+                      "label": "测试",
+                      "$type": "terminal"
+                    }
+                  ],
+                  "$more": false,
+                  "id": 6669944,
+                  "label": "1L",
+                  "$type": "terminalCategory"
+                }
+              ],
+              "$more": false,
+              "id": 6669941,
+              "label": "行政楼",
+              "$type": "terminalCategory"
+            },
+            {
+              "parent": {
+                "id": 6669935,
+                "label": "杭州校区"
+              },
+              "children": [
+                {
+                  "parent": {
+                    "id": 6669983,
+                    "label": "4号楼"
+                  },
+                  "children": [
+                    {
+                      "parent": {
+                        "id": 6669991,
+                        "label": "1L"
+                      },
+                      "id": 6669999,
+                      "label": "101-报告厅拼接屏",
+                      "$type": "terminal"
+                    },
+                    {
+                      "parent": {
+                        "id": 6669991,
+                        "label": "1L"
+                      },
+                      "id": 6670003,
+                      "label": "102-大风实验室",
+                      "$type": "terminal"
+                    },
+                    {
+                      "parent": {
+                        "id": 6669991,
+                        "label": "1L"
+                      },
+                      "id": 10220449,
+                      "label": "103-阶梯教室展示区",
+                      "$type": "terminal"
+                    },
+                    {
+                      "parent": {
+                        "id": 6669991,
+                        "label": "1L"
+                      },
+                      "id": 10220451,
+                      "label": "104-功能教室展示区（融合屏）",
+                      "$type": "terminal"
+                    }
+                  ],
+                  "$more": false,
+                  "id": 6669991,
+                  "label": "1L",
+                  "$type": "terminalCategory"
+                }
+              ],
+              "$more": false,
+              "id": 6669983,
+              "label": "4号楼",
+              "$type": "terminalCategory"
+            }
+          ],
+          "$more": false,
+          "id": 6669935,
+          "label": "杭州校区",
+          "$type": "terminalCategory",
+          "$hasChildren": true
+        }
+      ]
+      if(this.terminalId) {
+        this.setCurrentTerminal();
+      }
     },
     // 检查连接
     checkIp() {
       ls.set('serviceUrl', this.serviceUrl);
-      service.post('classCard/testLink').then(res => {
-        if (res.message === 'success') {
-          msg({
-            message: '连接成功!',
-            type: 'success'
-          });
-          this.getTerminal();
-          initMqtt();
-        } else {
-          ls.remove('serviceUrl');
-          msg({
-            message: '连接服务器失败!',
-            type: 'wrong'
-          });
-        }
-      })
+      msg({
+        message: '连接成功!',
+        type: 'success'
+      });
+      this.getTerminal();
+      initMqtt();
     },
     bind() {
       const terminalId = ls.get('terminalId');
@@ -300,44 +361,16 @@ export default {
     },
     // 绑定教室
     bindTerminal() {
-      service.post('classCard/bindingTerminal', {
-        terminal: this.schoolInfo.terminal,
-        mac: this.mac
-      }).then(res => {
-        console.log(res);
-        ls.set('companyId', res.data);
-        if (res.message === 'success') {
-          ls.set('terminalId', this.schoolInfo.terminal);
-          msg({
-            message: '绑定成功！',
-            type: 'success'
-          });
-        }
-      }, () => {
-        msg({
-          message: '绑定失败！',
-          type: 'wrong'
-        });
-      })
+      ls.set('companyId', 6669210);
+      ls.set('terminalId', this.schoolInfo.terminal);
+
     },
     changeBind() {
-      service.post('classCard/changeBinding', {
-        terminal: this.schoolInfo.terminal,
-        mac: this.mac
-      }).then((res) => {
-        if (res.message === 'success') {
-          ls.set('terminalId', this.schoolInfo.terminal);
-          msg({
-            message: '绑定成功！',
-            type: 'success'
-          });
-        }
-      }, () => {
-        msg({
-          message: '绑定失败！',
-          type: 'wrong'
-        });
-      })
+      ls.set('terminalId', this.schoolInfo.terminal);
+      msg({
+        message: '绑定成功！',
+        type: 'success'
+      });
     },
     setCurrentTerminal() {
       // 根据当前的terminalId 找出对应的楼层教学楼校区等.

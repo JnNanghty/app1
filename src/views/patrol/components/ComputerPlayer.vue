@@ -45,13 +45,13 @@
 <template>
   <div class="wrapped-computer-container">
     <div class="computer-player-container">
-      <img :src="src" alt="" v-if="src">
-      <p v-else-if="loading">
-        电脑画面加载中...
-      </p>
-      <p v-else>
-        暂无电脑画面
-      </p>
+      <img src="../../../assets/screen.png" alt="">
+<!--      <p v-else-if="loading">-->
+<!--        电脑画面加载中...-->
+<!--      </p>-->
+<!--      <p v-else>-->
+<!--        暂无电脑画面-->
+<!--      </p>-->
     </div>
   </div>
 </template>
@@ -82,7 +82,8 @@ export default {
     };
   },
   watch: {
-    power: function(newVal, oldVal) { // 切换电脑开关
+    power: function(newVal, oldVal) {
+      // 切换电脑开关
       // 初始化不触发, 无电脑不触发
       if (oldVal === undefined || !this.computer.id) {
         return;
@@ -123,11 +124,11 @@ export default {
     initPC: function() {
       this.src = '';
       this.loading = true;
-      this.getPcStatus();
+      // this.getPcStatus();
       if (this.interval) {
         clearInterval(this.interval);
       }
-      this.interval = setInterval(this.getPcStatus, 5 * 1000);
+      // this.interval = setInterval(this.getPcStatus, 5 * 1000);
     },
     getPcStatus: function(isForce) {
       let timestamp = Date.now();

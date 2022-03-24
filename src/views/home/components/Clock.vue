@@ -134,7 +134,6 @@ export default {
     return {
       ctx: null,
       canvasSize: window.rem * 16,
-      check: false,
       deviceConfig: {
         signInForwardOffset: 5 // 考勤时间 分钟
       },
@@ -151,10 +150,10 @@ export default {
   mounted() {
     this.ctx = this.$refs.clockCanvas.getContext('2d');
     this.init();
-    mitt.on('changeTheme', this.changeTheme);
+    mitt.on('changeTheme', this.changeTheme2);
   },
   beforeUnmount() {
-    mitt.off('changeTheme', this.changeTheme)
+    mitt.off('changeTheme', this.changeTheme2)
   },
   computed: {
     clockStatus() {
@@ -240,14 +239,9 @@ export default {
         this.pointSrc = require('@/assets/icon_bright/point_bright.png')
       }
       this.loadImageAndDraw(img, this.canvasSize * 0.0625, this.canvasSize * 0.0625, this.canvasSize * 0.875, this.canvasSize * 0.875)
-
-      // if (!this.currentCourse.courseId) {
-      //   this.loadImageAndDraw(require('@/assets/icon/clock_eye.png'), 137, 100, 46, 40)
-      // }
       this.ctx.save();
     },
-    changeTheme() {
-      this.ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
+    changeTheme2() {
       this.init();
     },
     loadImageAndDraw(src, dx, dy, width, height) {
@@ -276,13 +270,8 @@ export default {
       ctx.fill()
     },
     clearCanvas() {
-      console.log('restore')
       if (this.ctx) {
-        // this.ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
         this.ctx.restore()
-
-        // this.ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
-        // this.init();
       }
     }
   }

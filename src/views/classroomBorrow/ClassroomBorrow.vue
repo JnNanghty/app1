@@ -214,13 +214,26 @@ export default {
     getBorrowTime() {
       // 清空已经借用的时间
       this.borrowTime = [];
-      service.post('course/getBorrowTerminalTime', {
-        date: this.formData.date,
-        terminalId: this.formData.terminal.id
-      }).then(res => {
-        // 要被禁用的时间
-        this.cantBorrowDuration = res;
-      })
+      this.cantBorrowDuration = [
+        {
+          "start": "2022-03-24T00:00:31.525Z",
+          "startSource": 480,
+          "endSource": 570,
+          "end": "2022-03-24T01:30:31.525Z"
+        },
+        {
+          "start": "2022-03-24T02:30:31.525Z",
+          "startSource": 630,
+          "endSource": 770,
+          "end": "2022-03-24T04:50:31.525Z"
+        },
+        {
+          "start": "2022-03-24T05:00:31.525Z",
+          "startSource": 780,
+          "endSource": 870,
+          "end": "2022-03-24T06:30:31.525Z"
+        }
+      ];
     },
     addBorrowTime(item) {
       console.log(item)

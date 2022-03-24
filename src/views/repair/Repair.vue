@@ -164,7 +164,6 @@ export default {
     this.terminalInfo = ls.get('terminalInfo')
     mitt.on('updateSelect', this.selectTerminal)
 
-    this.getTerminal();
     this.getDevices();
     this.generateCode()
   },
@@ -174,67 +173,45 @@ export default {
     mitt.off('updateSelect', this.selectTerminal)
   },
   methods: {
-    getTerminal() {
-      service.post('model/getEntityTree', {
-        nodes: [{
-          subnodes: [{
-            type: 'terminal',
-            filter: {
-              field: 'parent',
-              match: 'EQ',
-              value: null
-            }
-          }, {
-            type: 'terminalCategory',
-            filter: {
-              field: 'parent',
-              match: 'EQ',
-              value: null
-            }
-          }]
-        }, {
-          type: 'terminal'
-        }, {
-          type: 'terminalCategory',
-          subnodes: [{
-            type: 'terminal',
-            filter: {
-              field: 'parent',
-              match: 'EQ',
-              value: '$parentId'
-            }
-          }, {
-            type: 'terminalCategory',
-            filter: {
-              field: 'parent',
-              match: 'EQ',
-              value: '$parentId'
-            }
-          }]
-        }]
-      }).then(res => {
-      });
-    },
     getDevices() {
-      service.post('model/getEntities', {
-        target: 'device',
-        filter: {
-          relation: 'AND',
-          children: [{
-            field: 'terminal',
-            match: 'EQ',
-            value: this.form.terminal.id
-          }, {
-            field: 'type',
-            match: 'NE',
-            value: null
-          }]
-        },
-        pageSize: -1,
-        retFields: ['type', 'assetName']
-      }).then(res => {
-        this.devices = res.list;
-      })
+      this.devices = [
+          {
+            "assetName": "壁挂式一体机",
+            "id": 6906249,
+            "label": "中控",
+            "type": {
+              "id": 1,
+              "label": "中控"
+            }
+          },
+          {
+            "assetName": null,
+            "id": 6906250,
+            "label": null,
+            "type": {
+              "id": 3,
+              "label": "投影仪"
+            }
+          },
+          {
+            "assetName": null,
+            "id": 7048868,
+            "label": null,
+            "type": {
+              "id": 2,
+              "label": "电脑"
+            }
+          },
+          {
+            "assetName": null,
+            "id": 10577196,
+            "label": "班牌",
+            "type": {
+              "id": 18,
+              "label": "班牌"
+            }
+          }
+        ];
     },
     submit() {
       let self = this

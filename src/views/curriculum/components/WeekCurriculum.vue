@@ -162,7 +162,6 @@
 <script>
 import ls from "@/store/ls";
 import {msg} from "@/components/message";
-import service from "@/api/services";
 import timeUtil from "@/util/timeUtil";
 
 export default {
@@ -196,59 +195,232 @@ export default {
   },
   methods: {
     getFirstWeek() {
-      service.post('classCard/scheduleInfo', {
-        id: this.terminalId
-      }).then(res => {
-        this.currentWeek = this.calcCurrentWeek(res.data.firstWeek);
-        this.firstWeek = res.data.firstWeek;
-        this.scrollLeft()
-        this.sectionTime = res.data.sessionSourceList.map(i => {
-          return `${timeUtil.sourceToTime(i.startSource)}-${timeUtil.sourceToTime(i.endSource)}`;
-        })
-        this.getCurriculum();
+      let data = {
+        "firstWeek": "2022-02-06T16:00:00.000Z",
+        "sessionSourceList": [
+          {
+            "startSource": 480,
+            "endSource": 520
+          },
+          {
+            "startSource": 530,
+            "endSource": 570
+          },
+          {
+            "startSource": 580,
+            "endSource": 620
+          },
+          {
+            "startSource": 630,
+            "endSource": 665
+          },
+          {
+            "startSource": 670,
+            "endSource": 770
+          },
+          {
+            "startSource": 780,
+            "endSource": 820
+          },
+          {
+            "startSource": 830,
+            "endSource": 870
+          },
+          {
+            "startSource": 880,
+            "endSource": 960
+          },
+          {
+            "startSource": 970,
+            "endSource": 1010
+          },
+          {
+            "startSource": 1020,
+            "endSource": 1070
+          },
+          {
+            "startSource": 1080,
+            "endSource": 1120
+          },
+          {
+            "startSource": 1120,
+            "endSource": 1190
+          },
+          {
+            "startSource": 1205,
+            "endSource": 1245
+          }
+        ]
+      }
+      this.currentWeek = this.calcCurrentWeek(data.firstWeek);
+      this.firstWeek = data.firstWeek;
+      this.scrollLeft()
+      this.sectionTime = data.sessionSourceList.map(i => {
+        return `${timeUtil.sourceToTime(i.startSource)}-${timeUtil.sourceToTime(i.endSource)}`;
       })
+      this.getCurriculum();
+
     },
     getCurriculum() {
-      // android webview 57 / chrome 57版本才实现 display:grid 所以以下代码需要改
-      service.post('course/terminalCurriculum', {
-        id: this.terminalId,
-        weekNo: this.currentWeek
-      }).then(res => {
-        // 空格子
-        const sectionLen = this.sectionTime.length;
-        let data = [];
-        res.result.forEach((item, index) => {
-          let temp = [];
-          for (let i = 1; i <= sectionLen; i++) {
-            let hasPush = false;
-            item.forEach(course => {
-              if (i >= course.startSession && i <= course.endSession) {
-                temp.push(Object.assign(course, {
-                  style: {
-                    height: (2.5 * (course.endSession - course.startSession + 1) - 0.5) + 'rem'
-                  },
-                  showDetail: false
-                }));
-                i = course.endSession;
-                hasPush = true;
-              }
-            });
-            !hasPush && temp.push({
-              courseName: '',
-              courseNumber: '',
-              dayOfWeek: index + 1,
-              startSession: i,
-              endSession: i,
-              style: {
-                height: '2.5rem'
-              },
-              showDetail: false
-            });
+      let res = [
+        [
+          {
+            "college": null,
+            "courseName": "大学英语（2）",
+            "dayOfWeek": 1,
+            "courseClass": "信息1班",
+            "teacherName": "谢佳文",
+            "endSession": 2,
+            "courseNumber": "10001",
+            "startSession": 1
+          },
+          {
+            "college": "士官学院（人武部）",
+            "courseName": "GIS实务Ⅱ",
+            "dayOfWeek": 1,
+            "courseClass": "士官测绘19-1",
+            "teacherName": "熊国华",
+            "endSession": 3,
+            "courseNumber": "(2020-2021-2)-23711062-170139-1",
+            "startSession": 3
           }
-          data.push(temp);
-        });
-        this.curriculum = data;
+        ],
+        [
+          {
+            "college": "工程造价学院",
+            "courseName": "建筑CAD",
+            "dayOfWeek": 2,
+            "courseClass": "造价20-4",
+            "teacherName": "刘松鑫",
+            "endSession": 7,
+            "courseNumber": "(2020-2021-2)-22019020-000102-2",
+            "startSession": 6
+          }
+        ],
+        [
+          {
+            "college": null,
+            "courseName": "大学英语（1）",
+            "dayOfWeek": 3,
+            "courseClass": "高数4班",
+            "teacherName": "谢佳文",
+            "endSession": 2,
+            "courseNumber": "20001",
+            "startSession": 1
+          },
+          {
+            "college": "士官学院（人武部）",
+            "courseName": "遥感测绘技术",
+            "dayOfWeek": 3,
+            "courseClass": "士官测绘19-2",
+            "teacherName": "王东东",
+            "endSession": 3,
+            "courseNumber": "(2020-2021-2)-23708030-000168-2",
+            "startSession": 3
+          }
+        ],
+        [
+          {
+            "college": "工程造价学院",
+            "courseName": "BIM图形算量实务",
+            "dayOfWeek": 4,
+            "courseClass": "造价19-6",
+            "teacherName": "俞嘉陈",
+            "endSession": 2,
+            "courseNumber": "(2020-2021-2)-22533020-000103-1",
+            "startSession": 1
+          },
+          {
+            "college": "工程造价学院",
+            "courseName": "BIM基础与实务",
+            "dayOfWeek": 4,
+            "courseClass": "造价20-7",
+            "teacherName": "李修强(经管)",
+            "endSession": 5,
+            "courseNumber": "(2020-2021-2)-22005020-000116-1",
+            "startSession": 4
+          },
+          {
+            "college": "工程造价学院",
+            "courseName": "房地产经营管理",
+            "dayOfWeek": 4,
+            "courseClass": "房地产19-1",
+            "teacherName": "应佐萍",
+            "endSession": 7,
+            "courseNumber": "(2020-2021-2)-22026040-160125-1",
+            "startSession": 6
+          }
+        ],
+        [
+          {
+            "college": "士官学院（人武部）",
+            "courseName": "遥感测绘技术",
+            "dayOfWeek": 5,
+            "courseClass": "士官测绘19-1",
+            "teacherName": "王东东",
+            "endSession": 12,
+            "courseNumber": "(2020-2021-2)-23708030-000168-1",
+            "startSession": 1
+          },
+          {
+            "college": "建筑工程学院",
+            "courseName": "建筑CAD",
+            "dayOfWeek": 5,
+            "courseClass": "建工20-3",
+            "teacherName": "闫明",
+            "endSession": 8,
+            "courseNumber": "(2020-2021-2)-31031040-160131-1",
+            "startSession": 7
+          }
+        ],
+        [
+          {
+            "college": "工程造价学院",
+            "courseName": "建设工程投资控制与合同管理",
+            "dayOfWeek": 6,
+            "courseClass": "监理19-2",
+            "teacherName": "余春春",
+            "endSession": 12,
+            "courseNumber": "(2020-2021-2)-21205040-150172-1",
+            "startSession": 1
+          }
+        ],
+        []
+      ]
+      // android webview 57 / chrome 57版本才实现 display:grid 所以以下代码需要改
+      const sectionLen = this.sectionTime.length;
+      let data = [];
+      res.forEach((item, index) => {
+        let temp = [];
+        for (let i = 1; i <= sectionLen; i++) {
+          let hasPush = false;
+          item.forEach(course => {
+            if (i >= course.startSession && i <= course.endSession) {
+              temp.push(Object.assign(course, {
+                style: {
+                  height: (2.5 * (course.endSession - course.startSession + 1) - 0.5) + 'rem'
+                },
+                showDetail: false
+              }));
+              i = course.endSession;
+              hasPush = true;
+            }
+          });
+          !hasPush && temp.push({
+            courseName: '',
+            courseNumber: '',
+            dayOfWeek: index + 1,
+            startSession: i,
+            endSession: i,
+            style: {
+              height: '2.5rem'
+            },
+            showDetail: false
+          });
+        }
+        data.push(temp);
       });
+      this.curriculum = data;
     },
     calcCurrentWeek(firstWeek) {
       const fwt = new Date(firstWeek).getTime();

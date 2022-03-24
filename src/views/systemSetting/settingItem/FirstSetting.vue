@@ -6,6 +6,7 @@
   display flex
   padding: 0.65rem;
   box-sizing border-box
+
   .main-left,
   .main-right
     flex: 1;
@@ -21,8 +22,10 @@
 
   .main-left
     margin-right: 0.75rem
+
 .form-item
   margin-bottom: 0.85rem
+
 .form-label
   margin-bottom: 0.35rem
   font-size 0.7rem;
@@ -69,7 +72,7 @@ export default {
   components: {Auth},
   data() {
     return {
-      serviceUrl: '',
+      serviceUrl: 'http://testc.hzmaijie.com',
       ipChecked: false
     }
   },
@@ -83,35 +86,16 @@ export default {
   methods: {
     checkIp() {
       ls.set('serviceUrl', this.serviceUrl);
-      service.post('classCard/testLink').then(res => {
-        if (res.message === 'success') {
-          msg({
-            message: '连接成功!',
-            type: 'success'
-          });
-          initMqtt();
-          this.getConfig();
-        } else {
-          ls.remove('serviceUrl');
-          msg({
-            message: '连接服务器失败!',
-            type: 'wrong'
-          });
-        }
-      })
+      msg({
+        message: '连接成功!',
+        type: 'success'
+      });
+
+      initMqtt();
+      this.getConfig();
     },
     getConfig() {
-      service.post('classCard/getConfig').then((res) => {
-        if (res.message === 'success') {
-          ls.set('deviceConfig', res.data);
-          this.ipChecked = true;
-        } else {
-          msg({
-            message: '获取班牌信息失败！',
-            type: 'wrong'
-          });
-        }
-      });
+      this.ipChecked = true;
     }
   }
 }

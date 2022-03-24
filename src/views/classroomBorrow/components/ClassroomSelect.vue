@@ -88,30 +88,138 @@ export default {
   },
   methods: {
     getInfo() {
-      service.post('model/getEntityTree', {
-        nodes: [{
-          subnodes: [{
-            type: 'terminal',
-            filter: {field: 'parent', match: 'EQ', value: null}
-          }, {
-            type: 'terminalCategory',
-            filter: {field: 'parent', match: 'EQ', value: null}
-          }]
-        }, {
-          type: 'terminal'
-        }, {
-          type: 'terminalCategory',
-          subnodes: [{
-            type: 'terminal',
-            filter: {field: 'parent', match: 'EQ', value: '$parentId'}
-          }, {
-            type: 'terminalCategory',
-            filter: {field: 'parent', match: 'EQ', value: '$parentId'}
-          }]
-        }]
-      }).then(res => {
-        this.campus = res.list;
-      })
+      this.campus = [
+        {
+          "parent": null,
+          "children": [
+            {
+              "parent": {
+                "id": 6669935,
+                "label": "杭州校区"
+              },
+              "children": [
+                {
+                  "parent": {
+                    "id": 6669941,
+                    "label": "行政楼"
+                  },
+                  "children": [
+                    {
+                      "parent": {
+                        "id": 6669944,
+                        "label": "1L"
+                      },
+                      "id": 6669946,
+                      "label": "101-金智（会议室1800壁挂机）",
+                      "$type": "terminal"
+                    },
+                    {
+                      "parent": {
+                        "id": 6669944,
+                        "label": "1L"
+                      },
+                      "id": 6669949,
+                      "label": "103-云智（样板间后墙飞机头）",
+                      "$type": "terminal"
+                    },
+                    {
+                      "parent": {
+                        "id": 6669944,
+                        "label": "1L"
+                      },
+                      "id": 6669954,
+                      "label": "102-睿智（样板间前墙飞机头）",
+                      "$type": "terminal"
+                    },
+                    {
+                      "parent": {
+                        "id": 6669944,
+                        "label": "1L"
+                      },
+                      "id": 10123262,
+                      "label": "测试",
+                      "$type": "terminal"
+                    }
+                  ],
+                  "$more": false,
+                  "id": 6669944,
+                  "label": "1L",
+                  "$type": "terminalCategory"
+                }
+              ],
+              "$more": false,
+              "id": 6669941,
+              "label": "行政楼",
+              "$type": "terminalCategory"
+            },
+            {
+              "parent": {
+                "id": 6669935,
+                "label": "杭州校区"
+              },
+              "children": [
+                {
+                  "parent": {
+                    "id": 6669983,
+                    "label": "4号楼"
+                  },
+                  "children": [
+                    {
+                      "parent": {
+                        "id": 6669991,
+                        "label": "1L"
+                      },
+                      "id": 6669999,
+                      "label": "101-报告厅拼接屏",
+                      "$type": "terminal"
+                    },
+                    {
+                      "parent": {
+                        "id": 6669991,
+                        "label": "1L"
+                      },
+                      "id": 6670003,
+                      "label": "102-大风实验室",
+                      "$type": "terminal"
+                    },
+                    {
+                      "parent": {
+                        "id": 6669991,
+                        "label": "1L"
+                      },
+                      "id": 10220449,
+                      "label": "103-阶梯教室展示区",
+                      "$type": "terminal"
+                    },
+                    {
+                      "parent": {
+                        "id": 6669991,
+                        "label": "1L"
+                      },
+                      "id": 10220451,
+                      "label": "104-功能教室展示区（融合屏）",
+                      "$type": "terminal"
+                    }
+                  ],
+                  "$more": false,
+                  "id": 6669991,
+                  "label": "1L",
+                  "$type": "terminalCategory"
+                }
+              ],
+              "$more": false,
+              "id": 6669983,
+              "label": "4号楼",
+              "$type": "terminalCategory"
+            }
+          ],
+          "$more": false,
+          "id": 6669935,
+          "label": "杭州校区",
+          "$type": "terminalCategory",
+          "$hasChildren": true
+        }
+      ]
     },
     selectTerminal(item) {
       this.terminalId = item.id;

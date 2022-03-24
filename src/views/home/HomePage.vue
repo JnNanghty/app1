@@ -58,13 +58,46 @@ export default {
   components: {ClassroomInfo, Clock, Attendance},
   data() {
     return {
-      terminalId: null,
+      terminalId: 6669946,
       currentCourse: {},
       nextCourse: {},
       inCourse: false, // 当前时间是否在课节内
       curriculumData: [],
       endOfClassText: '空闲中',
-      terminalInfo: {},
+      terminalInfo: {
+        address: null,
+        alarmStatus: 1,
+        builtin: null,
+        canBorrow: true,
+        companyId_: 6669210,
+        config: null,
+        createTime: "2021-08-12T00:09:26.000Z",
+        creator: 6669930,
+        deshiId: null,
+        deshiIp: null,
+        enableCoursePower: false,
+        enableSelfInspect: true,
+        favorite: null,
+        group: null,
+        id: 6669946,
+        label: "101-金智（会议室1800壁挂机）",
+        lastOnlineTime: "2022-03-24T03:57:31.000Z",
+        lastUpdate_: 16480944677820000,
+        parent: 6669944,
+        remark: null,
+        repair: 6669284,
+        scene: null,
+        scenePhoto: "",
+        seatCount: 120,
+        showInControl: true,
+        showInTour: true,
+        sn: null,
+        status: 3,
+        things: null,
+        thirdPartyType: null,
+        threshold: null,
+        type: 1,
+      },
       countDownInterval: null,
       flag: false,
       windowStyle: {
@@ -76,7 +109,7 @@ export default {
     mitt.on('courseStatus', this.scrollWindow)
   },
   mounted() {
-    this.terminalId = ls.get('terminalId');
+    // this.terminalId = ls.get('terminalId');
     if (this.terminalId) {
       this.getDailyCurriculum();
       this.countDownInterval = setInterval(() => {
@@ -85,7 +118,6 @@ export default {
           this.windowStyle.transform = 'translateX(-50vw)';
         }
       }, 2e3);
-      this.getTerminalInfo();
     } else {
       msg({
         message: '请先在设置中绑定班级！'
@@ -100,24 +132,143 @@ export default {
     }
   },
   methods: {
-    getTerminalInfo() {
-      service.post('classCard/terminalInfo', {
-        id: this.terminalId
-      }).then(res => {
-        this.terminalInfo = res.data ? res.data : {};
-        ls.set('terminalInfo', this.terminalInfo);
-      })
-    },
     getDailyCurriculum() {
-      service.post('classCard/dailyCurriculum', {
-        id: this.terminalId
-      }).then(res => {
-        this.curriculumData = res.data;
-        this.resolveData();
-        if (this.currentCourse.courseId) {
-          this.windowStyle.transform = 'translateX(-50vw)';
+      this.curriculumData = [
+        {
+          "teacherName": "俞嘉陈",
+          "courseId": 10775141,
+          "college": "工程造价学院",
+          "courseClass": "造价19-6",
+          "courseName": "BIM图形算量实务",
+          "courseNumber": "(2020-2021-2)-22533020-000103-1",
+          "startSource": 480,
+          "endSource": 520
+        },
+        {
+          "teacherName": "俞嘉陈",
+          "courseId": 10775141,
+          "college": "工程造价学院",
+          "courseClass": "造价19-6",
+          "courseName": "BIM图形算量实务",
+          "courseNumber": "(2020-2021-2)-22533020-000103-1",
+          "startSource": 530,
+          "endSource": 570
+        },
+        {
+          "teacherName": null,
+          "courseId": null,
+          "college": null,
+          "courseClass": null,
+          "courseName": null,
+          "courseNumber": null,
+          "startSource": 580,
+          "endSource": 620
+        },
+        {
+          "teacherName": "李修强(经管)",
+          "courseId": 10775124,
+          "college": "工程造价学院",
+          "courseClass": "造价20-7",
+          "courseName": "BIM基础与实务",
+          "courseNumber": "(2020-2021-2)-22005020-000116-1",
+          "startSource": 630,
+          "endSource": 665
+        },
+        {
+          "teacherName": "李修强(经管)",
+          "courseId": 10775124,
+          "college": "工程造价学院",
+          "courseClass": "造价20-7",
+          "courseName": "BIM基础与实务",
+          "courseNumber": "(2020-2021-2)-22005020-000116-1",
+          "startSource": 670,
+          "endSource": 770
+        },
+        {
+          "teacherName": "应佐萍",
+          "courseId": 10775117,
+          "college": "工程造价学院",
+          "courseClass": "房地产19-1",
+          "courseName": "房地产经营管理",
+          "courseNumber": "(2020-2021-2)-22026040-160125-1",
+          "startSource": 780,
+          "endSource": 820
+        },
+        {
+          "teacherName": "应佐萍",
+          "courseId": 10775117,
+          "college": "工程造价学院",
+          "courseClass": "房地产19-1",
+          "courseName": "房地产经营管理",
+          "courseNumber": "(2020-2021-2)-22026040-160125-1",
+          "startSource": 830,
+          "endSource": 870
+        },
+        {
+          "teacherName": null,
+          "courseId": null,
+          "college": null,
+          "courseClass": null,
+          "courseName": null,
+          "courseNumber": null,
+          "startSource": 880,
+          "endSource": 960
+        },
+        {
+          "teacherName": null,
+          "courseId": null,
+          "college": null,
+          "courseClass": null,
+          "courseName": null,
+          "courseNumber": null,
+          "startSource": 970,
+          "endSource": 1010
+        },
+        {
+          "teacherName": null,
+          "courseId": null,
+          "college": null,
+          "courseClass": null,
+          "courseName": null,
+          "courseNumber": null,
+          "startSource": 1020,
+          "endSource": 1070
+        },
+        {
+          "teacherName": null,
+          "courseId": null,
+          "college": null,
+          "courseClass": null,
+          "courseName": null,
+          "courseNumber": null,
+          "startSource": 1080,
+          "endSource": 1120
+        },
+        {
+          "teacherName": null,
+          "courseId": null,
+          "college": null,
+          "courseClass": null,
+          "courseName": null,
+          "courseNumber": null,
+          "startSource": 1120,
+          "endSource": 1190
+        },
+        {
+          "teacherName": null,
+          "courseId": null,
+          "college": null,
+          "courseClass": null,
+          "courseName": null,
+          "courseNumber": null,
+          "startSource": 1205,
+          "endSource": 1245
         }
-      });
+      ]
+      this.resolveData();
+      if (this.currentCourse.courseId) {
+        this.windowStyle.transform = 'translateX(-50vw)';
+      }
     },
     resolveData() {
       const len = this.curriculumData.length;

@@ -148,7 +148,16 @@ export default {
   data() {
     return {
       config: {
-        log: ''
+        background: "/public/6669210/classcard/hxP0TRjJv587486i3rgs.jpg",
+        calendar: "/public/6669210/classcard/oWIiO6Ivs125066pr41e.png",
+        custom: "[{\"name\":\"timetable\",\"label\":\"课表查询\",\"value\":true},{\"name\":\"patrol\",\"label\":\"在线巡课\",\"value\":true},{\"name\":\"attendance\",\"label\":\"课表考勤\",\"value\":true},{\"name\":\"borrow\",\"label\":\"教室借用\",\"value\":true},{\"name\":\"news\",\"label\":\"校园资讯\",\"value\":true},{\"name\":\"access\",\"label\":\"门禁\",\"value\":true},{\"name\":\"repair\",\"label\":\"报修\",\"value\":true}]",
+        id: 10774801,
+        label: "迈杰大学",
+        logo: "/public/6669210/classcard/u2rWzejKE784309r2z1y.png",
+        signInForwardOffset: 3,
+        signInLateOffset: 5,
+        signInTypes: "[{\"name\":\"card\",\"label\":\"刷卡\",\"value\":true},{\"name\":\"code\",\"label\":\"扫码\",\"value\":true},{\"name\":\"face\",\"label\":\"人脸识别\",\"value\":false}]",
+        theme: "dark",
       },
       componentName: 'BindClassroom',
       activeTabIndex: 0,
@@ -162,8 +171,7 @@ export default {
         {id: 2, name: 'experiment', label: '实验实训室'},
         {id: 5, name: 'art', label: '功能教室'},
         {id: 6, name: 'other', label: '其他'}
-      ],
-      userInfo: {}
+      ]
     }
   },
   computed: {
@@ -179,7 +187,7 @@ export default {
   },
   created() {
     this.terminalInfo = ls.get('terminalInfo') || {};
-    this.userInfo = ls.get('userInfo') || {}
+    this.terminalId = ls.get('terminalId')
   },
   methods: {
     goHome() {
