@@ -98,15 +98,15 @@ const routes = [
       path: '/noPermission',
       name: 'NoPermission',
       component: NoPermission
+    }, {
+      path: '/examMode',
+      name: 'ExamMode',
+      component: ExamMode
     }]
   }, {
     path: '/systemSettingHome',
     name: 'SystemSettingHome',
     component: SystemSettingHome
-  }, {
-    path: '/examMode',
-    name: 'ExamMode',
-    component: ExamMode
   }, {
     path: '/programmeMode',
     name: 'ProgrammeMode',

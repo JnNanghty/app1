@@ -1,35 +1,43 @@
 <style lang="stylus" scoped>
 .main
   get_font_color(font_color)
+
   .title
     text-align center
     margin: 1rem 0
     font-size .8rem;
+
   .keyboard
     width: 50%
     margin: 0 auto
+
     .password-wrap
       border-top-left-radius 8px
       border-top-right-radius @border-top-left-radius
       display flex
       padding: 1rem;
+
       .password
         flex: 1
         letter-spacing 1rem;
         display flex
         overflow-x scroll;
+
         .dot
           width: 10px
           height: @width;
           border-radius 50%;
           background: #424851
           margin-right: 1rem
+
       .clear-icon
         width: 24px
         height: @width
+
     .keyboard-content
       display flex
       flex-wrap wrap;
+
       .number
         flex-grow: 1;
         flex-basis: 33.3%
@@ -50,7 +58,7 @@
         <div class="clear-icon" @click="clearPassword"><img :src="clearIconSrc" alt=""></div>
       </div>
       <div class="keyboard-content">
-        <div class="number" v-for="item in keys" :key="item" @click="addNum(item)">{{item}}</div>
+        <div class="number" v-for="item in keys" :key="item" @click="addNum(item)">{{ item }}</div>
       </div>
     </div>
   </div>
@@ -68,7 +76,7 @@ export default {
       keys: [1, 2, 3, 4, 5, 6, 7, 8, 9, '*', 0, '#'],
       password: '',
       clearIconSrc: require('@/assets/icon/clear-icon_dark.png'),
-      truePassword: ''
+      truePassword: '123456'
     }
   },
   computed: {},
@@ -83,15 +91,18 @@ export default {
       service.post('', {}).then()
     },
     addNum(item) {
-      if(this.password.length < 6) {
+      if (this.password.length < 6) {
         this.password += item;
+        if (this.password.length === 6) {
+          this.checkPassword();
+        }
       }
     },
     clearPassword() {
       this.password = ''
     },
     checkPassword() {
-      if(this.password === this.truePassword) {
+      if (this.password === this.truePassword) {
         msg({
           message: '密码正确',
           type: 'success'
