@@ -4,11 +4,19 @@
 </style>
 <template>
   <div class="main">
-    <div>
-      考试时间： {{ examData.examStartDate }}
-      考场号： {{ examData.examRoomNo }}
-      考试科目： {{ examData.examSubject }}
+    <div class="left">
+      <div class="left-top">
+        <div>{{terminalInfo.label}}</div>
+        <div>{{}}</div>
+        <div></div>
+      </div>
+      <div class="left-bottom">
+        <div class="exam-item">考试科目：{{examData.examSubject}}</div>
+        <div class="exam-item">考试时间：{{examData.examStartDate}}</div>
+        <div class="exam-item">监考人员：{{examData.examRoomNo}}</div>
+      </div>
     </div>
+    <div class="right"></div>
   </div>
 </template>
 
@@ -25,7 +33,8 @@ export default {
         examRoomNo: '考场号',
         examStartDate: '开始时间',
         examSubject: '考试科目'
-      }
+      },
+      terminalInfo: {}
     }
   },
   created() {

@@ -1,23 +1,5 @@
 function MessageBox({message = '', duration, type = null}) {
   const wrap = document.createElement('div');
-  wrap.setAttribute('style', `
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      left: 0;
-      right: 0;
-      margin: 0 auto;
-      min-width: 10rem;
-      width: fit-content;
-      padding: .5rem 1rem 0;
-      height: 2rem;
-      background: #57575780;
-      border-radius: 4px;
-      z-index: 3000;
-      opacity: 0;
-      text-align: center;
-      font-size: 1rem;
-    `);
   wrap.classList.add('__message-content')
 
   const keyframe = [

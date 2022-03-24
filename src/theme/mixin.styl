@@ -67,6 +67,22 @@ get_background_image($name)
 
 .__message-content{
   get_font_color(font_color)
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  min-width: 10rem;
+  width: fit-content;
+  padding: .5rem 1rem 0;
+  height: 2rem;
+  background: rgba(87, 87, 87, 0.8);
+  border-radius: 4px;
+  z-index: 3000;
+  opacity: 0;
+  text-align: center;
+  font-size: 1rem;
 }
 
 .__confirm-shadow{
@@ -91,6 +107,7 @@ get_background_image($name)
     text-align center
     display flex
     flex-direction column
+    font-size .8rem
     .__confirm-content{
       padding: 2rem 1rem
       flex: 1;

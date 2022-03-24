@@ -135,7 +135,7 @@
     <div class="main-right">
       <h2 class="form-title">系统操作</h2>
       <div class="option-button cancel-button  _button" @click="exit">退出应用</div>
-      <div class="option-button _button">显示底部工具栏</div>
+      <div class="option-button _button" @click="showStatusBar">显示状态栏</div>
     </div>
   </div>
 </template>
@@ -180,6 +180,9 @@ export default {
         message: '保存成功！',
         type: 'success'
       });
+    },
+    showStatusBar() {
+      StatusBar.show();
     }
   }
 }

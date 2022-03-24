@@ -154,7 +154,7 @@ export default {
     mitt.on('changeTheme', this.changeTheme);
   },
   beforeUnmount() {
-    mitt.off('changeTheme')
+    mitt.off('changeTheme', this.changeTheme)
   },
   computed: {
     clockStatus() {

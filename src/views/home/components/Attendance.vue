@@ -13,7 +13,7 @@
   border-radius 8px;
   display flex
   position relative
-  padding: 1.5rem 1rem
+  padding: 1rem .7rem
   box-sizing border-box
   justify-content space-around
 
@@ -69,6 +69,7 @@
   get_background(student_info_background)
   border-bottom-left-radius 8px
   border-bottom-right-radius 8px;
+  flex 1;
 
   .student-item
     border-radius 50%
@@ -109,7 +110,7 @@
   margin-top: 1rem
 
   img
-    height: 100%
+    width: 2rem
     vertical-align middle
     margin-right: 1rem
 
@@ -239,7 +240,7 @@ export default {
   },
   computed: {
     currentCourseFlag() {
-      return true;
+      return !!this.nextCourse.courseId;
     }
   },
   created() {
