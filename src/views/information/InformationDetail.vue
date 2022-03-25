@@ -14,6 +14,17 @@
     height: 100%
 .line
   margin: 1rem 0;
+  background: #272727;
+  color #272727
+.info-title
+  text-align center
+  font-size .7rem;
+.info-desc
+  text-align center
+  margin-top: .4rem
+  color #979797
+  font-size .6rem;
+
 </style>
 <template>
   <div class="main">
@@ -21,9 +32,9 @@
       <iframe :src="info.content"></iframe>
     </template>
     <template v-else>
-      <div>{{info.title}}</div>
-      <div>
-        <span>来源：{{info.laiyuan}}</span>
+      <div class="info-title">{{info.title}}</div>
+      <div class="info-desc">
+        <span>来源：{{info.source}}</span>
         <span>作者：{{info.author}}</span>
         <span>{{time}}</span>
       </div>
