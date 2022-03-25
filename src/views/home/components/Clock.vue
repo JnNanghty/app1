@@ -6,6 +6,7 @@
 
   .c-clock-canvas
     margin: 0 auto
+    background: url("../../../assets/clock.png") center center/87.5% 87.5% no-repeat
 
 
   .c-course-info
@@ -83,7 +84,7 @@
 </style>
 <template>
   <div class="c-main-content">
-    <canvas class="c-clock-canvas" ref="clockCanvas" :width="canvasSize" :height="canvasSize"></canvas>
+    <canvas class="c-clock-canvas" :style="canvasBackground" ref="clockCanvas" :width="canvasSize" :height="canvasSize"></canvas>
     <div class="point" :style="pointStyle">
       <img :src="pointSrc" alt="">
     </div>
@@ -142,6 +143,9 @@ export default {
       clockColor: ['#384050', '#e1581b', '#fba35e'],
       pointStyle: {
         transform: 'rotate(0deg)'
+      },
+      canvasBackground: {
+        background: `url(${require('@/assets/clock.png')}) center center/87.5% 87.5% no-repeat`
       }
     }
   },
@@ -239,23 +243,14 @@ export default {
         img = require('@/assets/clock_bright.png');
         this.pointSrc = require('@/assets/icon_bright/point_bright.png')
       }
-      this.loadImageAndDraw(img, this.canvasSize * 0.0625, this.canvasSize * 0.0625, this.canvasSize * 0.875, this.canvasSize * 0.875)
 
-      // if (!this.currentCourse.courseId) {
-      //   this.loadImageAndDraw(require('@/assets/icon/clock_eye.png'), 137, 100, 46, 40)
-      // }
-      this.ctx.save();
+      this.canvasBackground = {
+        background: `url(${img}) center center/87.5% 87.5% no-repeat`
+      }
     },
     changeTheme() {
       this.ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
       this.init();
-    },
-    loadImageAndDraw(src, dx, dy, width, height) {
-      let img = new Image();
-      img.onload = () => {
-        this.ctx.drawImage(img, dx, dy, width, height);
-      }
-      img.src = src;
     },
     drawClock(start, end, color) {
       let {ctx} = this
@@ -276,13 +271,8 @@ export default {
       ctx.fill()
     },
     clearCanvas() {
-      console.log('restore')
       if (this.ctx) {
-        // this.ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
-        this.ctx.restore()
-
-        // this.ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
-        // this.init();
+        this.ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
       }
     }
   }
