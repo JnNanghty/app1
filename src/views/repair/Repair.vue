@@ -7,8 +7,8 @@
   get_font_color(font_color)
 
   .top
-    padding: 1rem
-    border-radius 8px
+    padding: .4rem 1rem;
+    border-radius .4rem
     get_background(setting_panel_bancground)
     margin-bottom: .5rem
     display flex
@@ -19,6 +19,10 @@
         get_background(borrow_change_button_background)
         width 5rem;
         margin-left: 2.5rem
+        margin-top: 0.5rem
+        height 1.6rem
+        line-height @height
+
   .bottom
     display flex
 
@@ -26,18 +30,18 @@
       flex: 1;
       get_background(setting_panel_bancground)
 
-      border-radius 8px
+      border-radius .4rem
       box-sizing border-box
 
     .left
-      padding: 1rem
+      padding: 1.5rem
       text-align center
       margin-right: .5rem
     .qr-code
       width: 7rem
       height @width
       border-radius 4px;
-      margin: 2rem 0 1rem
+      margin: 2.7rem 0 3rem
 
 .form-item
   margin-bottom: 1rem
@@ -45,6 +49,7 @@
 
 .form-select
   width 70%
+  height 2.4rem;
 
 .submit-button
   margin-top: 1rem

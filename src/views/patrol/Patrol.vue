@@ -10,16 +10,20 @@
 
     .top-left
       flex: 1
-      margin-right: 10px
+      margin-right: .75rem
       display flex
       .device-list
         width 30%
-        margin-left:1rem;
+        margin-left: 0.25rem;
         height: 100%
         overflow-y scroll
         .device-item
           height: 5rem
-          margin-bottom: 1rem
+          margin-bottom: .4rem
+          border-radius .8rem;
+          overflow: hidden;
+          img
+            height: 100%
     .top-right
       width: 24%
       display flex
@@ -60,7 +64,7 @@
   <div class="main">
     <div class="top">
       <div class="top-left">
-        <div style="flex: 1;">
+        <div style="flex: 1;border-radius: .8rem;overflow: hidden">
           <template v-if="activeDevice.type.id === 5">
             <camera-player :camera="activeDevice"></camera-player>
           </template>
@@ -72,14 +76,19 @@
           </template>
         </div>
         <div class="device-list" v-show="filterDevices.length > 0">
-          <div class="device-item" v-for="item in filterDevices" :key="item.id" @click="setItemActive(item)">
-            <template v-if="item.type.id === 5">
-              <camera-player :camera="item"></camera-player>
-            </template>
-            <template v-else-if="item.type.id === 2">
-              <computer-player :computer="item" :power="true"></computer-player>
-            </template>
+          <div class="device-item" v-for="item in filterDevices" :key="item.id" >
+            <img src="../../assets/video.png" style="width: 100%" alt="">
           </div>
+          <div class="device-item" v-for="item in filterDevices" :key="item.id" >
+            <img src="../../assets/video.png" style="width: 100%" alt="">
+          </div>
+          <div class="device-item" v-for="item in filterDevices" :key="item.id" >
+            <img src="../../assets/video.png" style="width: 100%" alt="">
+          </div>
+          <div class="device-item" v-for="item in filterDevices" :key="item.id" >
+            <img src="../../assets/video.png" style="width: 100%" alt="">
+          </div>
+
         </div>
       </div>
       <div class="top-right">

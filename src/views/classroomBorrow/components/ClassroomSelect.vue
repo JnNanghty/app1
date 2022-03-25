@@ -1,7 +1,7 @@
 <style scoped lang="stylus">
 .cs-warp
   get_background(borrow_wrap_background)
-  border-radius 8px
+  border-radius .4rem
   width: 100%
   height: 100%
   padding: 1rem 1.5rem;

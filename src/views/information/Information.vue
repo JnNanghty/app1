@@ -7,16 +7,25 @@
   .info-item
     display flex
     padding: 1rem
-    margin-bottom: 1rem
+    overflow: hidden;
+    box-sizing border-box
+    width: 100%
     .info-time
       margin-right: 2rem
     .info-content
       font-size .8rem
       flex 1;
-      padding: 1rem
-      overflow hidden
-      text-overflow ellipsis
-      white-space nowrap
+      padding: .6rem
+      width: 100%
+      .info-title
+        font-size: .7rem;
+        margin-bottom: .5rem;
+      .info-desc
+        font-size: .6rem
+        overflow hidden
+        text-overflow ellipsis
+        white-space nowrap
+        width: 80%
 </style>
 <template>
   <div class="main">
@@ -26,7 +35,8 @@
         <div style="font-size: .6rem">{{item.ym}}</div>
       </div>
       <div class="info-content">
-        <div>{{item.title}}</div>
+        <div class="info-title">{{item.title}}</div>
+        <div class="info-desc">{{item.content}}</div>
       </div>
     </div>
   </div>
@@ -100,23 +110,6 @@ export default {
           },
           "content": "wads"
         },
-        {
-          "isIssued": true,
-          "coverPicture": null,
-          "createTime": "2022-02-28T06:59:24.000Z",
-          "author": {
-            "id": 6669282,
-            "label": "系统管理员"
-          },
-          "id": 11715704,
-          "label": null,
-          "title": "9999",
-          "type": {
-            "id": 1,
-            "label": "链接(URL)"
-          },
-          "content": "8989"
-        }
       ]
       this.infoList = data.map(item => {
         const time = new Date(item.createTime)

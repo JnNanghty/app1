@@ -9,7 +9,8 @@
   padding-right: 1.5rem;
   max-height: 3.5rem;
   position: relative;
-  height: 3rem;
+  height: 3.2rem;
+  box-sizing border-box
   get_font_color(font_color)
 }
 
@@ -84,7 +85,7 @@
   display: flex;
   justify-content: center;
   align-items center
-  height: 5rem;
+  height: 4rem;
   overflow-x: scroll;
   overflow-y: hidden;
   position relative

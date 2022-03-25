@@ -1,6 +1,6 @@
 <template>
   <div id="app-main">
-    <router-view v-slot="{Component}" v-doubleclick="changeTheme">
+    <router-view v-slot="{Component}">
       <transition name="up">
         <component :is="Component"></component>
       </transition>

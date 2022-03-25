@@ -8,7 +8,7 @@
 
   .change-week
     overflow-x scroll
-    margin-bottom: 1rem;
+    margin-bottom: .5rem;
 
     &::-webkit-scrollbar
       height: 0
@@ -21,8 +21,7 @@
         float left
         width itemWidth
         box-sizing border-box
-        padding: 10px 25px 0;
-        height: 2.9rem
+        height: 2.4rem
         font-size .7rem;
         line-height @height
         text-align center
@@ -50,26 +49,29 @@
   flex: 1;
 
   .table-row
-    min-height: 2.5rem;
+    min-height: 1rem;
     box-sizing: border-box;
     display flex
     justify-content center
     align-items center
     position relative
-    font-size .45rem;
+    font-size .51rem;
 
   .course-item
     get_background(patrol_bottom_background)
     border-radius 4px;
-    margin-left: .25rem
-    margin-right: .25rem
-    margin-bottom: .5rem
+    margin-left: .125rem
+    margin-right: .125rem
+    margin-bottom: .3rem
     border-right: none;
     position relative
+    padding: 0.2rem;
+    font-size .45rem;
+    box-sizing border-box
 
     .course-detail
       position absolute
-      top: 53%
+      top: 80%
       left: 50%;
       transform: translateX(-50%);
       border-radius 8px;
@@ -83,13 +85,14 @@
 
       &::after
         position absolute
-        top: -10px;
+        top: -1rem;
         left: 50%
+        transform translateX(-50%)
         content ''
         display block
         width: 0
         height: 0
-        border: 5px solid #000;
+        border: .5rem solid #000;
         border-top-color: transparent;
         border-bottom-color: #575D67;
         border-left-color: transparent;
@@ -97,7 +100,7 @@
 
   .table-title
     get_background(curriculum_section_background)
-    padding: 8px 0;
+    padding: .3rem 0;
     margin-bottom: 2px
     font-size .7rem
     min-height: auto;
@@ -110,17 +113,27 @@
     border-top-right-radius 8px;
 
   .section-row
-    padding: 3px
+    display flex
     get_background(curriculum_section_background)
     color #9fa2a7
-    display block
+    align-items: stretch;
+
+    .time-line
+      writing-mode: tb;
+      font-size .6rem;
+      letter-spacing .5rem;
+      padding: 0 0.5rem
+      border-bottom 3px solid #2F333A
+      get_font_color(font_color)
+    .section-wrap
+      border-left: 3px solid #2F333A
+      flex: 1
 
     .section-label
-      font-size .8rem
+      font-size .4rem
 
     .section-time
-      font-size .6rem
-      transform scale(0.8)
+      font-size .3rem
 
 </style>
 <template>
@@ -134,11 +147,16 @@
       </div>
     </div>
     <div class="table">
-      <div class="table-col">
+      <div class="table-col" style="flex: 1.2">
         <div class="table-row table-title">课节时间</div>
-        <div class="table-row section-row" v-for="(item, index) in sectionTime" :key="index">
-          <span class="section-label">第{{ simplifyNum[index] }}节</span>
-          <div class="section-time">{{ item }}</div>
+        <div class="table-row section-row" v-for="(item, index, c) in sectionTime" :key="index">
+          <div class="time-line">{{ index === 'morning' ? '上午' : index === 'afternoon' ? '下午' : '晚上' }}</div>
+          <div class="section-wrap">
+            <div v-for="(time, i) in item" :key="i" style="min-height: 1rem;box-sizing: border-box;">
+              <span class="section-label">第{{ simplifyNum[i] }}节</span>
+              <div class="section-time">{{ time }}</div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="table-col" v-for="(item, index) in curriculum" :key="item">
@@ -149,8 +167,7 @@
           {{ course && course.courseName }}
           <div class="course-detail" v-if="course.courseName && course.showDetail">
             <div style="font-size: .9rem;">{{ course.courseName }}</div>
-            <div>{{ course.teacherName }} <span
-                style="margin-left: 1rem;">{{ calcTime(course.startSession, course.endSession) }}</span></div>
+            <div>{{ course.teacherName }} <span style="margin-left: 1rem;">{{ calcTime(course.startSession, course.endSession) }}</span></div>
             <div style="margin-bottom: 10px;">{{ course.college }}</div>
             <div>{{ course.courseClass }}</div>
           </div>
@@ -245,12 +262,50 @@ export default {
           }
         ]
       }
+      let res = {
+        "afternoon": 5,
+        "courseSection": [
+          "08:00-08:40",
+          "08:50-09:30",
+          "09:40-10:20",
+          "10:30-11:05",
+          "11:10-12:50",
+          "13:00-13:40",
+          "13:50-14:30",
+          "14:40-16:00",
+          "16:10-16:50",
+          "17:00-17:50",
+          "18:00-18:40",
+          "18:40-19:50",
+          "20:05-20:45"
+        ],
+        "evening": 3,
+        "morning": 5
+      }
+
+      let temp = {
+        morning: [],
+        afternoon: [],
+        evening: []
+      }
+      res.courseSection.forEach((item, index) => {
+        // 1 可预约  2 已被预约 3不可预约
+        if (index < res.morning) {
+          temp.morning.push(item)
+        } else if (index >= res.morning && index < res.morning + res.afternoon) {
+          temp.afternoon.push(item)
+        } else {
+          temp.evening.push(item)
+        }
+      })
+
       this.currentWeek = this.calcCurrentWeek(data.firstWeek);
       this.firstWeek = data.firstWeek;
       this.scrollLeft()
-      this.sectionTime = data.sessionSourceList.map(i => {
-        return `${timeUtil.sourceToTime(i.startSource)}-${timeUtil.sourceToTime(i.endSource)}`;
-      })
+      // this.sectionTime = data.sessionSourceList.map(i => {
+      //   return `${timeUtil.sourceToTime(i.startSource)}-${timeUtil.sourceToTime(i.endSource)}`;
+      // })
+      this.sectionTime = temp;
       this.getCurriculum();
 
     },
@@ -351,9 +406,9 @@ export default {
             "dayOfWeek": 5,
             "courseClass": "士官测绘19-1",
             "teacherName": "王东东",
-            "endSession": 12,
+            "endSession": 11,
             "courseNumber": "(2020-2021-2)-23708030-000168-1",
-            "startSession": 1
+            "startSession": 9
           },
           {
             "college": "建筑工程学院",
@@ -373,15 +428,15 @@ export default {
             "dayOfWeek": 6,
             "courseClass": "监理19-2",
             "teacherName": "余春春",
-            "endSession": 12,
+            "endSession": 5,
             "courseNumber": "(2020-2021-2)-21205040-150172-1",
-            "startSession": 1
+            "startSession": 4
           }
         ],
         []
       ]
       // android webview 57 / chrome 57版本才实现 display:grid 所以以下代码需要改
-      const sectionLen = this.sectionTime.length;
+      const sectionLen = 13
       let data = [];
       res.forEach((item, index) => {
         let temp = [];
@@ -391,7 +446,7 @@ export default {
             if (i >= course.startSession && i <= course.endSession) {
               temp.push(Object.assign(course, {
                 style: {
-                  height: (2.5 * (course.endSession - course.startSession + 1) - 0.5) + 'rem'
+                  height: (1.15 * (course.endSession - course.startSession + 1)) + 'rem'
                 },
                 showDetail: false
               }));
@@ -406,7 +461,7 @@ export default {
             startSession: i,
             endSession: i,
             style: {
-              height: '2.5rem'
+              height: '1.15rem'
             },
             showDetail: false
           });
@@ -433,6 +488,7 @@ export default {
         clearTimeout(this.closeTimeout)
         this.closeTimeout = null;
       }
+      console.log(item);
       this.closeOther()
       item.showDetail = true;
       this.closeTimeout = setTimeout(() => {
@@ -445,10 +501,26 @@ export default {
     },
     // 根据开始节次和结束节次 计算开始时间和结束时间
     calcTime(startSession, endSession) {
-      let start = this.sectionTime[startSession - 1]
-      let end = this.sectionTime[endSession - 1]
+      let arr = [
+        "08:00-08:40",
+        "08:50-09:30",
+        "09:40-10:20",
+        "10:30-11:05",
+        "11:10-12:50",
+        "13:00-13:40",
+        "13:50-14:30",
+        "14:40-16:00",
+        "16:10-16:50",
+        "17:00-17:50",
+        "18:00-18:40",
+        "18:40-19:50",
+        "20:05-20:45"
+      ]
+      let start = arr[startSession - 1]
+      let end = arr[endSession - 1]
       let startTime = start.split('-')[0]
       let endTime = end.split('-')[1];
+
       return startTime + '-' + endTime;
     },
     closeOther() {

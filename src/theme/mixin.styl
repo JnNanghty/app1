@@ -45,7 +45,7 @@ get_background_image($name)
 ._button{
   text-align center;
   background-color: #FDA45E;
-  border-radius 8px
+  border-radius .4rem
   width: 75%
   height: 2rem
   line-height @height;
@@ -55,7 +55,7 @@ get_background_image($name)
 }
 ._select{
   font-size .8rem;
-  border-radius 8px
+  border-radius .4rem
   width 100%
   height: 2rem
   border: none
@@ -63,6 +63,13 @@ get_background_image($name)
   get_background(select_background)
   get_font_color(font_color)
   appearance: none;
+  outline none
+  option{
+    get_background(select_background)
+  }
+  &:focus{
+    get_background(select_background_focus)
+  }
 }
 
 .__message-content{
@@ -78,7 +85,7 @@ get_background_image($name)
   padding: .5rem 1rem 0;
   height: 2rem;
   background: rgba(87, 87, 87, 0.8);
-  border-radius: 4px;
+  border-radius: .4rem
   z-index: 3000;
   opacity: 0;
   text-align: center;
@@ -101,7 +108,7 @@ get_background_image($name)
     right: 0
     margin: 0 auto;
     transform: translateY(-60%);
-    border-radius 8px;
+    border-radius .4rem
     width: 12rem
     background: #2D2D2D;
     text-align center

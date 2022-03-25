@@ -1,7 +1,7 @@
 <style lang="stylus" scoped>
 .r-main
   get_background(borrow_wrap_background)
-  border-radius 8px
+  border-radius .4rem
   height: 100%
   padding: 1.5rem 1rem
   box-sizing border-box

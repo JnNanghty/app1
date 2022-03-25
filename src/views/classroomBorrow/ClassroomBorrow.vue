@@ -19,11 +19,11 @@
   margin-left: 1rem
 .wrap
   get_background(borrow_wrap_background)
-  border-radius 8px
-  padding: .75rem 1.25rem
+  border-radius .4rem;
   box-sizing border-box
   margin-bottom: .5rem
   border 2px solid rgba(0,0,0,0)
+  font-size .8rem;
 .change-button
   border-radius 8px
   get_background(borrow_change_button_background)
@@ -36,6 +36,7 @@
 
 .wrap1
   display flex
+  padding: 1rem 1.5rem
   .w1-left
     width: 70%;
     .w1-room-name
@@ -49,6 +50,7 @@
     justify-content flex-end
     align-items center
 .wrap2
+  padding: 1rem 1.5rem
   .w2-top
     display flex
     justify-content space-between
@@ -79,10 +81,14 @@
               width: .8rem;
               height @width
 .wrap3
+  padding: .75rem 1.5rem
   display flex
 .reason-input
   padding-top: 5px
   padding-bottom: @padding-top
+  height: 1.8rem;
+.submit-button
+  width: 13rem
 </style>
 <template>
   <div class="main">
@@ -122,7 +128,7 @@
         <div style="font-size: .8rem;">申请理由：</div>
         <input v-model="formData.reason" class="_input reason-input" type="text" placeholder="选填">
       </div>
-      <div class="_button" @click="submit">提交申请</div>
+      <div class="submit-button _button" @click="submit">提交申请</div>
     </div>
     <div class="right">
       <component :is="rightComponentName"></component>

@@ -12,6 +12,8 @@
   .info
     width: 100%
     height: 100%
+.line
+  margin: 1rem 0;
 </style>
 <template>
   <div class="main">
@@ -19,6 +21,13 @@
       <iframe :src="info.content"></iframe>
     </template>
     <template v-else>
+      <div>{{info.title}}</div>
+      <div>
+        <span>来源：{{info.laiyuan}}</span>
+        <span>作者：{{info.author}}</span>
+        <span>{{time}}</span>
+      </div>
+      <hr class="line">
       <div class="info" v-html="info.content"></div>
     </template>
   </div>
@@ -26,6 +35,7 @@
 
 <script>
 import mitt from "@/util/mitt";
+import timeUtil from "@/util/timeUtil";
 
 export default {
   name: "InformationDetail",
@@ -35,7 +45,11 @@ export default {
       info: {}
     }
   },
-  computed: {},
+  computed: {
+    time() {
+      return timeUtil.formatDate(this.info.createTime, '-')
+    }
+  },
   created() {
     let data = this.$route.params.data
     this.info = JSON.parse(data)
