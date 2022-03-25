@@ -2,6 +2,7 @@
 .user-info {
   get_font_color(font_color)
   display flex
+  padding: .3rem
 
   .user-info-top {
     font-size .8rem;
