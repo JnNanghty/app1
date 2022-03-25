@@ -92,8 +92,8 @@
     .time-line
       position absolute
       top: 0
+      font-size .8rem;
       font-weight 600
-      font-size .6rem;
 
       &::after
         content: ''

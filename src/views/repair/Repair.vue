@@ -30,7 +30,8 @@
       box-sizing border-box
 
     .left
-      padding: 1.5rem
+      padding: 1rem
+      text-align center
       margin-right: .5rem
     .qr-code
       width: 7rem

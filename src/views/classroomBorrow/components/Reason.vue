@@ -14,6 +14,7 @@
     padding: 1rem 1.5rem;
     box-sizing border-box
     overflow-y: scroll;
+    font-size .6rem
 </style>
 <template>
   <div class="r-main">

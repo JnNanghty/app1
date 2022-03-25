@@ -26,7 +26,7 @@
     overflow: hidden;
     width: 4.5rem
     margin: 5px
-    background: #424851;
+    get_background(input_background)
     border-radius 8px
     padding: .5rem;
 </style>
