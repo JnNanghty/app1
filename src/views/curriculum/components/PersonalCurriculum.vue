@@ -446,7 +446,7 @@ export default {
             if (i >= course.startSession && i <= course.endSession) {
               temp.push(Object.assign(course, {
                 style: {
-                  height: (1.15 * (course.endSession - course.startSession + 1)) + 'rem'
+                  height: (1.15 * (course.endSession - course.startSession + 1) - 0.3) + 'rem'
                 },
                 showDetail: false
               }));
