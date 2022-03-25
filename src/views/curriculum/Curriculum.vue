@@ -143,6 +143,7 @@ export default {
     this.calendar = serviceUrl + config.calendar;
 
     mitt.on('changeTheme', this.changeTheme3)
+    this.changeTheme3()
   },
   mounted() {
     this.$nextTick(() => {
