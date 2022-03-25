@@ -25,7 +25,9 @@
         <div style="font-size: 2.4rem">{{item.d}}</div>
         <div style="font-size: .6rem">{{item.ym}}</div>
       </div>
-      <div class="info-content">{{item.title}}</div>
+      <div class="info-content">
+        <div>{{item.title}}</div>
+      </div>
     </div>
   </div>
 </template>

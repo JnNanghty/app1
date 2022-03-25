@@ -143,12 +143,22 @@ export default {
         floor: -1, // 楼层
         terminal: -1 // 教室
       },
-      terminalId: null
+      terminalId: 6669946
     }
   },
   created() {
-    this.currentCourse = ls.get('currentCourse') || {};
-    this.terminalId = ls.get('terminalId')
+    this.currentCourse = {
+      college:"工程造价学院",
+      courseClass:"造价19-6",
+      courseId:10775141,
+      courseName:"BIM图形算量实务",
+      courseNumber:"(2020-2021-2)-22533020-000103-1",
+      endSource:520,
+      endTime:"08:40",
+      startSource:480,
+      startTime:"08:00",
+      teacherName:"俞嘉陈",
+    };
 
     this.getTerminal();
     this.getDeviceList();
@@ -309,6 +319,7 @@ export default {
           "$hasChildren": true
         }
       ]
+      this.setCurrentTerminal()
     },
     getDeviceList() {
       this.devices = [

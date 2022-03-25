@@ -3,7 +3,7 @@
   get_font_color(font_color)
   .title
     text-align center
-    margin: 1rem 0
+    font-size .8rem;
   .keyboard
     width: 50%
     margin: 0 auto
@@ -18,14 +18,17 @@
         display flex
         overflow-x scroll;
         .dot
-          width: 10px
+          width: .5rem;
           height: @width;
           border-radius 50%;
           background: #424851
           margin-right: 1rem
       .clear-icon
-        width: 24px
+        width: 1.2rem
         height: @width
+        img
+          width: 100%
+          height 100%
     .keyboard-content
       display flex
       flex-wrap wrap;
