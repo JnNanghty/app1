@@ -6,7 +6,6 @@
   .top
     height: 80%
     margin-bottom: .5rem
-    margin-top: .5rem
     display flex
 
     .top-left
@@ -23,10 +22,12 @@
           margin-bottom: 1rem
     .top-right
       width: 24%
+      display flex
+      justify-content space-between
+      flex-direction column
 
       .course-info
-        min-height 60%
-        max-height: 13rem;
+        flex: 1;
         box-sizing border-box
         overflow-y scroll
         margin-top: 1rem
@@ -43,7 +44,6 @@
           margin-bottom: .5rem;
 
   .bottom
-    //display none
     padding: .5rem;
     border-radius 8px
     get_background(patrol_bottom_background)

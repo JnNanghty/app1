@@ -6,8 +6,8 @@
 
 .auth-title
   text-align center
-  margin-top: 2.5rem;
-  margin-bottom: 2.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
   font-size 1.2rem
 
 .auth-content

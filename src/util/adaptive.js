@@ -44,4 +44,4 @@
       doc.body.style.fontSize = "16px";
     }, false);
   }
-})(1024, 1920);
+})(960, 1920);

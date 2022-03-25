@@ -13,7 +13,7 @@
   width: 50%
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
 .right
   flex 1
   margin-left: 1rem

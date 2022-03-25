@@ -89,22 +89,22 @@
       height: 100%
       background: #424851
 
-    //opacity .5;
-
     .time-line
       position absolute
       top: 0
+      font-weight 600
+      font-size .6rem;
 
       &::after
         content: ''
         position absolute
         top: 50%;
         transform: translateY(-50%);
-        left: -2rem
+        left: -2.1rem
         display block
         border-radius 50%
-        border 2px solid #979797
-        width: 16px
+        border .2rem solid #979797
+        width: .7rem
         height: @width
 
 </style>
