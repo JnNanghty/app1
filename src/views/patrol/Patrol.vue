@@ -6,7 +6,6 @@
   .top
     height: 80%
     margin-bottom: .5rem
-    margin-top: .5rem
     display flex
 
     .top-left
@@ -23,10 +22,12 @@
           margin-bottom: 1rem
     .top-right
       width: 24%
+      display flex
+      flex-direction column
+      justify-content space-between
 
       .course-info
-        min-height 60%
-        max-height: 13rem;
+        flex: 1
         box-sizing border-box
         overflow-y scroll
         margin-top: 1rem
@@ -198,7 +199,7 @@ export default {
                         "label": "1L"
                       },
                       "id": 6669946,
-                      "label": "101-金智（会议室1800壁挂机）",
+                      "label": "101-金智",
                       "$type": "terminal"
                     },
                     {

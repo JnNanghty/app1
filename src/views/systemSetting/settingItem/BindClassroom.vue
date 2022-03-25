@@ -227,7 +227,7 @@ export default {
                         "label": "1L"
                       },
                       "id": 6669946,
-                      "label": "101-金智（会议室1800壁挂机）",
+                      "label": "101-金智",
                       "$type": "terminal"
                     },
                     {

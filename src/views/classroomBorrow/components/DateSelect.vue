@@ -94,18 +94,20 @@
     .time-line
       position absolute
       top: 0
+      font-size .8rem;
+      font-weight 600;
 
       &::after
         content: ''
         position absolute
         top: 50%;
-        transform: translateY(-50%);
-        left: -2rem
+        left: -2.1rem
         display block
         border-radius 50%
-        border 2px solid #979797
-        width: 16px
+        border .2rem solid #979797
+        width: .7rem
         height: @width
+        transform: translateY(-0.65rem);
 
 </style>
 <template>
@@ -186,46 +188,62 @@ export default {
       mitt.emit('changeDate', this.date)
     },
     getSectionConfig() {
-      service.post('course/terminalSection', {
-        id: this.terminalId
-      }).then(res => {
-        this.sectionConfig = res;
-        let temp = {
-          morning: [],
-          afternoon: [],
-          evening: []
+      let res = {
+        "afternoon": 5,
+        "courseSection": [
+          "08:00-08:40",
+          "08:50-09:30",
+          "09:40-10:20",
+          "10:30-11:05",
+          "11:10-12:50",
+          "13:00-13:40",
+          "13:50-14:30",
+          "14:40-16:00",
+          "16:10-16:50",
+          "17:00-17:50",
+          "18:00-18:40",
+          "18:40-19:50",
+          "20:05-20:45"
+        ],
+        "evening": 3,
+        "morning": 5
+      }
+      this.sectionConfig = res;
+      let temp = {
+        morning: [],
+        afternoon: [],
+        evening: []
+      }
+      res.courseSection.forEach((item, index) => {
+        let time = item.split('-')
+        let start = time[0]
+        let end = time[1]
+        let startSource = this.calcSource(start)
+        let endSource = this.calcSource(end)
+        let duration = endSource - startSource;
+        let can = this.cantBorrowTime.every(item2 => {
+          let itemDuration = item2.endSource - item2.startSource;
+          let max = Math.max(item2.endSource, endSource);
+          let min = Math.min(item2.startSource, startSource)
+          let cha = max - min;
+          return cha >= (itemDuration + duration);
+        });
+        // 1 可预约  2 已被预约 3不可预约
+        let timeItem = {
+          start,
+          end,
+          status: can ? 1 : 3,
+          id: index + 1
         }
-        res.courseSection.forEach((item, index) => {
-          let time = item.split('-')
-          let start = time[0]
-          let end = time[1]
-          let startSource = this.calcSource(start)
-          let endSource = this.calcSource(end)
-          let duration = endSource - startSource;
-          let can = this.cantBorrowTime.every(item2 => {
-            let itemDuration = item2.endSource - item2.startSource;
-            let max = Math.max(item2.endSource, endSource);
-            let min = Math.min(item2.startSource, startSource)
-            let cha = max - min;
-            return cha >= (itemDuration + duration);
-          });
-          // 1 可预约  2 已被预约 3不可预约
-          let timeItem = {
-            start,
-            end,
-            status: can ? 1 : 3,
-            id: index + 1
-          }
-          if (index < res.morning) {
-            temp.morning.push(timeItem)
-          } else if (index >= res.morning && index < res.morning + res.afternoon) {
-            temp.afternoon.push(timeItem)
-          } else {
-            temp.evening.push(timeItem)
-          }
-        })
-        this.timeConfig = temp;
+        if (index < res.morning) {
+          temp.morning.push(timeItem)
+        } else if (index >= res.morning && index < res.morning + res.afternoon) {
+          temp.afternoon.push(timeItem)
+        } else {
+          temp.evening.push(timeItem)
+        }
       })
+      this.timeConfig = temp;
     },
     borrow(item) {
       // 添加预约时间

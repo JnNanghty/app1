@@ -2,6 +2,8 @@
 .user-info {
   get_font_color(font_color)
   display flex
+  padding: 0.3rem
+  box-sizing border-box
 
   .user-info-top {
     font-size .8rem;
@@ -44,7 +46,7 @@ export default {
   data() {
     return {
       userInfo: {
-        label: '谢佳文'
+        label: '李荣浩'
       },
       expireTime: 360,
       exitInterval: null

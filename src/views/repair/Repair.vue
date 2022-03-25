@@ -30,13 +30,14 @@
       box-sizing border-box
 
     .left
-      padding: 1.5rem
+      padding: 1rem
+      text-align center
       margin-right: .5rem
     .qr-code
       width: 7rem
       height @width
       border-radius 4px;
-      margin: 2rem 0 3rem
+      margin: 2rem 0 1rem
 
 .form-item
   margin-bottom: 1rem
@@ -46,7 +47,7 @@
   width 70%
 
 .submit-button
-  margin-top: 2rem
+  margin-top: 1rem
 </style>
 <template>
   <div class="main">
@@ -95,7 +96,7 @@
         <template v-else>
           <div style="text-align: center">
             <img class="qr-code" :src="code" alt="">
-            <div style="font-size: .6rem;">微信扫描左侧二维码进行语音报修</div>
+            <div style="font-size: .6rem;">扫描二维码进行语音报修</div>
           </div>
         </template>
       </div>

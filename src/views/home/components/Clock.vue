@@ -51,18 +51,18 @@
       margin-bottom: 5px
 
     .current-status
-      get_font_color(font_color)
+      color #a7a8aa
       font-size .8rem
       margin-top: 4rem
       margin-bottom: 5px
 
     .next-tip
-      get_font_color(font_color)
       font-size .8rem
+      color #a7a8aa
 
     .next-time
       color #F3A568
-      font-size 1.25rem
+      font-size 1.6rem
       font-weight 900
 
 

@@ -342,7 +342,7 @@ export default {
         favorite: null,
         group: null,
         id: 6669946,
-        label: "101-金智（会议室1800壁挂机）",
+        label: "101-金智",
         lastOnlineTime: "2022-03-24T03:57:31.000Z",
         lastUpdate_: 16480944677820000,
         parent: 6669944,

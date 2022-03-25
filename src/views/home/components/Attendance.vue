@@ -90,7 +90,7 @@
   border-radius 8px;
   padding: 2rem 1rem;
   box-sizing border-box
-  margin-top: 1rem
+  margin-top: .5rem
 
   .auth-item
     width: 20%
@@ -106,8 +106,8 @@
 .a-bottom-mini
   display flex
   justify-content space-around
-  height: 2rem
-  margin-top: 1rem
+  height: 2.3rem
+  margin-top: .5rem
 
   img
     width: 2rem

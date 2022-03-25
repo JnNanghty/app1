@@ -114,16 +114,20 @@ export default {
     return {
       tabsLabelArray: [{
         label: '今日课表',
-        icon: require('@/assets/curriculum_icon/today.png')
+        icon: require('@/assets/curriculum_icon/today.png'),
+        name: 'today'
       }, {
         label: '本周课表',
-        icon: require('@/assets/curriculum_icon/week.png')
+        icon: require('@/assets/curriculum_icon/week.png'),
+        name: 'week'
       }, {
         label: '个人课表',
-        icon: require('@/assets/curriculum_icon/my.png')
+        icon: require('@/assets/curriculum_icon/my.png'),
+        name: 'my'
       }, {
         label: '学年校历',
-        icon: require('@/assets/curriculum_icon/year.png')
+        icon: require('@/assets/curriculum_icon/year.png'),
+        name: 'year'
       }],
       activeIndex: 0,
       token: null,
@@ -134,6 +138,8 @@ export default {
   created() {
     this.token = getToken();
     mitt.on('loginSuccess', this.loginSuccess);
+    mitt.on('changeTheme', this.changeTheme3)
+    this.changeTheme3();
   },
   mounted() {
     this.$nextTick(() => {
@@ -142,6 +148,7 @@ export default {
   },
   beforeUnmount() {
     mitt.off('loginSuccess', this.loginSuccess)
+    mitt.off('changeTheme', this.changeTheme3)
   },
   methods: {
     loginSuccess() {
@@ -153,6 +160,18 @@ export default {
         mitt.emit('hideBackButton')
       })
     },
+    changeTheme3() {
+      let theme = window.document.documentElement.dataset.theme
+
+      let suffix = ''
+      if (theme === 'bright') {
+        suffix = '_bright'
+      }
+
+      this.tabsLabelArray.forEach(item => {
+        item.icon = require(`@/assets/curriculum_icon/${item.name}${suffix}.png`)
+      })
+    }
   }
 }
 </script>

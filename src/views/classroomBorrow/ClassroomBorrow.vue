@@ -13,7 +13,7 @@
   width: 50%
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
 .right
   flex 1
   margin-left: 1rem
@@ -176,7 +176,7 @@ export default {
       return timeUtil.formatDate(this.formData.date, '-');
     },
     windowWidth() {
-      let w = this.borrowTime.length * 6.5 + 0.5
+      let w = this.borrowTime.length * 5 + 0.5
       return {
         width: w + 'rem'
       }
