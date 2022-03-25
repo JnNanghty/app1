@@ -323,18 +323,19 @@ export default {
       });
 
       let res = {
+        "morning": 5,
         "afternoon": 5,
         "evening": 3,
-        "morning": 5
       }
       let temp = {
         morning: [],
         afternoon: [],
         evening: []
       }
+      let j = 0
       for (let t in res) {
         for (let i = 0; i < res[t]; i++) {
-          temp[t].push(this.list[i]);
+          temp[t].push(this.list[j++]);
         }
       }
       this.section = temp;
