@@ -167,10 +167,10 @@ export default {
       let theme = window.document.documentElement.dataset.theme
       let suffix = ''
       if (theme === 'bright') {
-        suffix = 'bright'
+        suffix = '_bright'
       }
       this.tabsLabelArray.forEach(item => {
-        item.icon = require(`@/assets/curriculum_icon/${item.name}_${suffix}.png`)
+        item.icon = require(`@/assets/curriculum_icon/${item.name}${suffix}.png`)
       })
     },
   }
