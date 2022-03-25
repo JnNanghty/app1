@@ -14,15 +14,14 @@
     height: 100%
 .line
   margin: 1rem 0;
-  background: #272727;
-  color #272727
+  border 1px solid #272727
 .info-title
   text-align center
   font-size .7rem;
 .info-desc
   text-align center
-  margin-top: .4rem
-  color #979797
+  margin-top: .4rem;
+  color #979797;
   font-size .6rem;
 
 </style>
@@ -34,11 +33,11 @@
     <template v-else>
       <div class="info-title">{{info.title}}</div>
       <div class="info-desc">
-        <span>来源：{{info.source}}</span>
-        <span>作者：{{info.author}}</span>
+        <span style="margin-right: 1rem;">来源：{{info.source}}</span>
+        <span style="margin-right: 1rem;">作者：{{info.author}}</span>
         <span>{{time}}</span>
       </div>
-      <hr class="line">
+      <div class="line"></div>
       <div class="info" v-html="info.content"></div>
     </template>
   </div>

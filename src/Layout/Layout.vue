@@ -1,5 +1,5 @@
 <style lang="stylus" scoped>
-@import "~@/theme/mixin.styl";
+
 
 .header {
   display: flex;
@@ -75,6 +75,11 @@
   height: 100vh;
 }
 
+.logo-background {
+  background: url("../assets/bg-mark.png") no-repeat;
+  background-position 0 100%;
+}
+
 .main-content {
   flex: 1;
   position: relative;
@@ -103,6 +108,7 @@
     bottom: 8px;
     width: 6rem
     height: 1.2rem
+
     img {
       width: 100%
       height: 100%
@@ -189,7 +195,7 @@
 </style>
 <template>
   <div>
-    <div class="app-main-content">
+    <div class="app-main-content" :class="bgHasLogo ? 'logo-background' : ''">
       <header class="header">
         <div class="logo">
           <img style="height: 100%;" src="../assets/school_logo.png" alt="">
@@ -250,6 +256,7 @@ export default {
     return {
       loginToPath: null,
       terminalId: 6669946,
+      bgHasLogo: false,
       config: {
         background: "/public/6669210/classcard/hxP0TRjJv587486i3rgs.jpg",
         calendar: "/public/6669210/classcard/oWIiO6Ivs125066pr41e.png",
@@ -404,6 +411,10 @@ export default {
     mitt.on('loginSuccess', this.loginSuccess);
     // 切换主题
     mitt.on('changeTheme', this.changeTheme)
+    mitt.on('showBgLogo', (v) => {
+      console.log(v)
+      this.bgHasLogo = v
+    })
     // this.refresh();
     let time = Date.now();
     this.timeInterval = setInterval(() => {
