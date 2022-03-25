@@ -6,6 +6,7 @@
 
   .c-clock-canvas
     margin: 0 auto
+    background url("../../../assets/clock.png") center center/87.5% 87.5% no-repeat;
 
 
   .c-course-info
@@ -83,7 +84,7 @@
 </style>
 <template>
   <div class="c-main-content">
-    <canvas class="c-clock-canvas" ref="clockCanvas" :width="canvasSize" :height="canvasSize"></canvas>
+    <canvas class="c-clock-canvas" :style="canvasBackground" ref="clockCanvas" :width="canvasSize" :height="canvasSize"></canvas>
     <div class="point" :style="pointStyle">
       <img :src="pointSrc" alt="">
     </div>
@@ -126,6 +127,7 @@
 import ls from "@/store/ls";
 import timeUtil from '@/util/timeUtil'
 import mitt from "@/util/mitt";
+import img from "@/assets/clock.png";
 
 export default {
   name: "Clock",
@@ -141,6 +143,9 @@ export default {
       clockColor: ['#384050', '#e1581b', '#fba35e'],
       pointStyle: {
         transform: 'rotate(0deg)'
+      },
+      canvasBackground: {
+        background: `url(${require('@/assets/clock.png')}) center center/87.5% 87.5% no-repeat`
       }
     }
   },
@@ -238,18 +243,12 @@ export default {
         img = require('@/assets/clock_bright.png');
         this.pointSrc = require('@/assets/icon_bright/point_bright.png')
       }
-      this.loadImageAndDraw(img, this.canvasSize * 0.0625, this.canvasSize * 0.0625, this.canvasSize * 0.875, this.canvasSize * 0.875)
-      this.ctx.save();
+      this.canvasBackground = {
+        background: `url(${img}) center center/87.5% 87.5% no-repeat`
+      }
     },
     changeTheme2() {
       this.init();
-    },
-    loadImageAndDraw(src, dx, dy, width, height) {
-      let img = new Image();
-      img.onload = () => {
-        this.ctx.drawImage(img, dx, dy, width, height);
-      }
-      img.src = src;
     },
     drawClock(start, end, color) {
       let {ctx} = this
@@ -271,7 +270,7 @@ export default {
     },
     clearCanvas() {
       if (this.ctx) {
-        this.ctx.restore()
+        this.ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
       }
     }
   }
