@@ -103,6 +103,7 @@
 .desc
   text-align center
   font-size 0.8rem;
+  white-space nowrap
 .a-bottom-mini
   display flex
   justify-content space-around
