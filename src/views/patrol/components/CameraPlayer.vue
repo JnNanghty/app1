@@ -78,7 +78,7 @@ export default {
     controls: {
       type: Boolean,
       required: false,
-      default: true
+      default: false
     },
   },
   data() {
@@ -124,7 +124,7 @@ export default {
       let self = this;
       this.player = videojs(this.elementId, video_options, function onPlayerReady() {
         let src = {
-          src: 'test.mp4'
+          src: '/test.mp4'
         };
         let keys = Object.keys(VIDEO_TYPE_REGEX);
         for (let i = 0; i < keys.length; i++) {

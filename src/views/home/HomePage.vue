@@ -84,7 +84,7 @@ export default {
         lastOnlineTime: "2022-03-24T03:57:31.000Z",
         lastUpdate_: 16480944677820000,
         parent: 6669944,
-        remark: null,
+        remark: '管理员：王学军 188 0000 0000',
         repair: 6669284,
         scene: null,
         scenePhoto: "",
@@ -263,7 +263,7 @@ export default {
           "courseNumber": null,
           "startSource": 1205,
           "endSource": 1245
-        }
+        },
       ]
       this.resolveData();
       if (this.currentCourse.courseId) {
