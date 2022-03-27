@@ -7,9 +7,8 @@
   box-sizing border-box
   get_font_color(font_color)
   font-size 0.8rem
-
-.__option-active
-  background #FDA45E !important
+  &:active
+    background #FDA45E !important
 </style>
 <template>
   <div class="__option" @click="selectOption">{{ label }}</div>
