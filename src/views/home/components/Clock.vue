@@ -13,7 +13,7 @@
     position absolute;
     top: 0
     left: 0
-    width: 16rem;
+    width: 19rem;
     text-align: center;
     .c-image
       margin-top: 5rem
@@ -28,11 +28,17 @@
     .teacher-name
       get_font_color(font_color)
       font-size 1rem
+      font-weight 300
 
     .course-name
+      font-weight 300
       get_font_color(font_color)
       font-size 1rem
-
+    .line
+      height: 1px
+      background: #535353;
+      width: 6rem
+      margin: 0.45rem auto 0.6rem
     .title-time
       get_font_color(font_color)
       font-size 1.6rem
@@ -47,13 +53,13 @@
     .current-status-active
       color #FDA45E
       font-size .8rem
-      margin-top: 4rem
+      margin-top: 4.8rem
       margin-bottom: 5px
 
     .current-status
       color #a7a8aa
       font-size .8rem
-      margin-top: 4rem
+      margin-top: 4.8rem
       margin-bottom: 5px
 
     .next-tip
@@ -69,9 +75,9 @@
   .point
     position absolute
     top: -.25rem
-    left: 7.4rem
+    left: 8.9rem
     width: 1.2rem
-    height: 8.25rem
+    height: 9.75rem
     transform rotate(90deg)
     transform-origin bottom center
 
@@ -100,6 +106,7 @@
         <div class="title">{{ currentCourse.college }}</div>
         <div class="teacher-name">{{ currentCourse.teacherName }}</div>
         <div class="course-name">{{ currentCourse.courseName }}</div>
+        <div class="line"></div>
         <div class="next-tip">距离下课还剩</div>
         <div class="next-time">{{ endTime }}</div>
       </template>
@@ -108,6 +115,7 @@
         <div class="title-time">{{ nextCourse.startTime }} - {{ nextCourse.endTime }}</div>
         <div class="teacher-name">{{ nextCourse.teacherName }}</div>
         <div class="course-name">{{ nextCourse.courseName }}</div>
+        <div class="line"></div>
         <div class="next-tip">距离上课还剩</div>
         <div class="next-time">{{ lastTime }}</div>
       </template>
@@ -116,6 +124,7 @@
         <div class="title-time">{{ nextCourse.startTime }} - {{ nextCourse.endTime }}</div>
         <div class="teacher-name">{{ nextCourse.teacherName }}</div>
         <div class="course-name">{{ nextCourse.courseName }}</div>
+        <div class="line"></div>
         <div class="next-tip">距离上课还剩</div>
         <div class="next-time">{{ lastTime }}</div>
       </template>
@@ -135,7 +144,7 @@ export default {
   data() {
     return {
       ctx: null,
-      canvasSize: window.rem * 16,
+      canvasSize: window.rem * 19,
       deviceConfig: {
         signInForwardOffset: 5 // 考勤时间 分钟
       },
@@ -244,7 +253,7 @@ export default {
         this.pointSrc = require('@/assets/icon_bright/point_bright.png')
       }
       this.canvasBackground = {
-        background: `url(${img}) center center/87.5% 87.5% no-repeat`
+        background: `url(${img}) center center/16rem 16rem no-repeat`
       }
     },
     changeTheme2() {
@@ -254,7 +263,7 @@ export default {
       let {ctx} = this
       ctx.strokeStyle = color;
       let sR = this.canvasSize * 0.0208  // 小圆弧的半径
-      let bR = this.canvasSize * (0.875 - 0.0625) / 2 // 大圆弧外圈的半径
+      let bR = this.canvasSize * (0.78) / 2 // 大圆弧外圈的半径
       let width = this.canvasSize;
       let height = this.canvasSize;
       let bX = width / 2  // 大圆弧的圆心坐标  x

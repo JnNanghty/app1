@@ -56,9 +56,10 @@
 
     .form-select
       margin-right: 1rem
-      min-width: 8rem;
+      min-width: 7rem;
       width: fit-content;
       padding-right: 1rem;
+      box-sizing border-box
 </style>
 <template>
   <div class="main">
@@ -103,33 +104,30 @@
       </div>
     </div>
     <div class="bottom">
-      <select class="form-select _select" v-model="schoolInfo.campus">
-        <option value="-1" label="请选择校区"></option>
-        <option v-for="item in campus" :value="item.id" :label="item.label"></option>
-      </select>
-      <select class="form-select _select" v-model="schoolInfo.category">
-        <option value="-1" label="请选择教学楼"></option>
-        <option v-for="item in category" :value="item.id" :label="item.label"></option>
-      </select>
-      <select class="form-select _select" v-model="schoolInfo.floor">
-        <option value="-1" label="请选择楼层"></option>
-        <option v-for="item in floor" :value="item.id" :label="item.label"></option>
-      </select>
-      <select class="form-select _select" v-model="schoolInfo.terminal" @change="selectTerminal">
-        <option value="-1" label="请选择教室"></option>
-        <option v-for="item in terminal" :value="item.id" :label="item.label"></option>
-      </select>
+      <my-select class="form-select _select" :len="campus.length + 1" :value="schoolInfo.campus.label">
+        <my-option @select="campusSelected({label: '请选择校区', value: -1})" value="-1" label="请选择校区"></my-option>
+        <my-option @select="campusSelected" v-for="item in campus" :value="item.id" :label="item.label"></my-option>
+      </my-select>
+      <my-select class="form-select _select" :len="category.length + 1" :value="schoolInfo.category.label">
+        <my-option @select="categorySelected({label: '请选择教学楼', value: -1})" value="-1" label="请选择教学楼"></my-option>
+        <my-option @select="categorySelected" v-for="item in category" :value="item.id" :label="item.label"></my-option>
+      </my-select>
+      <my-select class="form-select _select" :len="floor.length + 1" :value="schoolInfo.floor.label">
+        <my-option @select="floorSelected({label: '请选择楼层', value: -1})" value="-1" label="请选择楼层"></my-option>
+        <my-option @select="floorSelected" v-for="item in floor" :value="item.id" :label="item.label"></my-option>
+      </my-select>
+      <my-select class="form-select _select" :len="terminal.length + 1" :value="schoolInfo.terminal.label" >
+        <my-option @select="terminalSelected({label: '请选择教室', value: -1})" value="-1" label="请选择教室"></my-option>
+        <my-option @select="terminalSelected" v-for="item in terminal" :value="item.id" :label="item.label"></my-option>
+      </my-select>
     </div>
   </div>
 </template>
 
 <script>
-import ls from "@/store/ls";
 import CameraPlayer from "./components/CameraPlayer";
 import ComputerPlayer from "@/views/patrol/components/ComputerPlayer";
-import {removeToken, setToken} from "@/util/auth";
 import service from "@/api/services";
-import {msg} from "@/components/message";
 import timeUtil from "@/util/timeUtil";
 
 export default {
@@ -147,10 +145,22 @@ export default {
       },
       campus: [],
       schoolInfo: {
-        campus: -1, // 校区
-        category: -1, // 教学楼
-        floor: -1, // 楼层
-        terminal: -1 // 教室
+        campus: {
+          label: '请选择校区',
+          value: -1
+        }, // 校区
+        category: {
+          label: '请选择教学楼',
+          value: -1
+        }, // 教学楼
+        floor: {
+          label: '请选择楼层',
+          value: -1
+        }, // 楼层
+        terminal: {
+          label: '请选择教室',
+          value: -1
+        } // 教室
       },
       terminalId: 6669946
     }
@@ -178,23 +188,42 @@ export default {
     },
     category() {
       let r = []
-      this.campus.some(i => i.id === this.schoolInfo.campus && (r = i.children))
+      this.campus.some(i => i.id === this.schoolInfo.campus.value && (r = i.children))
       return r
     },
     floor() {
       let r = []
-      this.category.some(i => i.id === this.schoolInfo.category && (r = i.children))
+      this.category.some(i => i.id === this.schoolInfo.category.value && (r = i.children))
       return r
     },
     terminal() {
       let r = []
-      this.floor.some(i => i.id === this.schoolInfo.floor && (r = i.children))
+      this.floor.some(i => i.id === this.schoolInfo.floor.value && (r = i.children))
       return r
     }
   },
   mounted() {
   },
   methods: {
+    campusSelected(item) {
+      this.schoolInfo.campus = item;
+      this.schoolInfo.category = {label: '请选择教学楼', value: -1};
+      this.schoolInfo.floor = {label: '请选择楼层', value: -1};
+      this.schoolInfo.terminal = {label: '请选择教室', value: -1};
+    },
+    categorySelected(item) {
+      this.schoolInfo.category = item
+      this.schoolInfo.floor = {label: '请选择楼层', value: -1};
+      this.schoolInfo.terminal = {label: '请选择教室', value: -1};
+    },
+    floorSelected(item) {
+      this.schoolInfo.floor = item
+      this.schoolInfo.terminal = {label: '请选择教室', value: -1};
+    },
+    terminalSelected(item) {
+      this.schoolInfo.terminal = item
+      this.selectTerminal()
+    },
     getTerminal() {
       this.campus = [
         {
@@ -382,7 +411,7 @@ export default {
     },
     selectTerminal() {
       if (this.schoolInfo.terminal !== -1) {
-        this.terminalId = this.schoolInfo.terminal
+        this.terminalId = this.schoolInfo.terminal.value
         // this.getDailyCurriculum()
         // this.getDeviceList()
       }
@@ -412,10 +441,22 @@ export default {
           cat.children.forEach(flo => {
             flo.children.forEach(ter => {
               if(ter.id === this.terminalId) {
-                this.schoolInfo.campus = cam.id;
-                this.schoolInfo.category = cat.id;
-                this.schoolInfo.floor = flo.id;
-                this.schoolInfo.terminal = ter.id;
+                this.schoolInfo.campus = {
+                  label: cam.label,
+                  value: cam.id
+                };
+                this.schoolInfo.category = {
+                  label: cat.label,
+                  value: cat.id
+                };
+                this.schoolInfo.floor = {
+                  label: flo.label,
+                  value: flo.id
+                };
+                this.schoolInfo.terminal = {
+                  label: ter.label,
+                  value: ter.id
+                };
               }
             })
           })

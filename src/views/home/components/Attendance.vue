@@ -10,7 +10,7 @@
 
 .a-top
   get_background(patrol_course_info_background)
-  border-radius 8px;
+  border-radius .6rem;
   display flex
   position relative
   padding: 1rem .7rem
@@ -23,12 +23,11 @@
 
     p
       opacity .6
-      font-size .6rem;
+      font-size .7rem;
 
     .number
       font-size 1.6rem;
       font-weight 900
-      margin-top: .5rem
 
   .line
     position relative
@@ -123,8 +122,8 @@
   padding: .8rem 1.5rem;
   box-sizing border-box
   get_background(next_course_info_background)
-  margin-bottom: 10px;
-  border-radius 8px;
+  margin-bottom: 0.8rem;
+  border-radius .4rem;
 
   .next-course
     color #FDA45E

@@ -9,10 +9,10 @@
 <template>
   <div class="main">
     <template v-if="programmeData.type === 1">
-      <video :src="serviceUrl"></video>
+      <video style="width: 100%;height: 100%;" :src="serviceUrl"></video>
     </template>
     <template v-else>
-      <div v-html="programmeData.content"></div>
+      <div style="width: 100%;height: 100%;" v-html="programmeData.content"></div>
     </template>
   </div>
 </template>

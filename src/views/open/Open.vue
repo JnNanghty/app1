@@ -10,6 +10,13 @@
     width: 30%
     get_background(patrol_course_info_background)
 </style>
+<style lang="stylus">
+.ss
+  margin-left: 10rem
+  margin-top: 17rem
+  width: 5rem
+  height: 2rem
+</style>
 <template>
   <div class="main">
     <auth ref="auth"></auth>
@@ -20,17 +27,19 @@
 <script>
 import Auth from "@/components/authPage/Auth";
 import mitt from "@/util/mitt";
+
 export default {
   name: "Open",
-  components: {Auth},
+  components: { Auth},
   data() {
-    return {}
+    return {
+    }
   },
   created() {
 
   },
   mounted() {
-    this.$refs.auth.$data.title = '请通过一下任一种方式进行开门'
+    // this.$refs.auth.$data.title = '请通过一下任一种方式进行开门'
     mitt.emit('hideBackButton')
   },
   methods: {

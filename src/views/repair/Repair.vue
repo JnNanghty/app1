@@ -13,8 +13,10 @@
     margin-bottom: .5rem
     display flex
     justify-content space-between
+
     .terminal
       display flex
+
       .change-terminal
         get_background(borrow_change_button_background)
         width 5rem;
@@ -35,8 +37,8 @@
 
     .left
       padding: 1.5rem
-      text-align center
       margin-right: .5rem
+
     .qr-code
       width: 7rem
       height @width
@@ -46,19 +48,20 @@
 .form-item
   margin-bottom: 1rem
   font-size .8rem;
-
-.form-select
-  width 70%
-  height 2.4rem;
+  .form-select
+    width 75%
+    vertical-align middle
 
 .submit-button
+  width: 75%
   margin-top: 1rem
+  margin-left: 4.3rem
 </style>
 <template>
   <div class="main">
     <div class="top">
       <div class="terminal">
-        <div style="flex: 1;font-size: 1.6rem;">{{terminalInfo.label}}</div>
+        <div style="flex: 1;font-size: 1.6rem;">{{ terminalInfo.label }}</div>
         <div class="change-terminal _button" @click="showChangeTerminal = true">切换教室</div>
       </div>
       <user-info></user-info>
@@ -66,31 +69,34 @@
     <div class="bottom">
       <div class="left" @click="showChangeTerminal = false">
         <div class="form-item">
-          <label for="device-type">
+          <span>
             故障设备：
-            <select class="form-select _select" id="device-type" v-model="form.device">
-              <option :value="-1" label="请选择"></option>
-              <option v-for="item in devices" :key="item.id" :label="item.type.label" :value="item.id"></option>
-            </select>
-          </label>
+          </span>
+          <my-select class="form-select _select" :len="devices.length + 1" :value="formLabel.device">
+            <my-option @select="selectDevice(defaultItem)" :value="-1" label="请选择"></my-option>
+            <my-option @select="selectDevice" v-for="item in devices" :key="item.id" :label="item.type.label"
+                       :value="item.id"></my-option>
+          </my-select>
         </div>
         <div class="form-item">
-          <label for="alarm-type">
+          <span>
             故障类型：
-            <select class="form-select _select" id="alarm-type" v-model="form.type">
-              <option :value="-1" label="请选择"></option>
-              <option v-for="item in alarmTypes" :key="item.id" :value="item.id" :label="item.text"></option>
-            </select>
-          </label>
+          </span>
+          <my-select class="form-select _select" :len="alarmTypes.length + 1" :value="formLabel.type">
+            <my-option @select="selectType(defaultItem)" :value="-1" label="请选择"></my-option>
+            <my-option @select="selectType" v-for="item in alarmTypes" :key="item.id" :value="item.id"
+                       :label="item.text"></my-option>
+          </my-select>
         </div>
         <div class="form-item">
-          <label for="severity">
+          <span>
             严重程度：
-            <select class="form-select _select" id="severity" v-model="form.severity">
-              <option :value="-1" label="请选择"></option>
-              <option v-for="item in severities" :key="item.id" :value="item.id" :label="item.text"></option>
-            </select>
-          </label>
+          </span>
+          <my-select class="form-select _select" :len="severities.length + 1" :value="formLabel.severity">
+            <my-option @select="selectSeverity(defaultItem)" :value="-1" label="请选择"></my-option>
+            <my-option @select="selectSeverity" v-for="item in severities" :key="item.id" :value="item.id"
+                       :label="item.text"></my-option>
+          </my-select>
         </div>
         <div class="submit-button _button" @click.stop="submit">立即上报</div>
       </div>
@@ -117,6 +123,7 @@ import mitt from "@/util/mitt";
 import {myConfirm} from "@/components/confirm";
 import {msg} from "@/components/message";
 import QRCode from 'qrcode'
+
 export default {
   components: {ClassroomSelect},
   data() {
@@ -131,6 +138,12 @@ export default {
         step: 'waiting',
         timeout: 7,
         relationTeacher: {}
+      },
+      defaultItem: {label: '请选择', value: -1},
+      formLabel: {
+        device: '',
+        type: '',
+        severity: ''
       },
       alarmTypes: [
         {id: 1, value: 'control', text: '中控系统故障'},
@@ -179,45 +192,57 @@ export default {
     mitt.off('updateSelect', this.selectTerminal)
   },
   methods: {
+    selectDevice(item) {
+      this.form.device = item.value
+      this.formLabel.device = item.label
+    },
+    selectSeverity(item) {
+      this.form.severity = item.value
+      this.formLabel.severity = item.label
+    },
+    selectType(item) {
+      this.form.type = item.value
+      this.formLabel.type = item.label
+    },
     getDevices() {
       this.devices = [
-          {
-            "assetName": "壁挂式一体机",
-            "id": 6906249,
-            "label": "中控",
-            "type": {
-              "id": 1,
-              "label": "中控"
-            }
-          },
-          {
-            "assetName": null,
-            "id": 6906250,
-            "label": null,
-            "type": {
-              "id": 3,
-              "label": "投影仪"
-            }
-          },
-          {
-            "assetName": null,
-            "id": 7048868,
-            "label": null,
-            "type": {
-              "id": 2,
-              "label": "电脑"
-            }
-          },
-          {
-            "assetName": null,
-            "id": 10577196,
-            "label": "班牌",
-            "type": {
-              "id": 18,
-              "label": "班牌"
-            }
+        {
+          "assetName": "壁挂式一体机",
+          "id": 6906249,
+          "label": "中控",
+          "type": {
+            "id": 1,
+            "label": "中控"
           }
-        ];
+        },
+        {
+          "assetName": null,
+          "id": 6906250,
+          "label": null,
+          "type": {
+            "id": 3,
+            "label": "投影仪"
+          }
+        },
+        {
+          "assetName": null,
+          "id": 7048868,
+          "label": null,
+          "type": {
+            "id": 2,
+            "label": "电脑"
+          }
+        },
+        {
+          "assetName": null,
+          "id": 10577196,
+          "label": "班牌",
+          "type": {
+            "id": 18,
+            "label": "班牌"
+          }
+        }
+      ];
     },
     submit() {
       let self = this
