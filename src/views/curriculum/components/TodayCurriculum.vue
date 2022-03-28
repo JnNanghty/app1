@@ -205,11 +205,16 @@ export default {
             evening: []
           }
           let j = 0
-          for (let t in sec) {
-            for (let i = 0; i < sec[t]; i++) {
-              temp[t].push(this.list[j++]);
-            }
+          for (let i = 0; i < sec['morning']; i++) {
+            temp['morning'].push(this.list[j++]);
           }
+          for (let i = 0; i < sec['afternoon']; i++) {
+            temp['afternoon'].push(this.list[j++]);
+          }
+          for (let i = 0; i < sec['evening']; i++) {
+            temp['evening'].push(this.list[j++]);
+          }
+
           this.section = temp;
         })
       });
