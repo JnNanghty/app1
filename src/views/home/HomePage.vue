@@ -79,9 +79,11 @@ export default {
     this.terminalId = ls.get('terminalId');
     if (this.terminalId) {
       this.getDailyCurriculum();
+      mitt.emit('showBgLogo', true)
       this.countDownInterval = setInterval(() => {
         this.resolveData()
         if (this.currentCourse.courseId) {
+          mitt.emit('showBgLogo', false)
           this.windowStyle.transform = 'translateX(-50vw)';
         }
       }, 2e3);
@@ -93,6 +95,7 @@ export default {
     }
   },
   beforeUnmount() {
+    mitt.emit('showBgLogo', false)
     mitt.off('courseStatus', this.scrollWindow)
     if (this.countDownInterval !== null) {
       clearInterval(this.countDownInterval)
@@ -170,9 +173,11 @@ export default {
           // 如果为课前考勤， 且考勤界面已经显示
           mitt.emit('startSignIn')
         }
+        mitt.emit('showBgLogo', false)
         this.windowStyle.transform = 'translateX(-50vw)';
       } else {
         this.windowStyle.transform = 'translateX(0)';
+        mitt.emit('showBgLogo', true)
       }
     }
   }

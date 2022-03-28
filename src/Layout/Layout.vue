@@ -9,7 +9,8 @@
   padding-right: 1.5rem;
   max-height: 3.5rem;
   position: relative;
-  height: 3rem;
+  height: 3.2rem;
+  box-sizing border-box
   get_font_color(font_color)
 }
 
@@ -74,6 +75,11 @@
   height: 100vh;
 }
 
+.logo-background {
+  background: url("../assets/bg-mark.png") no-repeat;
+  background-position 0 100%;
+}
+
 .main-content {
   flex: 1;
   position: relative;
@@ -84,7 +90,7 @@
   display: flex;
   justify-content: center;
   align-items center
-  height: 5rem;
+  height: 4rem;
   overflow-x: scroll;
   overflow-y: hidden;
   position relative
@@ -188,7 +194,7 @@
 </style>
 <template>
   <div>
-    <div class="app-main-content">
+    <div class="app-main-content" :class="bgHasLogo ? 'logo-background' : ''">
       <header class="header">
         <div class="logo">
           <img style="height: 100%;" :src="config.logo" alt="">
@@ -251,6 +257,7 @@ export default {
       noticeText: '',
       loginToPath: null,
       terminalId: null,
+      bgHasLogo: false,
       config: {
         logo: ''
       },
@@ -364,7 +371,11 @@ export default {
     mitt.on('loginSuccess', this.loginSuccess);
     // 切换主题
     mitt.on('changeTheme', this.changeTheme)
-    this.refresh();
+    mitt.on('showBgLogo', (v) => {
+      console.log(v)
+      this.bgHasLogo = v
+    })
+    // this.refresh();
     let time = Date.now();
     this.timeInterval = setInterval(() => {
       time = Date.now();

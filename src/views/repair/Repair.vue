@@ -5,6 +5,8 @@
   padding: 0 2rem;
   box-sizing: border-box;
   get_font_color(font_color)
+  display flex
+  flex-direction column
 
   .top
     padding: .4rem 1rem;
@@ -19,23 +21,30 @@
         get_background(borrow_change_button_background)
         width 5rem;
         margin-left: 2.5rem
+        margin-top: 0.5rem
+        height 1.6rem
+        line-height @height
+
   .bottom
     display flex
+    flex: 1;
 
     .left, .right
       flex: 1;
       get_background(setting_panel_bancground)
+
       border-radius .4rem
       box-sizing border-box
 
     .left
       padding: 1.5rem
-      margin-right: 0.5rem
+      margin-right: .5rem
+
     .qr-code
       width: 7rem
       height @width
-      border-radius 4px;
-      margin: 2.7rem 0 3rem
+      border-radius .3rem;
+      margin: 2.1rem 0 3.5rem
 
 .form-item
   margin-bottom: 1rem
@@ -46,14 +55,14 @@
 
 .submit-button
   width: 75%
-  margin-top: 1rem
+  margin-top: 3rem
   margin-left: 4.3rem
 </style>
 <template>
   <div class="main">
     <div class="top">
       <div class="terminal">
-        <div style="flex: 1;font-size: 1.6rem;">{{terminalInfo.label}}</div>
+        <div style="flex: 1;font-size: 1.6rem;">{{ terminalInfo.label }}</div>
         <div class="change-terminal _button" @click="showChangeTerminal = true">切换教室</div>
       </div>
       <user-info></user-info>
