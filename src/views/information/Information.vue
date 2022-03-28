@@ -46,7 +46,7 @@
       margin-bottom: .4rem
     .first-info-summary
       font-size .6rem
-      color rgba(255, 255, 255, 0.6)
+      opacity 0.6
       text-overflow: -o-ellipsis-lastline;
       overflow: hidden;
       text-overflow: ellipsis;
