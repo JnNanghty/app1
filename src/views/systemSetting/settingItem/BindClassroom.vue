@@ -309,13 +309,13 @@ export default {
     // 绑定教室
     bindTerminal() {
       service.post('classCard/bindingTerminal', {
-        terminal: this.schoolInfo.terminal,
+        terminal: this.schoolInfo.terminal.value,
         mac: this.mac
       }).then(res => {
         console.log(res);
         ls.set('companyId', res.data);
         if (res.message === 'success') {
-          ls.set('terminalId', this.schoolInfo.terminal);
+          ls.set('terminalId', this.schoolInfo.terminal.value);
           msg({
             message: '绑定成功！',
             type: 'success'
@@ -330,11 +330,11 @@ export default {
     },
     changeBind() {
       service.post('classCard/changeBinding', {
-        terminal: this.schoolInfo.terminal,
+        terminal: this.schoolInfo.terminal.value,
         mac: this.mac
       }).then((res) => {
         if (res.message === 'success') {
-          ls.set('terminalId', this.schoolInfo.terminal);
+          ls.set('terminalId', this.schoolInfo.terminal.value);
           msg({
             message: '绑定成功！',
             type: 'success'

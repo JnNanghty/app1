@@ -71,7 +71,6 @@ export default {
   },
   watch: {
     len() {
-      console.log(1)
       this.computePos()
     }
   },

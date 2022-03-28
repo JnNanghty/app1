@@ -128,7 +128,7 @@ export default {
 }
 
 .up-leave-active {
-  transition: transform .5s ease, opacity .5s ease;
+  transition: transform .4s ease, opacity .4s ease;
 }
 
 .up-leave-to {

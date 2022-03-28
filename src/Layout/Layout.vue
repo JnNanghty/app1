@@ -375,7 +375,7 @@ export default {
       console.log(v)
       this.bgHasLogo = v
     })
-    // this.refresh();
+    this.refresh();
     let time = Date.now();
     this.timeInterval = setInterval(() => {
       time = Date.now();

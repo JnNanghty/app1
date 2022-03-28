@@ -2,17 +2,16 @@
 .user-info {
   get_font_color(font_color)
   display flex
-  padding: .3rem
+  padding: 0.3rem
+  box-sizing border-box
 
   .user-info-top {
     font-size .8rem;
     flex: 1;
 
     .exit-text {
-      font-size: .6rem;
+      font-size: .4rem;
       color: #FDA45E;
-      transform: scale(.85);
-      transform-origin: left;
     }
   }
 
@@ -20,10 +19,11 @@
     margin-left: 2rem
     padding: .4rem 1.5rem;
     text-align center
-    border-radius 8px;
+    border-radius .4rem;
     get_background(input_background)
     font-size .7rem;
     height fit-content
+    white-space nowrap
   }
 }
 </style>
@@ -57,9 +57,9 @@ export default {
       this.expireTime = Math.floor((expires - now) / 1000);
       if (now >= expires) {
         clearInterval(this.exitInterval);
-        this.$router.replace({
-          name: 'Home'
-        });
+        // this.$router.replace({
+        //   name: 'Home'
+        // });
       }
     }, 1e3);
   },

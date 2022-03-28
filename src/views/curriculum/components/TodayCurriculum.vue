@@ -10,7 +10,7 @@
 
 .table-title {
   display flex
-  padding: 11px 0;
+  padding: .55rem 0;
   get_background(curriculum_section_background)
   border-top-left-radius 8px;
   border-top-right-radius 8px;
@@ -20,7 +20,7 @@
   text-align center
 
   .table-title-item-first {
-    width: 4.5rem
+    width: 5rem
   }
 
   .table-title-item {
@@ -28,28 +28,46 @@
   }
 }
 
+.table-item {
+  width: 100%
+  display flex
+
+  .time-line {
+    text-align center
+    writing-mode: tb;
+    font-size .6rem;
+    letter-spacing .5rem;
+    padding: 0 0.5rem
+    border-bottom 3px solid #2F333A
+    border-right 3px solid #2F333A
+    get_border_color(curriculum_timeline_border_color)
+    get_font_color(font_color)
+    get_background(curriculum_section_background)
+  }
+}
+
 .list-item {
   display: flex;
   text-align center
-
+  height: 2.35rem
 
   .section-item {
-    padding: 11px
-    width: 4.5rem
+    padding: .55rem;
+    width: 3rem
     box-sizing border-box
     white-space nowrap
     get_background(curriculum_section_background)
 
     .section-label {
-      font-size .7rem
+      font-size .6rem
     }
 
     .section-time {
-      font-size .6rem
-      transform scale(0.8)
+      font-size .3rem
     }
   }
-  .section-item-not-active{
+
+  .section-item-not-active {
     color #9fa2a7
   }
 
@@ -59,13 +77,15 @@
     text-align center
     font-weight 200
     font-size .6rem;
+
     .course-item-desc {
       flex: 1
       display flex
       align-items center
       justify-content center
     }
-    .course-class{
+
+    .course-class {
       font-size .6rem
     }
   }
@@ -97,16 +117,22 @@
       <div class="table-title-item">开课学院</div>
     </div>
     <div class="table-content">
-      <div class="list-item" v-for="(item, index) in list" :key="index">
-        <div class="section-item" :class="currentSource > item.endSource ? 'section-item-not-active' : ''">
-          <span class="section-label">第{{ simplifyNum[index] }}节</span>
-          <div class="section-time">{{ item.startTime }}-{{ item.endTime }}</div>
-        </div>
-        <div class="course-item" :class="[activeItemIndex === index ? 'course-item-active' : '', currentSource > item.endSource ? 'section-item-not-active' : '']">
-          <div class="course-item-desc">{{ item.courseName }}</div>
-          <div class="course-item-desc">{{ item.teacherName }}</div>
-          <div class="course-item-desc course-class">{{ item.courseClass }}</div>
-          <div class="course-item-desc">{{ item.college }}</div>
+      <div class="table-item" v-for="(tItem, idx) in section">
+        <div class="time-line">{{ idx === 'morning' ? '上午' : idx === 'afternoon' ? '下午' : '晚上' }}</div>
+        <div style="flex: 1;">
+          <div v-for="(item, index) in tItem" :key="index" class="list-item">
+            <div class="section-item" :class="currentSource > item.endSource ? 'section-item-not-active' : ''">
+              <span class="section-label">第{{ simplifyNum[index] }}节</span>
+              <div class="section-time">{{ item.startTime }}-{{ item.endTime }}</div>
+            </div>
+            <div class="course-item"
+                 :class="[activeItemIndex === index ? 'course-item-active' : '', currentSource > item.endSource ? 'section-item-not-active' : '']">
+              <div class="course-item-desc">{{ item.courseName }}</div>
+              <div class="course-item-desc">{{ item.teacherName }}</div>
+              <div class="course-item-desc course-class">{{ item.courseClass }}</div>
+              <div class="course-item-desc">{{ item.college }}</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -123,10 +149,11 @@ export default {
   data() {
     return {
       list: [],
+      section: {},
       terminalId: null,
       simplifyNum: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四'],
       currentSource: timeUtil.getNowTime().currentSource,
-      updateInterval: null
+      updateInterval: null,
     }
   },
   created() {
@@ -152,12 +179,12 @@ export default {
       const {currentSource} = timeUtil.getNowTime();
       let index = null;
       this.list.forEach((item, i) => {
-        if(currentSource >= item.startSource && currentSource <= item.endSource){
+        if (currentSource >= item.startSource && currentSource <= item.endSource) {
           index = i;
         }
       });
       return index;
-    }
+    },
   },
   methods: {
     getDailyCurriculum() {
@@ -169,6 +196,22 @@ export default {
           i.endTime = timeUtil.sourceToTime(i.endSource)
           return i;
         });
+        service.post('course/terminalSection', {
+          id: this.terminalId
+        }).then(sec => {
+          let temp = {
+            morning: [],
+            afternoon: [],
+            evening: []
+          }
+          let j = 0
+          for (let t in sec) {
+            for (let i = 0; i < sec[t]; i++) {
+              temp[t].push(this.list[j++]);
+            }
+          }
+          this.section = temp;
+        })
       });
     }
   },

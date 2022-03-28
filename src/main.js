@@ -40,6 +40,7 @@ app.directive('clickoutside', {
       if (el.contains(e.target)) return false;
       binding.value(e)
     }
+
     document.addEventListener('click', handler)
     el.__vueClickOutside__ = handler
   },
@@ -68,6 +69,7 @@ if (serviceUrl) {
 }
 
 document.addEventListener("deviceready", onDeviceReady, false);
+
 function onDeviceReady() {
   StatusBar.hide();
 }

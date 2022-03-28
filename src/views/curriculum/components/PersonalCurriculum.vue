@@ -1,5 +1,4 @@
 <style scoped lang="stylus">
-@import "~@/theme/mixin.styl";
 .week-curriculum-main
   overflow-y: scroll;
   height: 100%;
@@ -9,7 +8,7 @@
 
   .change-week
     overflow-x scroll
-    margin-bottom: 1rem;
+    margin-bottom: .5rem;
 
     &::-webkit-scrollbar
       height: 0
@@ -20,10 +19,9 @@
 
       .week-item
         float left
-        width: itemWidth
+        width itemWidth
         box-sizing border-box
-        padding: 10px 25px 0;
-        height: 2.9rem
+        height: 2.4rem
         font-size .7rem;
         line-height @height
         text-align center
@@ -51,49 +49,50 @@
   flex: 1;
 
   .table-row
-    min-height: 2.5rem;
+    min-height: 1rem;
     box-sizing: border-box;
-    //border-right: 1px solid #2F333A;
     display flex
-    font-size .45rem;
     justify-content center
     align-items center
     position relative
-
-  //overflow: hidden
+    font-size .51rem;
 
   .course-item
     get_background(patrol_bottom_background)
     border-radius 4px;
-    margin-left: .25rem
-    margin-right: .25rem
-    margin-bottom: .5rem
+    margin-left: .125rem
+    margin-right: .125rem
+    margin-bottom: .3rem
     border-right: none;
     position relative
+    padding: 0.2rem;
+    font-size .45rem;
+    box-sizing border-box
 
     .course-detail
       position absolute
-      top: 53%
+      top: 80%
       left: 50%;
       transform: translateX(-50%);
       border-radius 8px;
-      width: 10rem
+      width: 10rem;
       get_background(curriculum_course_detail_background)
       box-shadow: 0 8px 10px rgba(43, 51, 69, 0.208523);
       z-index 10
       text-align left
       padding: .5rem 1rem;
-      font-size .6rem;
+      font-size .6rem
 
       &::after
         position absolute
-        top: -10px;
+        top: -1rem;
         left: 50%
+        transform translateX(-50%)
         content ''
         display block
         width: 0
         height: 0
-        border: 5px solid #000;
+        border: .5rem solid #000;
         border-top-color: transparent;
         border-bottom-color: #575D67;
         border-left-color: transparent;
@@ -101,9 +100,9 @@
 
   .table-title
     get_background(curriculum_section_background)
-    padding: 8px 0;
+    padding: .3rem 0;
     margin-bottom: 2px
-    font-size .7rem;
+    font-size .7rem
     min-height: auto;
     border-right: none
 
@@ -114,17 +113,28 @@
     border-top-right-radius 8px;
 
   .section-row
-    padding: 3px
+    display flex
     get_background(curriculum_section_background)
     color #9fa2a7
-    display block
+    align-items: stretch;
+
+    .time-line
+      writing-mode: tb;
+      font-size .6rem;
+      letter-spacing .5rem;
+      padding: 0 0.5rem
+      border-bottom 3px solid #2F333A
+      border-right: 3px solid #2F333A
+      get_border_color(curriculum_timeline_border_color)
+      get_font_color(font_color)
+    .section-wrap
+      flex: 1
 
     .section-label
-      font-size .8rem
+      font-size .4rem
 
     .section-time
-      font-size .6rem
-      transform scale(0.8)
+      font-size .3rem
 
 </style>
 <template>
@@ -138,11 +148,16 @@
       </div>
     </div>
     <div class="table">
-      <div class="table-col">
+      <div class="table-col" style="flex: 1.2">
         <div class="table-row table-title">课节时间</div>
-        <div class="table-row section-row" v-for="(item, index) in sectionTime" :key="index">
-          <span class="section-label">第{{ simplifyNum[index] }}节</span>
-          <div class="section-time">{{ item }}</div>
+        <div class="table-row section-row" v-for="(item, index, c) in sectionTime" :key="index">
+          <div class="time-line">{{ index === 'morning' ? '上午' : index === 'afternoon' ? '下午' : '晚上' }}</div>
+          <div class="section-wrap">
+            <div v-for="(time, i) in item" :key="i" style="min-height: 1rem;box-sizing: border-box;">
+              <span class="section-label">第{{ simplifyNum[i] }}节</span>
+              <div class="section-time">{{ time }}</div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="table-col" v-for="(item, index) in curriculum" :key="item">
@@ -153,8 +168,7 @@
           {{ course && course.courseName }}
           <div class="course-detail" v-if="course.courseName && course.showDetail">
             <div style="font-size: .9rem;">{{ course.courseName }}</div>
-            <div>{{ course.teacherName }} <span
-                style="margin-left: 1rem;">{{ calcTime(course.startSession, course.endSession) }}</span></div>
+            <div>{{ course.teacherName }} <span style="margin-left: 1rem;">{{ calcTime(course.startSession, course.endSession) }}</span></div>
             <div style="margin-bottom: 10px;">{{ course.college }}</div>
             <div>{{ course.courseClass }}</div>
           </div>
@@ -170,7 +184,6 @@ import service from "@/api/services";
 import timeUtil from "@/util/timeUtil";
 
 export default {
-  name: 'Personal-Curriculum',
   data() {
     return {
       terminalId: null,
@@ -179,8 +192,9 @@ export default {
       curriculum: [],
       simplifyNumberArray: ['一', '二', '三', '四', '五', '六', '日'],
       simplifyNum: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九'],
-      closeTimeout: null, //5s后关闭课程详情
-      firstWeek: null
+      closeTimeout: null,
+      firstWeek: null,
+      terminalSectionTime: []
     }
   },
   mounted() {
@@ -204,24 +218,43 @@ export default {
       service.post('classCard/scheduleInfo', {
         id: this.terminalId
       }).then(res => {
-        this.currentWeek = this.calcCurrentWeek(res.data.firstWeek);
-        this.firstWeek = res.data.firstWeek
-        this.scrollLeft()
-        this.sectionTime = res.data.sessionSourceList.map(i => {
-          return `${timeUtil.sourceToTime(i.startSource)}-${timeUtil.sourceToTime(i.endSource)}`;
+        service.post('course/terminalSection', {
+          id: this.terminalId
+        }).then(sec => {
+          let temp = {
+            morning: [],
+            afternoon: [],
+            evening: []
+          }
+          this.terminalSectionTime = sec.courseSection
+          sec.courseSection.forEach((item, index) => {
+            // 1 可预约  2 已被预约 3不可预约
+            if (index < sec.morning) {
+              temp.morning.push(item)
+            } else if (index >= sec.morning && index < sec.morning + sec.afternoon) {
+              temp.afternoon.push(item)
+            } else {
+              temp.evening.push(item)
+            }
+          })
+          this.currentWeek = this.calcCurrentWeek(res.data.firstWeek);
+          this.firstWeek = res.data.firstWeek;
+          this.scrollLeft()
+          this.sectionTime = temp;
+          this.getCurriculum();
         })
-        this.getCurriculum();
       })
     },
     getCurriculum() {
-      service.post('classCard/personalCurriculum', {
+      // android webview 57 / chrome 57版本才实现 display:grid 所以以下代码需要改
+      service.post('course/personalCurriculum', {
         id: this.terminalId,
         weekNo: this.currentWeek
       }).then(res => {
         // 空格子
-        const sectionLen = this.sectionTime.length;
+        const sectionLen = this.sectionTime.morning.length + this.sectionTime.afternoon.length + this.sectionTime.evening.length;
         let data = [];
-        res.data.forEach((item, index) => {
+        res.result.forEach((item, index) => {
           let temp = [];
           for (let i = 1; i <= sectionLen; i++) {
             let hasPush = false;
@@ -229,7 +262,7 @@ export default {
               if (i >= course.startSession && i <= course.endSession) {
                 temp.push(Object.assign(course, {
                   style: {
-                    height: (2.5 * (course.endSession - course.startSession + 1) - 0.5) + 'rem'
+                    height: (1.15 * (course.endSession - course.startSession + 1) - 0.3) + 'rem'
                   },
                   showDetail: false
                 }));
@@ -244,7 +277,7 @@ export default {
               startSession: i,
               endSession: i,
               style: {
-                height: '2.5rem'
+                height: '1.15rem'
               },
               showDetail: false
             });
@@ -288,8 +321,8 @@ export default {
     },
     // 根据开始节次和结束节次 计算开始时间和结束时间
     calcTime(startSession, endSession) {
-      let start = this.sectionTime[startSession - 1]
-      let end = this.sectionTime[endSession - 1]
+      let start = this.terminalSectionTime[startSession - 1]
+      let end = this.terminalSectionTime[endSession - 1]
       let startTime = start.split('-')[0]
       let endTime = end.split('-')[1];
       return startTime + '-' + endTime;
