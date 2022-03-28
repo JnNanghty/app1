@@ -5,14 +5,17 @@
   height: 100%
   overflow scroll
   get_font_color(font_color)
+  .full
+    width: 100%
+    height: 100%
 </style>
 <template>
   <div class="main">
     <template v-if="programmeData.type === 1">
-      <video :src="serviceUrl"></video>
+      <video class="full" :src="serviceUrl"></video>
     </template>
     <template v-else>
-      <div v-html="programmeData.content"></div>
+      <div class="full" v-html="programmeData.content"></div>
     </template>
   </div>
 </template>

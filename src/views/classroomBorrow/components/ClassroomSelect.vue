@@ -33,14 +33,14 @@
 <template>
   <div class="cs-warp">
     <div class="cs-select">
-      <select class="select-item _select" v-model="campusId" @change="selectCampus">
-        <option value="-1" label="选择校区"></option>
-        <option v-for="item in campus" :key="item.id" :value="item.id" :label="item.label"></option>
-      </select>
-      <select class="_select" v-model="buildingId">
-        <option value="-1" label="选择教学楼"></option>
-        <option v-for="item in building" :key="item.id" :value="item.id" :label="item.label"></option>
-      </select>
+      <my-select class="select-item _select" :len="campus.length" :value="schoolInfo.campus.label">
+        <my-option @select="campusSelected" value="-1" label="选择校区"></my-option>
+        <my-option @select="campusSelected" v-for="item in campus" :key="item.id" :value="item.id" :label="item.label"></my-option>
+      </my-select>
+      <my-select class="_select" :len="building.length" :value="schoolInfo.building.label">
+        <my-option @select="buildingSelected" value="-1" label="选择教学楼"></my-option>
+        <my-option @select="buildingSelected" v-for="item in building" :key="item.id" :value="item.id" :label="item.label"></my-option>
+      </my-select>
     </div>
     <span style="font-size: .6rem;opacity: 0.5;font-weight: 200;">全部教室</span>
     <div class="cs-content">
@@ -60,20 +60,21 @@ export default {
   data() {
     return {
       campus: [], // 校区
-      campusId: -1,
-      buildingId: -1,
-      terminalId: -1
+      schoolInfo: {
+        campus: {label: '请选择校区', value: -1},
+        building: {label: '请选择教学楼', value: -1},
+      },
     }
   },
   computed: {
     building() {
       let b = []
-      this.campus.forEach(i => i.id === this.campusId && (b = i.children));
+      this.campus.forEach(i => i.id === this.schoolInfo.campus.value && (b = i.children));
       return b;
     },
     terminal() {
       let t = [], r = []
-      this.building.forEach(i => i.id === this.buildingId && (t = i.children))
+      this.building.forEach(i => i.id === this.schoolInfo.building.value && (t = i.children))
       console.log(t)
       t.forEach(i => {
         i.children.forEach(j => {
@@ -87,6 +88,13 @@ export default {
     this.getInfo();
   },
   methods: {
+    campusSelected(item) {
+      this.schoolInfo.campus = item;
+      this.schoolInfo.building = {label: '请选择教学楼', value: -1}
+    },
+    buildingSelected(item) {
+      this.schoolInfo.building = item;
+    },
     getInfo() {
       service.post('model/getEntityTree', {
         nodes: [{

@@ -34,8 +34,30 @@ app.directive('doubleclick', {
   }
 });
 
+app.directive('clickoutside', {
+  mounted(el, binding) {
+    function handler(e) {
+      if (el.contains(e.target)) return false;
+      binding.value(e)
+    }
+    document.addEventListener('click', handler)
+    el.__vueClickOutside__ = handler
+  },
+  beforeUnmount(el, binding) {
+    document.removeEventListener('click', el.__vueClickOutside__)
+    delete el.__vueClickOutside__
+  }
+});
+
 import UserInfo from "@/components/UserInfo";
+
 app.component(UserInfo.name, UserInfo);
+import MySelect from "@/components/MySelect";
+
+app.component(MySelect.name, MySelect);
+import MyOption from "@/components/MyOption";
+
+app.component(MyOption.name, MyOption);
 
 router.isReady().then(() => app.mount('#app'));
 

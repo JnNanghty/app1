@@ -19,6 +19,7 @@
 
 <script>
 import Auth from "@/components/authPage/Auth";
+import mitt from "@/util/mitt";
 export default {
   name: "Open",
   components: {Auth},
@@ -30,6 +31,7 @@ export default {
   },
   mounted() {
     this.$refs.auth.$data.title = '请通过一下任一种方式进行开门'
+    mitt.emit('hideBackButton')
   },
   methods: {
     goPasswordOpen() {

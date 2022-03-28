@@ -7,8 +7,8 @@
   get_font_color(font_color)
 
   .top
-    padding: 1rem
-    border-radius 8px
+    padding: .4rem 1rem;
+    border-radius .4rem
     get_background(setting_panel_bancground)
     margin-bottom: .5rem
     display flex
@@ -25,29 +25,29 @@
     .left, .right
       flex: 1;
       get_background(setting_panel_bancground)
-
-      border-radius 8px
+      border-radius .4rem
       box-sizing border-box
 
     .left
-      padding: 1rem
-      text-align center
-      margin-right: .5rem
+      padding: 1.5rem
+      margin-right: 0.5rem
     .qr-code
       width: 7rem
       height @width
       border-radius 4px;
-      margin: 2rem 0 1rem
+      margin: 2.7rem 0 3rem
 
 .form-item
   margin-bottom: 1rem
   font-size .8rem;
-
-.form-select
-  width 70%
+  .form-select
+    width 75%
+    vertical-align middle
 
 .submit-button
+  width: 75%
   margin-top: 1rem
+  margin-left: 4.3rem
 </style>
 <template>
   <div class="main">
@@ -61,31 +61,34 @@
     <div class="bottom">
       <div class="left" @click="showChangeTerminal = false">
         <div class="form-item">
-          <label for="device-type">
+          <span>
             故障设备：
-            <select class="form-select _select" id="device-type" v-model="form.device">
-              <option :value="-1" label="请选择"></option>
-              <option v-for="item in devices" :key="item.id" :label="item.type.label" :value="item.id"></option>
-            </select>
-          </label>
+          </span>
+          <my-select class="form-select _select" :len="devices.length + 1" :value="formLabel.device">
+            <my-option @select="selectDevice(defaultItem)" :value="-1" label="请选择"></my-option>
+            <my-option @select="selectDevice" v-for="item in devices" :key="item.id" :label="item.type.label"
+                       :value="item.id"></my-option>
+          </my-select>
         </div>
         <div class="form-item">
-          <label for="alarm-type">
+          <span>
             故障类型：
-            <select class="form-select _select" id="alarm-type" v-model="form.type">
-              <option :value="-1" label="请选择"></option>
-              <option v-for="item in alarmTypes" :key="item.id" :value="item.id" :label="item.text"></option>
-            </select>
-          </label>
+          </span>
+          <my-select class="form-select _select" :len="alarmTypes.length + 1" :value="formLabel.type">
+            <my-option @select="selectType(defaultItem)" :value="-1" label="请选择"></my-option>
+            <my-option @select="selectType" v-for="item in alarmTypes" :key="item.id" :value="item.id"
+                       :label="item.text"></my-option>
+          </my-select>
         </div>
         <div class="form-item">
-          <label for="severity">
+          <span>
             严重程度：
-            <select class="form-select _select" id="severity" v-model="form.severity">
-              <option :value="-1" label="请选择"></option>
-              <option v-for="item in severities" :key="item.id" :value="item.id" :label="item.text"></option>
-            </select>
-          </label>
+          </span>
+          <my-select class="form-select _select" :len="severities.length + 1" :value="formLabel.severity">
+            <my-option @select="selectSeverity(defaultItem)" :value="-1" label="请选择"></my-option>
+            <my-option @select="selectSeverity" v-for="item in severities" :key="item.id" :value="item.id"
+                       :label="item.text"></my-option>
+          </my-select>
         </div>
         <div class="submit-button _button" @click.stop="submit">立即上报</div>
       </div>
@@ -126,6 +129,12 @@ export default {
         step: 'waiting',
         timeout: 7,
         relationTeacher: {}
+      },
+      defaultItem: {label: '请选择', value: -1},
+      formLabel: {
+        device: '',
+        type: '',
+        severity: ''
       },
       alarmTypes: [
         {id: 1, value: 'control', text: '中控系统故障'},
@@ -175,6 +184,18 @@ export default {
     mitt.off('updateSelect', this.selectTerminal)
   },
   methods: {
+    selectDevice(item) {
+      this.form.device = item.value
+      this.formLabel.device = item.label
+    },
+    selectSeverity(item) {
+      this.form.severity = item.value
+      this.formLabel.severity = item.label
+    },
+    selectType(item) {
+      this.form.type = item.value
+      this.formLabel.type = item.label
+    },
     getTerminal() {
       service.post('model/getEntityTree', {
         nodes: [{
