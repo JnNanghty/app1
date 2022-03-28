@@ -5,6 +5,8 @@
   padding: 0 2rem;
   box-sizing: border-box;
   get_font_color(font_color)
+  display flex
+  flex-direction column
 
   .top
     padding: .4rem 1rem;
@@ -27,6 +29,7 @@
 
   .bottom
     display flex
+    flex: 1;
 
     .left, .right
       flex: 1;
@@ -42,8 +45,8 @@
     .qr-code
       width: 7rem
       height @width
-      border-radius 4px;
-      margin: 2.7rem 0 3rem
+      border-radius .3rem;
+      margin: 2.1rem 0 3.5rem
 
 .form-item
   margin-bottom: 1rem
@@ -54,7 +57,7 @@
 
 .submit-button
   width: 75%
-  margin-top: 1rem
+  margin-top: 3rem
   margin-left: 4.3rem
 </style>
 <template>
