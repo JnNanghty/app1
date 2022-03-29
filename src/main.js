@@ -41,6 +41,7 @@ app.directive('clickoutside', {
       if (el.contains(e.target)) return false;
       binding.value(e)
     }
+
     document.addEventListener('click', handler)
     el.__vueClickOutside__ = handler
   },
@@ -71,5 +72,8 @@ if (serviceUrl) {
 document.addEventListener("deviceready", onDeviceReady, false);
 
 function onDeviceReady() {
-  StatusBar.hide();
+  if (window.serialPortPlugin) {
+    let cmd = new Uint8Array([0xAA, 0x13, 0x01, 0x02, 0x55]);
+    window.serialPortPlugin.send(cmd, 3);
+  }
 }

@@ -6,7 +6,7 @@
 
   .c-clock-canvas
     margin: 0 auto
-    background url("../../../assets/clock.png") center center/87.5% 87.5% no-repeat;
+    background url("../../../assets/clock.png") center center / 87.5% 87.5% no-repeat;
 
 
   .c-course-info
@@ -15,11 +15,14 @@
     left: 0
     width: 19rem;
     text-align: center;
+
     .c-image
       margin-top: 5rem
+
       img
         width: 2.3rem;
         height: 2rem
+
     .c-nocourse
       margin-top: 1.15rem
       font-size 1.6rem
@@ -34,11 +37,13 @@
       font-weight 300
       get_font_color(font_color)
       font-size 1rem
+
     .line
       height: 1px
       background: #535353;
       width: 6rem
       margin: 0.45rem auto 0.6rem
+
     .title-time
       get_font_color(font_color)
       font-size 1.6rem
@@ -90,7 +95,8 @@
 </style>
 <template>
   <div class="c-main-content">
-    <canvas class="c-clock-canvas" :style="canvasBackground" ref="clockCanvas" :width="canvasSize" :height="canvasSize"></canvas>
+    <canvas class="c-clock-canvas" :style="canvasBackground" ref="clockCanvas" :width="canvasSize"
+            :height="canvasSize"></canvas>
     <div class="point" :style="pointStyle">
       <img :src="pointSrc" alt="">
     </div>
@@ -190,6 +196,10 @@ export default {
       this.pointStyle.transform = `rotate(${angle}deg)`;
       if ((!this.currentCourse.courseId && !this.nextCourse.courseId) ||
           (!this.inCourse && !this.nextCourse.courseId)) {
+        if (window.serialPortPlugin) {
+          let cmd = new Uint8Array([0xAA, 0x13, 0x01, 0x02, 0x55]);
+          window.serialPortPlugin.send(cmd, 3);
+        }
         return 1; // 空闲
       } else if (!!this.currentCourse.courseId && this.inCourse) {
         // 先draw灰色，再draw橙色
@@ -200,6 +210,10 @@ export default {
         let start1 = (currentSource % 720) / 720;
         let end1 = (endSource % 720) / 720;
         this.drawClock(start1, end1, this.clockColor[2])
+        if (window.serialPortPlugin) {
+          let cmd = new Uint8Array([0xAA, 0x13, 0x01, 0x01, 0x55]);
+          window.serialPortPlugin.send(cmd, 3);
+        }
         return 2; // 当前正在上课
       } else if ((!this.currentCourse.courseId && !!this.nextCourse.courseId) ||
           (!this.inCourse && !!this.nextCourse.courseId)) {
@@ -223,9 +237,14 @@ export default {
         let end3 = (endSource % 720) / 720;
         this.drawClock(start3, end3, this.clockColor[2]);
 
+        let cmd = new Uint8Array([0xAA, 0x13, 0x01, 0x02, 0x55]);
         if (currentSource > startSource - signInForwardOffset) {
           // 4 为 课前考勤中
           status = 4;
+          cmd = new Uint8Array([0xAA, 0x13, 0x01, 0x03, 0x55]);
+        }
+        if (window.serialPortPlugin) {
+          window.serialPortPlugin.send(cmd, 3);
         }
         mitt.emit('courseStatus', status)
         return status; // 显示即将上课

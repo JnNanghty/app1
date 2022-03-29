@@ -165,6 +165,10 @@ export default {
   },
   methods: {
     exit() {
+      if (window.serialPortPlugin) {
+        let cmd = new Uint8Array([0xAA, 0x12, 0x00, 0x00, 0x55]);
+        window.serialPortPlugin.send(cmd, 3);
+      }
       if (window.cordova) {
         cordova.plugins.exit();
       }
@@ -182,7 +186,6 @@ export default {
       });
     },
     showStatusBar() {
-      StatusBar.show();
     }
   }
 }

@@ -77,7 +77,7 @@
           </template>
         </div>
         <div class="device-list" v-show="filterDevices.length > 0">
-          <div class="device-item" v-for="item in filterDevices" :key="item.id" >
+          <div class="device-item" v-for="item in filterDevices" :key="item.id">
             <img src="../../assets/video.png" style="width: 100%" alt="">
           </div>
           <div class="device-item" v-for="item in filterDevices" :key="item.id" >
