@@ -143,6 +143,7 @@ export default {
           type: 'success'
         })
         this.showWrong = false;
+        this.senCmd();
       } else {
         this.showWrong = true;
         msg({
@@ -157,6 +158,12 @@ export default {
     },
     submit() {
       this.checkPassword();
+    },
+    senCmd() {
+      if(window.serialPortPlugin) {
+        let cmd = new Uint8Array([0xAA, 0x02, 0x00, 0x00, 0x55]);
+        window.serialPortPlugin.send(cmd, 3);
+      }
     }
   }
 }

@@ -190,6 +190,10 @@ export default {
       this.pointStyle.transform = `rotate(${angle}deg)`;
       if ((!this.currentCourse.courseId && !this.nextCourse.courseId) ||
           (!this.inCourse && !this.nextCourse.courseId)) {
+        if (window.serialPortPlugin) {
+          let cmd = new Uint8Array([0xAA, 0x13, 0x01, 0x02, 0x55]);
+          window.serialPortPlugin.send(cmd, 3);
+        }
         return 1; // 空闲
       } else if (!!this.currentCourse.courseId && this.inCourse) {
         // 先draw灰色，再draw橙色
@@ -200,6 +204,10 @@ export default {
         let start1 = (currentSource % 720) / 720;
         let end1 = (endSource % 720) / 720;
         this.drawClock(start1, end1, this.clockColor[2])
+        if (window.serialPortPlugin) {
+          let cmd = new Uint8Array([0xAA, 0x13, 0x01, 0x01, 0x55]);
+          window.serialPortPlugin.send(cmd, 3);
+        }
         return 2; // 当前正在上课
       } else if ((!this.currentCourse.courseId && !!this.nextCourse.courseId) ||
           (!this.inCourse && !!this.nextCourse.courseId)) {
@@ -223,9 +231,14 @@ export default {
         let end3 = (endSource % 720) / 720;
         this.drawClock(start3, end3, this.clockColor[2]);
 
+        let cmd = new Uint8Array([0xAA, 0x13, 0x01, 0x02, 0x55]);
         if (currentSource > startSource - signInForwardOffset) {
           // 4 为 课前考勤中
           status = 4;
+          cmd = new Uint8Array([0xAA, 0x13, 0x01, 0x03, 0x55]);
+        }
+        if (window.serialPortPlugin) {
+          window.serialPortPlugin.send(cmd, 3);
         }
         mitt.emit('courseStatus', status)
         return status; // 显示即将上课

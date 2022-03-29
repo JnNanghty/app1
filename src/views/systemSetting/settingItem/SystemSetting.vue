@@ -82,13 +82,16 @@
   margin: 0 auto;
   display flex
   justify-content space-around
+
   div {
     flex: 1
   }
 }
+
 .cancel-button {
   get_background(input_background)
 }
+
 .option-button
   width: 50%
   margin: 0 0 2rem 2rem
@@ -122,10 +125,10 @@
           <div class="form-label">首选DNS</div>
           <input class="form-input _input" v-model="systemInfo.dns">
         </div>
-<!--        <div class="form-item-inline">-->
-<!--          <div class="form-label">备用DNS</div>-->
-<!--          <input class="form-input _input">-->
-<!--        </div>-->
+        <!--        <div class="form-item-inline">-->
+        <!--          <div class="form-label">备用DNS</div>-->
+        <!--          <input class="form-input _input">-->
+        <!--        </div>-->
         <div class="submit-button">
           <div class="_button cancel-button" @click="cancel">取消</div>
           <div class="_button" style="margin-left: 2rem" @click="save">保存</div>
@@ -149,7 +152,7 @@ export default {
   data() {
     return {
       systemInfo: {
-        ipGetWay:'',
+        ipGetWay: '',
         ip: '',
         dns: '',
         mask: '',
@@ -159,18 +162,22 @@ export default {
   },
   created() {
     let info = ls.get('systemInfo')
-    if(info) {
+    if (info) {
       this.systemInfo = JSON.parse(info);
     }
   },
   methods: {
     exit() {
+      if (window.serialPortPlugin) {
+        let cmd = new Uint8Array([0xAA, 0x12, 0x00, 0x00, 0x55]);
+        window.serialPortPlugin.send(cmd, 3);
+      }
       if (window.cordova) {
         cordova.plugins.exit();
       }
     },
     cancel() {
-      for(let i in this.systemInfo) {
+      for (let i in this.systemInfo) {
         this.systemInfo[i] = ''
       }
     },
@@ -182,7 +189,9 @@ export default {
       });
     },
     showStatusBar() {
-      StatusBar.show();
+      if (window.banpaiTools) {
+        window.banpaiTools.setSystemBar(false)
+      }
     }
   }
 }
