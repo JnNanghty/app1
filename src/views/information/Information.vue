@@ -134,7 +134,7 @@ export default {
   methods: {
     scroll() {
       if (this.canScroll) {
-        this.pageSize += 5;
+        this.pageSize += 1;
         if (this.pageSize > this.totalCount) {
           this.canScroll = false;
         }
