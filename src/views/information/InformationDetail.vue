@@ -8,7 +8,7 @@
   height: 100%
   iframe
     width: 100%
-    height: 15rem;
+    height: 18rem;
   .info
     width: 100%
     height: 15rem;
