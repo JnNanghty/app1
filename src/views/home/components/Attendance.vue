@@ -97,12 +97,15 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
     img
       width: 100%
+
 .desc
   text-align center
   font-size 0.8rem;
   white-space nowrap
+
 .a-bottom-mini
   display flex
   justify-content space-around
@@ -134,6 +137,7 @@
     text-align left
     flex 1;
     font-size 1rem;
+
   .next-course-info-item
     width: 100%
     font-size 1.5rem;
@@ -176,7 +180,9 @@
 
     </div>
     <div v-if="show" class="student-info">
-      <div class="student-item" v-for="item in 40" :class="item === 3 ? 'student-active' : ''">{{ item }}</div>
+      <div class="student-item" v-for="item in attendanceInfo.students" :key="item.id"
+           :class="item.signInStatus === 1 ? 'student-active' : ''">{{ item.label }}
+      </div>
     </div>
     <template v-if="currentCourseFlag || show">
       <div class="a-bottom-mini">
@@ -225,6 +231,10 @@ export default {
     nextCourse: {
       type: Object,
       default: {}
+    },
+    currentCourse: {
+      type: Object,
+      default: {}
     }
   },
   data() {
@@ -240,7 +250,7 @@ export default {
   },
   computed: {
     currentCourseFlag() {
-      return !!this.nextCourse.courseId;
+      return !!this.currentCourse.courseId;
     }
   },
   created() {
@@ -261,6 +271,13 @@ export default {
         terminalId: terminalId
       }).then(res => {
         this.attendanceInfo = res.data;
+        this.attendanceInfo.students.forEach(item => {
+          if (item.signInStatus === 1) {
+            this.arrived.push(item);
+          } else if (item.signInStatus === 0) {
+            this.notArrived.push(item);
+          }
+        })
         msg({
           message: '开始签到!'
         })
@@ -271,8 +288,15 @@ export default {
         ic,
         lessonId: this.attendanceInfo.id
       }).then(res => {
+        if (this.currentCourseFlag) {
+          this.laterArrived.push(res.data)
+        } else {
+          this.arrived.push(res.data);
+        }
+        this.notArrived = this.notArrived.filter(i => i.label !== res.data.label);
+        this.attendanceInfo.students.forEach(item => (item.label === res.data.label) && (item.signInStatus = 1));
         msg({
-          message: '签到成功',
+          message: res.data.label + '签到成功',
           type: 'success'
         })
       })

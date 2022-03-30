@@ -8,10 +8,11 @@
   height: 100%
   iframe
     width: 100%
-    height: 100%
+    height: 15rem;
   .info
     width: 100%
-    height: 100%
+    height: 15rem;
+    overflow: scroll;
 .line
   margin: 1rem 0;
   border 1px solid #272727

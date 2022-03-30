@@ -110,7 +110,7 @@ main {
   <div class="main">
     <header>
       <div class="logo">
-        <img style="height: 100%;" :src="config.logo" alt="">
+        <img style="height: 100%;" :src="serviceUrl + config.logo" alt="">
       </div>
       <div class="header-center">
         <div style="font-weight: 300">{{ terminalInfo.label }}</div>
@@ -150,6 +150,7 @@ export default {
       config: {
         log: ''
       },
+      serviceUrl: '',
       componentName: 'BindClassroom',
       activeTabIndex: 0,
       terminalId: null,
@@ -180,6 +181,7 @@ export default {
   created() {
     this.terminalInfo = ls.get('terminalInfo') || {};
     this.userInfo = ls.get('userInfo') || {}
+    this.serviceUrl = ls.get('serviceUrl') || '';
   },
   beforeUnmount() {
     if (window.banpaiTools) {

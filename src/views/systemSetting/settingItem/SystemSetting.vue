@@ -166,6 +166,11 @@ export default {
     if (window.banpaiTools) {
       window.banpaiTools.ipConfig(res => {
         this.systemInfo = res;
+        if (res.mode === 'DHCP') {
+          this.modeLabel = 'DHCP'
+        } else {
+          this.modeLabel = '静态';
+        }
       });
     }
   },

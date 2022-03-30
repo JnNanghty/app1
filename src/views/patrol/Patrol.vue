@@ -162,7 +162,7 @@ export default {
   },
   created() {
     this.currentCourse = ls.get('currentCourse') || {};
-    this.terminalId = ls.get('terminalId')
+    this.terminalId = +ls.get('terminalId')
 
     this.getTerminal();
     this.getDeviceList();

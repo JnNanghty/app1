@@ -178,7 +178,7 @@ export default {
   },
   created() {
     this.serviceUrl = ls.get('serviceUrl') || '';
-    this.terminalId = ls.get('terminalId')
+    this.terminalId = +ls.get('terminalId')
   },
   computed: {
     category() {

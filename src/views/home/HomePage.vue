@@ -38,7 +38,7 @@
                :inCourse="inCourse"></clock>
       </div>
       <div class="main-c3">
-        <attendance :nextCourse="nextCourse"></attendance>
+        <attendance :currentCourse="currentCourse" :nextCourse="nextCourse"></attendance>
       </div>
     </div>
   </div>

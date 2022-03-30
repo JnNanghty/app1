@@ -57,6 +57,9 @@ export default {
     mitt.on('mqttRealTimeBroadcast', this.broadcast);
 
     mitt.on('mqttConfig', (data) => {
+      if(data.theme === 'dark' || data.theme === 'bright') {
+        window.document.documentElement.setAttribute('data-theme', data.theme);
+      }
     });
 
     mitt.on('showBackButton', () => {
