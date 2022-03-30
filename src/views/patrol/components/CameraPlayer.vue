@@ -3,7 +3,7 @@
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 8px;
+  border-radius: .4rem;
   overflow: hidden;
 }
 
@@ -32,10 +32,10 @@
 <template>
   <div class="wrapped-camera-container">
     <div class="camera-player-container">
-      <div v-if="(isFlvPlayer || isVideoPlayer) && !errorCamera" style="width: 100%; height: 100%">
+      <div v-if="(isFlvPlayer || isVideoPlayer) && !errorCamera" style="width: 100%; height: 100%;">
         <video :id="elementId" v-if="isFlvPlayer" class="video-js"
                style="width: 100%; height: 100%; object-fit: fill" autoplay></video>
-        <video :id="elementId" v-if="isVideoPlayer" style="width:100%;height:100%; object-fit:fill;"
+        <video :id="elementId" v-if="isVideoPlayer" style="width:100%;height: 100%; object-fit:fill;"
                class="video-js"></video>
       </div>
       <p class="no-video" v-if="noCamera">
@@ -103,15 +103,74 @@ export default {
       return `video_${this.camera.id}_${this.timestamp}`;
     },
     isFlvPlayer: function() {
-      return !!(this.camera && this.camera.cameraHttpFlvPlayUrl);
+      return true;
     },
     isVideoPlayer: function() {
-      return !!(!this.isFlvPlayer && (this.camera.cameraRtmpPlayUrl || this.camera.cameraPlayUrl));
+      return false;
     },
   },
   methods: {
     init() {
-      this.initVideoPlay();
+      if (this.noCamera || this.errorCamera) {
+        return;
+      }
+      this.$nextTick(() => {
+        this.initFlvPlayer();
+        // if (this.camera.cameraHttpFlvPlayUrl) {
+        //   this.initFlvPlayer();
+        // } else if (this.camera.cameraRtmpPlayUrl || this.camera.cameraPlayUrl) {
+        //   this.initVideoPlay();
+        // }
+      });
+    },
+    initFlvPlayer() {
+      let options = {
+        type: 'flv',
+        hasVideo: true,
+        hasAudio: this.camera.cameraHasAudio || false,
+        url: 'test.flv',
+        enableWorker: false,
+        lazyLoadMaxDuration: 3 * 60,
+        seekType: 'range'
+      };
+
+      let player = flvjs.createPlayer(options, {
+        enableWorker: false,
+        lazyLoadMaxDuration: 3 * 60,
+        seekType: 'range'
+      });
+      try {
+        player.videoEle = document.getElementById(this.elementId);
+        player.videoEle.controls = this.controls;
+        player.canPlay = false;
+        player.videoEle.addEventListener('canplay', () => {
+          this.canPlayListener(player);
+        });
+
+        player.attachMediaElement(player.videoEle);
+        player.load();
+        // 属性静音 或者本身静音 都是静音状态
+        player.muted = this.muted || !this.camera.cameraHasAudio;
+        player.timeoutChecker = setTimeout(() => {
+          if (player && !player.canPlay) {
+            // 10s尚未第一次可播放 出现问题
+            console.log('player source error');
+            // 重置播放流
+            service.post('device/camera/resetStream', {
+              deviceId: this.camera.id
+            });
+            setTimeout(() => {
+              this.resetCamera();
+            }, 2000);
+          } else if (player && player.canPlay) {
+            console.log('player source working');
+          }
+        }, 10 * 1000);
+        this.player = player;
+      } catch (error) {
+        // 防止初始化进行到一半的时候 组件被销毁
+        console.log('组件已销毁');
+      }
     },
     initVideoPlay() {
       let video_options = {
@@ -124,7 +183,7 @@ export default {
       let self = this;
       this.player = videojs(this.elementId, video_options, function onPlayerReady() {
         let src = {
-          src: '/test.mp4'
+          src: self.camera.cameraRtmpPlayUrl || self.camera.cameraPlayUrl
         };
         let keys = Object.keys(VIDEO_TYPE_REGEX);
         for (let i = 0; i < keys.length; i++) {

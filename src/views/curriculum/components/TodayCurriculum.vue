@@ -122,7 +122,7 @@
               <div class="section-time">{{ item.startTime }}-{{ item.endTime }}</div>
             </div>
             <div class="course-item"
-                 :class="[activeItemIndex === index ? 'course-item-active' : '', currentSource > item.endSource ? 'section-item-not-active' : '']">
+                 :class="[activeItemStartSource === item.startSource ? 'course-item-active' : '', currentSource > item.endSource ? 'section-item-not-active' : '']">
               <div class="course-item-desc">{{ item.courseName }}</div>
               <div class="course-item-desc">{{ item.teacherName }}</div>
               <div class="course-item-desc course-class">{{ item.courseClass }}</div>
@@ -171,15 +171,15 @@ export default {
     clearInterval(this.updateInterval);
   },
   computed: {
-    activeItemIndex() {
+    activeItemStartSource() {
       const {currentSource} = timeUtil.getNowTime();
-      let index = null;
+      let source = null;
       this.list.forEach((item, i) => {
         if (currentSource >= item.startSource && currentSource <= item.endSource) {
-          index = i;
+          source = item.startSource;
         }
       });
-      return index;
+      return source;
     },
   },
   methods: {

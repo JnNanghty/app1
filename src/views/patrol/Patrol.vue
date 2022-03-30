@@ -65,7 +65,7 @@
   <div class="main">
     <div class="top">
       <div class="top-left">
-        <div style="flex: 1;border-radius: .8rem;overflow: hidden">
+        <div style="flex: 1;border-radius: .8rem;overflow: hidden;height: 15.84rem;">
           <template v-if="activeDevice.type.id === 5">
             <camera-player :camera="activeDevice"></camera-player>
           </template>
@@ -77,19 +77,14 @@
           </template>
         </div>
         <div class="device-list" v-show="filterDevices.length > 0">
-          <div class="device-item" v-for="item in filterDevices" :key="item.id">
-            <img src="../../assets/video.png" style="width: 100%" alt="">
+          <div class="device-item" v-for="item in filterDevices" :key="item.id" @click="setItemActive(item)">
+            <template v-if="item.type.id === 5">
+              <camera-player :camera="item"></camera-player>
+            </template>
+            <template v-else-if="item.type.id === 2">
+              <computer-player :computer="item" :power="true"></computer-player>
+            </template>
           </div>
-          <div class="device-item" v-for="item in filterDevices" :key="item.id" >
-            <img src="../../assets/video.png" style="width: 100%" alt="">
-          </div>
-          <div class="device-item" v-for="item in filterDevices" :key="item.id" >
-            <img src="../../assets/video.png" style="width: 100%" alt="">
-          </div>
-          <div class="device-item" v-for="item in filterDevices" :key="item.id" >
-            <img src="../../assets/video.png" style="width: 100%" alt="">
-          </div>
-
         </div>
       </div>
       <div class="top-right">

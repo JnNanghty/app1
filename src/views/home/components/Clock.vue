@@ -17,8 +17,7 @@
     text-align: center;
 
     .c-image
-      margin-top: 5rem
-
+      margin-top: 6.7rem
       img
         width: 2.3rem;
         height: 2rem

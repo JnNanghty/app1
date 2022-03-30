@@ -76,4 +76,7 @@ function onDeviceReady() {
     let cmd = new Uint8Array([0xAA, 0x13, 0x01, 0x02, 0x55]);
     window.serialPortPlugin.send(cmd, 3);
   }
+  if (window.banpaiTools) {
+    window.banpaiTools.setSystemBar(true)
+  }
 }

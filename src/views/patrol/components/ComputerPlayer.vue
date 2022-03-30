@@ -13,7 +13,7 @@
 }
 .computer-player-container img{
   width: 100%;
-  height: 16rem;
+  height: 100%;
 }
 .computer-player-container p{
   display: flex;
