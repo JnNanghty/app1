@@ -165,7 +165,6 @@ export default {
   created() {
     if (window.banpaiTools) {
       window.banpaiTools.ipConfig(res => {
-        console.log('ipConfig: ', res);
         this.systemInfo = res;
       });
     }
