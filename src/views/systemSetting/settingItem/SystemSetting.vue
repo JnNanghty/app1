@@ -166,6 +166,11 @@ export default {
       this.systemInfo = JSON.parse(info);
     }
   },
+  beforeUnmount() {
+    if (window.banpaiTools) {
+      window.banpaiTools.setSystemBar(true)
+    }
+  },
   methods: {
     exit() {
       if (window.serialPortPlugin) {

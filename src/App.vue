@@ -166,7 +166,7 @@ export default {
 .back-button {
   position absolute
   left: 0
-  bottom: 0
+  bottom: 1rem;
   height: 10rem
   z-index 100
   img {

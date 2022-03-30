@@ -62,7 +62,7 @@
   <div class="main">
     <div class="top">
       <div class="top-left">
-        <div style="flex: 1;border-radius: .8rem;overflow: hidden">
+        <div style="flex: 1;border-radius: .8rem;overflow: hidden;height: 15.84rem;">
           <template v-if="activeDevice.type.id === 5">
             <camera-player :camera="activeDevice"></camera-player>
           </template>
