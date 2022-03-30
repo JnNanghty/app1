@@ -181,6 +181,11 @@ export default {
     this.terminalInfo = ls.get('terminalInfo') || {};
     this.userInfo = ls.get('userInfo') || {}
   },
+  beforeUnmount() {
+    if (window.banpaiTools) {
+      window.banpaiTools.setSystemBar(true)
+    }
+  },
   methods: {
     goHome() {
       this.$router.replace({

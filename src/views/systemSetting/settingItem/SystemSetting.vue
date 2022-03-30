@@ -25,8 +25,8 @@
 }
 
 .form-title {
-  margin-bottom: 1.15rem
-  font-size 1rem;
+  margin-bottom: 0.85rem
+  font-size 0.7rem;
 }
 
 .form-row {
@@ -49,28 +49,24 @@
     width 2.5rem
     white-space nowrap;
     margin-right: 0.65rem
-    line-height 2rem
+    line-height 1.7rem
     text-align right
+  }
+
+  .form-select {
+    width: 17.05rem
+    height: 1.7rem
+    line-height @height
   }
 }
 
 .form-label {
-  margin-bottom: 0.35rem
   font-size 0.7rem
 }
 
 .form-input {
   width: 16.45rem
-  height: 2rem
-}
-
-.form-select {
-  height: 2rem
-  width 6.4rem
-}
-
-.form-select-big-size {
-  width: 17.05rem
+  height: 1.7rem
 }
 
 .submit-button {
@@ -104,31 +100,31 @@
       <form class="form-content">
         <div class="form-item-inline">
           <div class="form-label">ip获取</div>
-          <select class="form-select _select form-select-big-size" v-model="systemInfo.ipGetWay">
-            <option value="1" label="自动"></option>
-            <option value="2" label="手动"></option>
-          </select>
+          <my-select class="form-select _select" :len="2" :value="modeLabel">
+            <my-option @select="selectMode({label: 'DHCP', value: 'DHCP'})" value="DHCP" label="DHCP"></my-option>
+            <my-option @select="selectMode({label: '静态', value: 'StaticIp'})" value="StaticIp" label="静态"></my-option>
+          </my-select>
         </div>
         <div class="form-item-inline">
           <div class="form-label">ip地址</div>
-          <input class="form-input _input" v-model="systemInfo.ip">
+          <input :readonly="ipReadOnly" class="form-input _input" v-model="systemInfo.ip">
         </div>
         <div class="form-item-inline">
           <div class="form-label">子网掩码</div>
-          <input class="form-input _input" v-model="systemInfo.mask">
+          <input :readonly="ipReadOnly" class="form-input _input" v-model="systemInfo.mask">
         </div>
         <div class="form-item-inline">
           <div class="form-label">网关</div>
-          <input class="form-input _input" v-model="systemInfo.gateWay">
+          <input :readonly="ipReadOnly" class="form-input _input" v-model="systemInfo.gateWay">
         </div>
         <div class="form-item-inline">
           <div class="form-label">首选DNS</div>
-          <input class="form-input _input" v-model="systemInfo.dns">
+          <input :readonly="ipReadOnly" class="form-input _input" v-model="systemInfo.dns1">
         </div>
-        <!--        <div class="form-item-inline">-->
-        <!--          <div class="form-label">备用DNS</div>-->
-        <!--          <input class="form-input _input">-->
-        <!--        </div>-->
+        <div class="form-item-inline">
+          <div class="form-label">备用DNS</div>
+          <input :readonly="ipReadOnly" class="form-input _input" v-model="systemInfo.dns2">
+        </div>
         <div class="submit-button">
           <div class="_button cancel-button" @click="cancel">取消</div>
           <div class="_button" style="margin-left: 2rem" @click="save">保存</div>
@@ -144,34 +140,41 @@
 </template>
 
 <script>
-import ls from "@/store/ls";
 import {msg} from "@/components/message";
 
 export default {
   name: "SystemSetting",
   data() {
     return {
+      modeLabel: '',
       systemInfo: {
-        ipGetWay: '',
+        mode: '',
         ip: '',
-        dns: '',
+        dns1: '',
+        dns2: '',
         mask: '',
         gateWay: ''
       }
     }
   },
-  created() {
-    let info = ls.get('systemInfo')
-    if (info) {
-      this.systemInfo = JSON.parse(info);
+  computed: {
+    ipReadOnly() {
+      return this.systemInfo.mode === 'DHCP'
     }
   },
-  beforeUnmount() {
+  created() {
     if (window.banpaiTools) {
-      window.banpaiTools.setSystemBar(true)
+      window.banpaiTools.ipConfig(res => {
+        console.log('ipConfig: ', res);
+        this.systemInfo = res;
+      });
     }
   },
   methods: {
+    selectMode(item) {
+      this.modeLabel = item.label;
+      this.systemInfo.mode = item.value;
+    },
     exit() {
       if (window.serialPortPlugin) {
         let cmd = new Uint8Array([0xAA, 0x12, 0x00, 0x00, 0x55]);
@@ -187,7 +190,10 @@ export default {
       }
     },
     save() {
-      ls.set('systemInfo', JSON.stringify(this.systemInfo))
+      if (window.banpaiTools) {
+        let ipConfig = JSON.stringify(this.systemInfo);
+        window.banpaiTools.setIpConfig(ipConfig);
+      }
       msg({
         message: '保存成功！',
         type: 'success'

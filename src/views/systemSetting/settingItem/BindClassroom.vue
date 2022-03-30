@@ -56,6 +56,11 @@
     height: 2rem
     width: 16rem;
   }
+  .form-input {
+    max-width: 19.5rem;
+    height: 2rem
+    border-radius .4rem;
+  }
 }
 
 .form-label {
@@ -63,10 +68,7 @@
   font-size 0.7rem;
 }
 
-.form-input {
-  max-width: 19.5rem;
-  height: 2rem
-}
+
 
 
 .submit-button {
