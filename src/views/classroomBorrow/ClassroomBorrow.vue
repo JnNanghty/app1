@@ -104,6 +104,7 @@
 
 .reason-input
   height: 1.8rem;
+  flex: 1;
 
 .submit-button
   width: 13rem
