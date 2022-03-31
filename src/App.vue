@@ -69,6 +69,14 @@ export default {
     mitt.on('hideBackButton', () => {
       this.showBackButton = false;
     })
+
+    mitt.on('mqttStatus', (data) => {
+      if(+data === 1) {
+        this.$router.replace({
+          name: "Home"
+        });
+      }
+    })
   },
   mounted() {
 

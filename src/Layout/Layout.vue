@@ -372,7 +372,6 @@ export default {
     // 切换主题
     mitt.on('changeTheme', this.changeTheme)
     mitt.on('showBgLogo', (v) => {
-      console.log(v)
       this.bgHasLogo = v
     })
     this.refresh();

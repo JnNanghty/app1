@@ -7,7 +7,7 @@
 .auth-title
   text-align center
   margin-top: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   font-size 1.2rem
 
 .auth-content
@@ -180,10 +180,7 @@ export default {
           'Content-Type': 'application/json;charset=UTF-8'
         }
       }).then(res => {
-        if (JSON.stringify(res.data) === '{}' || !res.data) {
-          console.log(1)
-        } else {
-          console.log(2)
+        if (JSON.stringify(res.data) === '{}' || !res.data) {} else {
           this.afterLogin(res.data);
         }
       })

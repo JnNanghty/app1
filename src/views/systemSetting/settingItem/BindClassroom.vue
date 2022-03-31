@@ -39,6 +39,11 @@
 
 .form-item {
   margin-bottom: 0.85rem
+  .form-input {
+    max-width: 19.5rem;
+    height: 2rem
+    border-radius .4rem;
+  }
 }
 
 .form-item-inline {

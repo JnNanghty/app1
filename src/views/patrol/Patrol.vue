@@ -290,8 +290,8 @@ export default {
       this.activeDevice = item;
     },
     selectTerminal() {
-      if (this.schoolInfo.terminal !== -1) {
-        this.terminalId = this.schoolInfo.terminal
+      if (this.schoolInfo.terminal.value !== -1) {
+        this.terminalId = this.schoolInfo.terminal.value
         this.getDailyCurriculum()
         this.getDeviceList()
       }

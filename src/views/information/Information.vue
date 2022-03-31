@@ -80,27 +80,29 @@
 
 </style>
 <template>
-  <div class="main" ref="infoMain" v-infinite-scroll="scroll">
-    <div class="first-info" v-if="infoList.length > 0" @click="goDetail(infoList[0])">
-      <div class="first-info-image">
-        <img :src="serviceUrl + infoList[0].coverPicture" alt="">
-      </div>
-      <div class="first-info-desc">
-        <div class="first-info-time">{{ infoList[0].ym }}/{{ infoList[0].d }}</div>
-        <div class="first-info-title">{{ infoList[0].title }}</div>
-        <div class="first-info-summary">{{ infoList[0].summary }}</div>
-        <div class="first-info-more-button">了解更多</div>
-      </div>
-    </div>
-    <div v-for="(item, index) in infoList" v-show="index !== 0" :key="item.id" class="info-item"
-         @click="goDetail(item)">
-      <div class="info-time">
-        <div style="font-size: 2.4rem">{{ item.d }}</div>
-        <div style="font-size: .6rem">{{ item.ym }}</div>
-      </div>
-      <div class="info-content">
-        <div class="info-title">{{ item.title }}</div>
-        <div class="info-desc">{{ item.summary }}</div>
+  <div class="main">
+    <div v-infinite-scroll="scroll">
+      <div class="first-info" v-if="infoList.length > 0" @click="goDetail(infoList[0])">
+        <div class="first-info-image">
+          <img :src="serviceUrl + infoList[0].coverPicture" alt="">
+        </div>
+        <div class="first-info-desc">
+          <div class="first-info-time">{{ infoList[0].ym }}/{{ infoList[0].d }}</div>
+          <div class="first-info-title">{{ infoList[0].title }}</div>
+          <div class="first-info-summary">{{ infoList[0].summary }}</div>
+          <div class="first-info-more-button">了解更多</div>
+        </div>
+        </div>
+      <div v-for="(item, index) in infoList" v-show="index !== 0" :key="item.id" class="info-item"
+           @click="goDetail(item)">
+        <div class="info-time">
+          <div style="font-size: 2.4rem">{{ item.d }}</div>
+          <div style="font-size: .6rem">{{ item.ym }}</div>
+        </div>
+        <div class="info-content">
+          <div class="info-title">{{ item.title }}</div>
+          <div class="info-desc">{{ item.summary }}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -116,7 +118,7 @@ export default {
   data() {
     return {
       infoList: [],
-      pageSize: 5,
+      pageSize: 10,
       totalCount: 0,
       canScroll: true,
       serviceUrl: ''
@@ -126,18 +128,16 @@ export default {
   computed: {},
   created() {
     this.serviceUrl = ls.get('serviceUrl')
-    this.getInfo()
+    // this.getInfo()
   },
   mounted() {
-    this.addScrollEvent()
+
   },
   methods: {
     scroll() {
-      if (this.canScroll) {
-        this.pageSize += 1;
-        if (this.pageSize > this.totalCount) {
-          this.canScroll = false;
-        }
+      if (this.canScroll){
+        this.canScroll = false;
+        this.pageSize += 5;
         this.getInfo()
       }
     },
@@ -147,6 +147,7 @@ export default {
         pageSize: this.pageSize
       }).then(res => {
         this.totalCount = res.data.total;
+        this.canScroll = this.pageSize <= this.totalCount;
         this.infoList = res.data.list.map(item => {
           const time = new Date(item.createTime)
           const y = time.getFullYear();
@@ -167,9 +168,6 @@ export default {
           data: JSON.stringify(item)
         }
       })
-    },
-    addScrollEvent() {
-      let el = this.$refs.infoMain
     }
   }
 }

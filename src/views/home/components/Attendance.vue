@@ -280,7 +280,7 @@ export default {
         })
         msg({
           message: '开始签到!'
-        })
+        });
       })
     },
     brushCard(ic) {

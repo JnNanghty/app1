@@ -69,7 +69,8 @@ export default {
       flag: false,
       windowStyle: {
         transform: 'translateX(0)'
-      }
+      },
+      inAttendance: false
     };
   },
   created() {
@@ -144,6 +145,7 @@ export default {
           // 减去秒数  把误差控制在1s以内
           ls.set('currentCourse', item, (item.endSource - (hour * 60 + minute)) * 60 * 1000 - second * 1000);
           this.inCourse = true;
+          this.inAttendance = false;
           break;
         } else if ((item.endSource < currentSource && currentSource < nextItem.startSource) ||
             (i === 0 && currentSource < item.startTime)) {
@@ -158,6 +160,7 @@ export default {
           this.currentCourse = {};
           this.nextCourse = {};
           this.inCourse = false;
+          this.inAttendance = false;
           ls.remove('currentCourse');
         }
       }
@@ -169,9 +172,13 @@ export default {
     },
     scrollWindow(status) {
       if (status === 2 || status === 4) {
-        if (status === 4 && this.windowStyle.transform === 'translateX(0)') {
-          // 如果为课前考勤， 且考勤界面已经显示
-          mitt.emit('startSignIn')
+        if (status === 4) {
+          // 1、 在首页 进入的考勤状态 有课程id
+          // 2、 从别的页面回到首页， 进入考勤 来不及计算课程id
+          if (this.nextCourse.courseId && !this.inAttendance) {
+            mitt.emit('startSignIn')
+            this.inAttendance = true;
+          }
         }
         mitt.emit('showBgLogo', false)
         this.windowStyle.transform = 'translateX(-50vw)';

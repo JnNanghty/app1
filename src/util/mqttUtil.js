@@ -29,6 +29,7 @@ export function initMqtt() {
               console.log('mqtt receive data');
               console.log(payload);
               const data = JSON.parse(payload);
+              console.log(data)
               if (data.type === 'config') {
                 mitt.emit('mqttConfig', data.data); // 修改背景图和logo，模块的定制
               } else if (data.type === 'realTimeBroadcast') {
@@ -39,8 +40,8 @@ export function initMqtt() {
                 mitt.emit('mqttExam', data.data); // 考试，考试科目，考场号 考试开始结束时间
               } else if(data.type === 'info') {
                 mitt.emit('mqttInfo', data.data) // 资讯
-              } else if(data.type === '') {
-                mitt.emit('mqtt')
+              } else if(data.type === 'status') {
+                mitt.emit('mqttStatus', data.data)
               }
             })
 

@@ -18,7 +18,7 @@ const InfiniteScroll = {
       const containerScrollTop = container === window ? container.document.documentElement.scrollTop : container.scrollTop;
       const containerClientHeight = container === window ? container.document.documentElement.clientHeight : container.clientHeight;
       const elClientHeight = el.clientHeight;
-      const shouldTrigger = containerScrollTop + containerClientHeight + 200 > elClientHeight;
+      const shouldTrigger = containerScrollTop + containerClientHeight > elClientHeight;
       if (shouldTrigger) {
         el[SCOPE].expression.call();
       }
