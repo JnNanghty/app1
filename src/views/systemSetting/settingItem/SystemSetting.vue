@@ -195,7 +195,7 @@ export default {
     },
     save() {
       if (window.banpaiTools) {
-        let ipConfig = JSON.stringify(this.systemInfo);
+        let ipConfig = this.systemInfo;
         window.banpaiTools.setIpConfig(ipConfig);
       }
       msg({

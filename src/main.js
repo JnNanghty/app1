@@ -15,6 +15,7 @@ const app = createApp(App)
 app.use(router).use(VueCookies)
 // 取消inject的.value
 app.config.unwrapInjectedRef = true
+
 app.directive('doubleclick', {
   mounted(el, binding) {
     let clicked = false;
@@ -33,7 +34,6 @@ app.directive('doubleclick', {
     }
   }
 });
-
 app.directive('clickoutside', {
   mounted(el, binding) {
     function handler(e) {
@@ -51,26 +51,23 @@ app.directive('clickoutside', {
 });
 
 import UserInfo from "@/components/UserInfo";
-
 app.component(UserInfo.name, UserInfo);
 import MySelect from "@/components/MySelect";
-
 app.component(MySelect.name, MySelect);
 import MyOption from "@/components/MyOption";
-
 app.component(MyOption.name, MyOption);
+
 
 router.isReady().then(() => app.mount('#app'));
 
 
-const serviceUrl = ls.get('serviceUrl');
-if (serviceUrl) {
-  initMqtt();
-}
 
 document.addEventListener("deviceready", onDeviceReady, false);
-
 function onDeviceReady() {
+  const serviceUrl = ls.get('serviceUrl');
+  if (serviceUrl) {
+    initMqtt();
+  }
   if (window.serialPortPlugin) {
     let cmd = new Uint8Array([0xAA, 0x13, 0x01, 0x02, 0x55]);
     window.serialPortPlugin.send(cmd, 3);

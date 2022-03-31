@@ -1,6 +1,5 @@
 <style scoped lang="stylus">
 .week-curriculum-main
-  overflow-y: scroll;
   height: 100%;
   padding-right: 30px
   box-sizing border-box
@@ -44,6 +43,8 @@
 .table
   display flex
   text-align center
+  height: 17rem
+  overflow-y: scroll;
 
 .table-col
   flex: 1;
