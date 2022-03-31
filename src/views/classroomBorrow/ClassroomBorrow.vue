@@ -9,21 +9,25 @@
   padding: .5rem 2rem 0;
   box-sizing border-box
   font-size .6rem;
+
 .left
   width: 50%
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
 .right
   flex 1
   margin-left: 1rem
+
 .wrap
   get_background(borrow_wrap_background)
-  border-radius 8px
-  padding: .75rem 1.25rem
+  border-radius .4rem;
   box-sizing border-box
   margin-bottom: .5rem
-  border 2px solid rgba(0,0,0,0)
+  border 2px solid rgba(0, 0, 0, 0)
+  font-size .8rem;
+
 .change-button
   border-radius 8px
   get_background(borrow_change_button_background)
@@ -36,32 +40,45 @@
 
 .wrap1
   display flex
+  padding: 1rem 1.5rem
+
   .w1-left
     width: 70%;
+
     .w1-room-name
       font-size 1.6rem;
       white-space nowrap
       overflow: hidden;
       text-overflow ellipsis;
+
   .w1-right
     width: 30%
     display flex
     justify-content flex-end
     align-items center
+
 .wrap2
+  padding: 1rem 1.5rem
+
   .w2-top
     display flex
     justify-content space-between
+    margin-bottom: 1rem;
+
   .w2-bottom
     display flex
     margin-top: 5px
     white-space: nowrap;
+
     .borrow-time-wrap
       flex: 1;
       overflow-x: scroll
+      padding-top: 5px
+
       .borrow-window
         width: 1000%
         display flex
+
         .borrow-time-item
           border-radius 6px;
           padding: .2rem 1rem .2rem .25rem;
@@ -70,19 +87,26 @@
           box-sizing border-box
           margin-left: 10px
           position relative
+
           .close-icon
             position absolute
             top: 50%
             right: 5px;
             transform translateY(-50%)
+
             img
-              width: 16px
+              width: .8rem;
               height @width
+
 .wrap3
+  padding: .55rem 1.5rem
   display flex
+
 .reason-input
-  padding-top: 5px
-  padding-bottom: @padding-top
+  height: 1.8rem;
+
+.submit-button
+  width: 13rem
 </style>
 <template>
   <div class="main">
@@ -90,7 +114,7 @@
       <div @click="selectWrap(0)" :class="activeWrap === 0 ? 'wrap-active' : ''" class="wrap wrap1">
         <div class="w1-left">
           <div>预约教室：</div>
-          <div class="w1-room-name">{{formData.terminal.label}}</div>
+          <div class="w1-room-name">{{ formData.terminal.label }}</div>
         </div>
         <div class="w1-right">
           <div class="change-button">切换教室</div>
@@ -98,11 +122,11 @@
       </div>
       <div @click="selectWrap(1)" :class="activeWrap === 1 ? 'wrap-active' : ''" class="wrap wrap2">
         <div class="w2-top">
-          <div>预约日期: <span style="font-size: 1rem;margin-left: .5rem;">{{borrowDateText}}</span></div>
+          <div>预约日期: <span style="font-size: 1rem;margin-left: .5rem;">{{ borrowDateText }}</span></div>
           <div class="change-button">更改日期</div>
         </div>
         <div class="w2-bottom">
-          <div style="padding-top: 5px;padding-bottom: 15px;">
+          <div style="padding-top: 5px;">
             <span style="font-size: .8rem">预约时段:</span>
             <br>
             <span style="font-size: .6rem;color: #FDA45E;">支持多选</span>
@@ -110,19 +134,20 @@
           <div class="borrow-time-wrap">
             <div class="borrow-window" :style="windowWidth">
               <div class="borrow-time-item" v-for="(item) in borrowTime" :key="item.id">
-              <div>第{{item.id}}节</div>
-              <div>{{ item.start }}-{{ item.end }}</div>
-              <div class="close-icon" @click="removeBorrowTime(item)"><img src="../../assets/close_icon.png" alt=""></div>
-            </div>
+                <div style="font-size: .5rem;">第{{ item.id }}节</div>
+                <div style="font-size: .7rem;">{{ item.start }}-{{ item.end }}</div>
+                <div class="close-icon" @click="removeBorrowTime(item)"><img src="../../assets/close_icon.png" alt="">
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <div @click="selectWrap(2)" :class="activeWrap === 2 ? 'wrap-active' : ''" class="wrap wrap3">
-        <div style="font-size: .8rem;">申请理由：</div>
+        <div style="font-size: .8rem;line-height: 1.8rem">申请理由：</div>
         <input v-model="formData.reason" class="_input reason-input" type="text" placeholder="选填">
       </div>
-      <div class="_button" @click="submit">提交申请</div>
+      <div class="submit-button _button" @click="submit">提交申请</div>
     </div>
     <div class="right">
       <component :is="rightComponentName"></component>
@@ -176,7 +201,7 @@ export default {
       return timeUtil.formatDate(this.formData.date, '-');
     },
     windowWidth() {
-      let w = this.borrowTime.length * 6.5 + 0.5
+      let w = this.borrowTime.length * 5 + 0.5
       return {
         width: w + 'rem'
       }
@@ -232,9 +257,16 @@ export default {
     },
     submit() {
       let self = this
-      if(this.borrowTime < 0) {
+      if (this.borrowTime.length <= 0) {
         msg({
           message: '请选择借用时间',
+          type: 'wrong'
+        });
+        return;
+      }
+      if(!this.checkBorrowTime()) {
+        msg({
+          message: '请选择连续的时间',
           type: 'wrong'
         });
         return ;
@@ -272,6 +304,21 @@ export default {
           })
         }
       })
+    },
+    checkBorrowTime() {
+      let ids = []
+      this.borrowTime.forEach(item => {
+        ids.push(item.id)
+      })
+      ids.sort((a, b) => a - b)
+      let len = ids.length;
+      if (len === 1) return true;
+      for (let i = 0; i < len - 1; i++) {
+        if (ids[i] + 1 !== ids[i + 1]) {
+          return false;
+        }
+      }
+      return true;
     }
   }
 }

@@ -1,7 +1,7 @@
 <style scoped lang="stylus">
 .cs-warp
   get_background(borrow_wrap_background)
-  border-radius 8px
+  border-radius .4rem
   width: 100%
   height: 100%
   padding: 1rem 1.5rem;
@@ -13,6 +13,7 @@
 
   .select-item
     margin-right: .75rem
+    flex: 1;
 
 .cs-content
   overflow-y scroll
@@ -37,7 +38,7 @@
         <my-option @select="campusSelected" value="-1" label="选择校区"></my-option>
         <my-option @select="campusSelected" v-for="item in campus" :key="item.id" :value="item.id" :label="item.label"></my-option>
       </my-select>
-      <my-select class="_select" :len="building.length" :value="schoolInfo.building.label">
+      <my-select class="select-item _select" :len="building.length" :value="schoolInfo.building.label">
         <my-option @select="buildingSelected" value="-1" label="选择教学楼"></my-option>
         <my-option @select="buildingSelected" v-for="item in building" :key="item.id" :value="item.id" :label="item.label"></my-option>
       </my-select>

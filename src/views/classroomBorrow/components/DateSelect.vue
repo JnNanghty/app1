@@ -1,16 +1,17 @@
 <style lang="stylus" scoped>
 .ds-top
   get_background(borrow_wrap_background)
-  border-radius 8px;
+  border-radius .4rem
   display flex
   justify-content center
   padding: .5rem 2rem;
   box-sizing border-box
 
   .icon
-    padding: 1rem
+    width: 2rem
+    height: 2.4rem
     get_background(input_background)
-    border-radius 8px;
+    border-radius .4rem
     display flex
     align-items center
     justify-content center
@@ -38,8 +39,10 @@
   .time-item
     display flex
     justify-content space-between
-    padding: 13px
+    padding: .35rem
     line-height 2rem;
+    font-size .6rem;
+
 
     &:nth-child(2n)
       get_background(borrow_date_item_background)
@@ -99,13 +102,13 @@
         content: ''
         position absolute
         top: 50%;
-        transform: translateY(-50%);
         left: -2.1rem
         display block
         border-radius 50%
         border .2rem solid #979797
         width: .7rem
         height: @width
+        transform: translateY(-0.65rem);
 
 </style>
 <template>
@@ -119,8 +122,7 @@
       <div class="time-line-item" v-for="(timeItem, index1) in timeConfig" :key="index1">
         <div class="time-line">{{ index1 === 'morning' ? '上午' : index1 === 'afternoon' ? '下午' : '晚上' }}</div>
         <div class="time-item" v-for="(item, index) in timeItem" :key="index">
-          <div>第{{ index + 1 }}节 <span>{{ item.start }}</span> <span>-</span>
-            <span>{{ item.end }}</span></div>
+          <div><span style="font-size: .8rem;">第{{ index + 1 }}节</span><span style="margin-left: 1.5rem">{{ item.start }}</span> <span style="font-size:.3rem;vertical-align:middle;margin: 0 0.6rem">-</span> <span>{{ item.end }}</span></div>
           <template v-if="item.status === 1">
             <div class="status1 _button" @click="borrow(item)">预约</div>
           </template>

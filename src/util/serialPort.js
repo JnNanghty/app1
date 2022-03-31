@@ -1,10 +1,6 @@
 // 初始化读卡器  注册回调
 import mitt from "@/util/mitt";
 
-function arrayBuffer2string(buf) {
-  return String.fromCharCode.apply(null, new Uint8Array(buf));
-}
-
 class Handler {
   constructor() {
     this.messages = new Map();
@@ -18,7 +14,15 @@ class Handler {
   handle(message) {
     const {count, data} = message;
     if(count === this.next) {
-      mitt.emit('brushCard', data.toString(16));
+      let ic = ''
+      console.log(data);
+      console.log(typeof data);
+      data.forEach(d => {
+        console.log(d);
+        ic += d.toString(16);
+      });
+      console.log(ic);
+      mitt.emit('brushCard', ic);
       this.lastCount = count;
       if(this.messages.has(count)) {
         this.messages.delete(count)
@@ -37,11 +41,12 @@ if (window.serialPortPlugin) {
   // /dev/ttyS3   波特率9600
   window.serialPortPlugin.init(3, 9600, res => {
     const dataArray = Array.from(new Uint8Array(res));
-    const count = Number(dataArray[0]);
-    const data = parseInt(arrayBuffer2string(res.slice(1)));
+    const count = +dataArray.shift();
+    console.log(count)
+    console.log(dataArray)
     handler.handle({
       count,
-      data
+      dataArray
     });
   })
 }
