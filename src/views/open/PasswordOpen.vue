@@ -112,7 +112,7 @@ export default {
       keys: [1, 2, 3, 4, 5, 6, 7, 8, 9, '*', 0, '#'],
       password: '',
       clearIconSrc: require('@/assets/icon/clear-icon_dark.png'),
-      truePassword: '',
+      truePassword: '123456',
       showWrong: false
     }
   },

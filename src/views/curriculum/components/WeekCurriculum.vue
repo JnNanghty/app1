@@ -94,8 +94,8 @@
         width: 0
         height: 0
         border: .5rem solid #000;
-        border-bottom-color: #575D67;
         border-top-color: transparent;
+        get_border_bottom_color(curriculum_border_bottom_color)
         border-left-color: transparent;
         border-right-color: transparent;
 

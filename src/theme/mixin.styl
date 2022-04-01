@@ -26,6 +26,14 @@ get_border_color($color)
       border-color: item[$color];
     }
 
+get_border_bottom_color($color)
+  border-bottom-color: darkMode[$color];
+
+  for item in themeList
+    [data-theme = {item.name}] & {
+      border-bottom-color: item[$color];
+    }
+
 get_background_image($name)
   background-image: darkMode[$name];
 

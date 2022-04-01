@@ -27,17 +27,29 @@ export default {
     return {}
   },
   created() {
-
+    mitt.on('loginSuccess', this.loginSuccess);
   },
   mounted() {
     this.$refs.auth.$data.title = '请通过一下任一种方式进行开门'
     mitt.emit('hideBackButton')
+  },
+  beforeUnmount() {
+    mitt.off('loginSuccess', this.loginSuccess);
   },
   methods: {
     goPasswordOpen() {
       this.$router.push({
         name: 'PasswordOpen'
       })
+    },
+    loginSuccess() {
+      this.senCmd();
+    },
+    senCmd() {
+      if(window.serialPortPlugin) {
+        let cmd = new Uint8Array([0xAA, 0x02, 0x00, 0x00, 0x55]);
+        window.serialPortPlugin.send(cmd, 3);
+      }
     }
   }
 }

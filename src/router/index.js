@@ -17,6 +17,7 @@ import ls from "@/store/ls";
 import InformationDetail from "@/views/information/InformationDetail";
 import AuthAdmin from "@/components/authPage/AuthAdmin";
 import FirstSetting from "@/views/systemSetting/settingItem/FirstSetting";
+import SignAuth from "@/components/authPage/SignAuth";
 
 const routes = [
   {
@@ -70,6 +71,10 @@ const routes = [
       path: '/auth',
       name: 'Auth',
       component: Auth
+    }, {
+      path: '/signAuth',
+      name: 'SignAuth',
+      component: SignAuth
     }, {
       path: '/authAdmin',
       name: 'AuthAdmin',

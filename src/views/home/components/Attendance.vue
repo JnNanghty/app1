@@ -181,36 +181,36 @@
     </div>
     <div v-if="show" class="student-info">
       <div class="student-item" v-for="item in attendanceInfo.students" :key="item.id"
-           :class="item.signInStatus === 1 ? 'student-active' : ''">{{ item.label }}
+           :class="item.signInStatus !== 1 ? 'student-active' : ''">{{ item.label }}
       </div>
     </div>
     <template v-if="currentCourseFlag || show">
-      <div class="a-bottom-mini">
+      <div class="a-bottom-mini" @click="goSignPage">
         <div class="auth-item">
           <img src="../../../assets/brush.png" alt="">
           <span class="desc">一卡通刷卡</span>
         </div>
-        <div class="auth-item">
+        <div class="auth-item" v-show="showQrCode">
           <img src="../../../assets/wx_code.png" alt="">
           <span class="desc">微信扫码</span>
         </div>
-        <div class="auth-item">
+        <div class="auth-item" v-show="showFace">
           <img src="../../../assets/face.png" alt="">
           <span class="desc">人脸识别</span>
         </div>
       </div>
     </template>
     <template v-else>
-      <div class="a-bottom">
+      <div class="a-bottom" @click="goSignPage">
         <div class="auth-item">
           <img src="../../../assets/brush.png" alt="">
           <div class="desc">一卡通刷卡</div>
         </div>
-        <div class="auth-item">
+        <div class="auth-item" v-show="showQrCode">
           <img src="../../../assets/wx_code.png" alt="">
           <div class="desc">微信扫码</div>
         </div>
-        <div class="auth-item">
+        <div class="auth-item" v-show="showFace">
           <img src="../../../assets/face.png" alt="">
           <div class="desc">人脸识别</div>
         </div>
@@ -239,23 +239,51 @@ export default {
   },
   data() {
     return {
-      arrived: [],
-      notArrived: [],
-      laterArrived: [],
       attendanceInfo: {
         students: []
       },
-      show: false
+      show: false,
+      config: []
     }
   },
   computed: {
     currentCourseFlag() {
       return !!this.currentCourse.courseId;
+    },
+    arrived() {
+      return this.attendanceInfo.students.filter(i => i.signInStatus === 3);
+    },
+    notArrived() {
+      return this.attendanceInfo.students.filter(i => i.signInStatus === 1)
+    },
+    laterArrived() {
+      return this.attendanceInfo.students.filter(i => i.signInStatus === 2);
+    },
+    showQrCode() {
+      let show = false;
+      this.config.forEach(item => {
+        if (item.name === 'code') {
+          show = item.value
+        }
+      });
+      return show;
+    },
+    showFace() {
+      let show = false;
+      this.config.forEach(item => {
+        if (item.name === 'face') {
+          show = item.value
+        }
+      });
+      return show;
     }
   },
   created() {
     mitt.on('brushCard', this.brushCard);
     mitt.on('startSignIn', this.startSignIn)
+    this.attendanceInfo = ls.get('attendanceInfo') || {students: []}
+    let config = ls.get('deviceConfig');
+    this.config = config.signInTypes ? JSON.parse(config.signInTypes) : []
   },
   beforeUnmount() {
     mitt.off('brushCard', this.brushCard);
@@ -272,12 +300,16 @@ export default {
       }).then(res => {
         this.attendanceInfo = res.data;
         this.attendanceInfo.students.forEach(item => {
+          // 1正常  2迟到   3签到
           if (item.signInStatus === 1) {
-            this.arrived.push(item);
-          } else if (item.signInStatus === 0) {
             this.notArrived.push(item);
+          } else if (item.signInStatus === 2) {
+            this.laterArrived.push(item);
+          } else {
+            item.signInStatus = 1;
           }
         })
+        ls.set('attendanceInfo', this.attendanceInfo);
         msg({
           message: '开始签到!'
         });
@@ -288,15 +320,18 @@ export default {
         ic,
         lessonId: this.attendanceInfo.id
       }).then(res => {
+        let status = 3;
         if (this.currentCourseFlag) {
-          this.laterArrived.push(res.data)
-        } else {
-          this.arrived.push(res.data);
+          status = 2;
         }
-        this.notArrived = this.notArrived.filter(i => i.label !== res.data.label);
-        this.attendanceInfo.students.forEach(item => (item.label === res.data.label) && (item.signInStatus = 1));
+        this.attendanceInfo.students.forEach(item => (item.label === res.data.label) && (item.signInStatus = status));
         msg({
           message: res.data.label + '签到成功',
+          type: 'success'
+        })
+      }, () => {
+        msg({
+          message: '签到失败',
           type: 'success'
         })
       })
@@ -304,6 +339,18 @@ export default {
     showDetail() {
       // 显示学生
       this.show = !this.show;
+    },
+    goSignPage() {
+      if (this.attendanceInfo.id) {
+        this.$router.push({
+          name: 'SignAuth'
+        })
+      } else {
+        msg({
+          message: '没有签到信息！',
+          type: 'wrong'
+        })
+      }
     }
   }
 }
