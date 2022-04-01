@@ -64,10 +64,10 @@
   width: 100%
   z-index 5
   position relative
-  top -8px;
+  top -0.4rem;
   get_background(student_info_background)
-  border-bottom-left-radius 8px
-  border-bottom-right-radius 8px;
+  border-bottom-left-radius .6rem
+  border-bottom-right-radius .6rem
   flex 1;
 
   .student-item
@@ -332,7 +332,7 @@ export default {
       }, () => {
         msg({
           message: '签到失败',
-          type: 'success'
+          type: 'wrong'
         })
       })
     },

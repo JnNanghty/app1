@@ -64,9 +64,9 @@
         <div class="left-item"><img class="icon" :src="remark" alt="">{{terminalInfo.remark || '-'}}</div>
       </div>
       <div class="left-bottom">
+        <div class="left-item">考 场 号：{{examData.examRoomNo}}</div>
         <div class="left-item">考试科目：<span style="font-size: 1rem;">{{examData.examSubject}}</span></div>
         <div class="left-item">考试时间：{{examData.examStartDate}}</div>
-<!--        <div class="left-item">监考人员：{{examData.examRoomNo}}</div>-->
       </div>
     </div>
     <div class="right">
@@ -99,7 +99,8 @@ export default {
     return {
       examData: {
         examRoomNo: '注册会计师考试',
-        examStartDate: '12：00-13：30',
+        examStartDate: null,
+        examEndDate: null,
         examSubject: '注册会计师考试'
       },
       terminalInfo: {},
@@ -114,6 +115,13 @@ export default {
     this.terminalInfo = ls.get('terminalInfo')
     this.changeTheme();
     mitt.on('changeTheme', this.changeTheme)
+  },
+  computed: {
+    examDate() {
+      let start = timeUtil.formatTime(this.examData.examStartDate || Date.now());
+      let end = timeUtil.formatTime(this.examData.examEndDate)
+      return start + ' - ' + end;
+    },
   },
   mounted() {},
   beforeUnmount() {
@@ -131,7 +139,7 @@ export default {
       }
       this.seat = require(`@/assets/icon${suffix2}/seat_${suffix}.png`)
       this.remark = require(`@/assets/icon${suffix2}/remark_${suffix}.png`)
-    }
+    },
   }
 }
 </script>

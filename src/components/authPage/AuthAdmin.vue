@@ -65,9 +65,9 @@ export default {
     auth() {
       if (this.account === 'admin' &&
           this.password === 'admin') {
-        const serviceUrl = ls.get('serviceUrl')
+        const companyId = ls.get('companyId')
         let name = 'FirstSetting'
-        if (serviceUrl) {
+        if (companyId) {
           name = 'Auth'
         }
         this.$router.push({

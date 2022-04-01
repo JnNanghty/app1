@@ -60,7 +60,7 @@
         </div>
         <div class="form-item">
           <div class="form-label">密码</div>
-          <input class="form-input _input" v-model="password" style="width: 19.5rem">
+          <input class="form-input _input" type="password" v-model="password" style="width: 19.5rem">
         </div>
         <div class="submit-button _button" @click="login">登录</div>
       </form>

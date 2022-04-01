@@ -9,6 +9,7 @@
   iframe
     width: 100%
     height: 18rem;
+    pointer-events none
   .info
     width: 100%
     height: 15rem;
@@ -71,7 +72,8 @@ export default {
   beforeUnmount() {
     mitt.emit('hideBackButton')
   },
-  methods: {}
+  methods: {
+  }
 }
 </script>
 

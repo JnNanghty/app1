@@ -70,7 +70,6 @@ export default {
       windowStyle: {
         transform: 'translateX(0)'
       },
-      inAttendance: false
     };
   },
   created() {
@@ -145,7 +144,6 @@ export default {
           // 减去秒数  把误差控制在1s以内
           ls.set('currentCourse', item, (item.endSource - (hour * 60 + minute)) * 60 * 1000 - second * 1000);
           this.inCourse = true;
-          this.inAttendance = false;
           break;
         } else if ((item.endSource < currentSource && currentSource < nextItem.startSource) ||
             (i === 0 && currentSource < item.startTime)) {
@@ -160,7 +158,6 @@ export default {
           this.currentCourse = {};
           this.nextCourse = {};
           this.inCourse = false;
-          this.inAttendance = false;
           ls.remove('currentCourse');
         }
       }
@@ -175,9 +172,9 @@ export default {
         if (status === 4) {
           // 1、 在首页 进入的考勤状态 有课程id
           // 2、 从别的页面回到首页， 进入考勤 来不及计算课程id
-          if (this.nextCourse.courseId && !this.inAttendance) {
+          let attendanceInfo = ls.get('attendanceInfo')
+          if (this.nextCourse.courseId && !attendanceInfo.id) {
             mitt.emit('startSignIn')
-            this.inAttendance = true;
           }
         }
         mitt.emit('showBgLogo', false)

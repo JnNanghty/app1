@@ -180,6 +180,8 @@ export default {
       this.systemInfo.mode = item.value;
     },
     exit() {
+      this.showStatusBar();
+      // 关闭灯光
       if (window.serialPortPlugin) {
         let cmd = new Uint8Array([0xAA, 0x12, 0x00, 0x00, 0x55]);
         window.serialPortPlugin.send(cmd, 3);
