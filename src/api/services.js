@@ -37,7 +37,7 @@ service.interceptors.request.use(config => {
 
   const data = config.data || {};
 
-  config.data = Object.assign(data, extraData);
+  config.data = Object.assign(extraData, data);
 
   return config;
 });

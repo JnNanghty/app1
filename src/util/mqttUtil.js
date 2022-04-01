@@ -29,7 +29,6 @@ export function initMqtt() {
               console.log('mqtt receive data');
               console.log(payload);
               const data = JSON.parse(payload);
-              console.log(data)
               if (data.type === 'config') {
                 mitt.emit('mqttConfig', data.data); // 修改背景图和logo，模块的定制
               } else if (data.type === 'realTimeBroadcast') {

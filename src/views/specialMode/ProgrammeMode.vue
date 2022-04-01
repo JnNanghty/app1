@@ -28,7 +28,7 @@
       height 100%
 </style>
 <template>
-  <div class="main">
+  <div class="main" @click="showBackButton">
     <template v-if="programmeData.type.id === 1">
       <!--      <video class="full" :src="playUrl"></video>-->
       <camera-player :camera="camera"></camera-player>
@@ -36,7 +36,7 @@
     <template v-else>
       <div class="full text-content" v-html="programmeData.content"></div>
     </template>
-    <div class="back-button" @click="$router.back">
+    <div class="back-button" v-show="showBack" @click="$router.back">
       <img src="../../assets/back_button.png" alt="">
     </div>
   </div>
@@ -73,24 +73,35 @@ export default {
         cameraPlayUrl: '',
         cameraRtmpPlayUrl: '',
         cameraHttpFlvPlayUrl: '',
-        cameraHasAudio: false
-      }
+        cameraHasAudio: false,
+        id: 1
+      },
+      showBack: false,
+      hideTimeout: null
     }
   },
   created() {
     const data = this.$route.params.data;
     this.programmeData = JSON.parse(data);
-    if (this.programmeData.type.id === 1) {
+    if (+this.programmeData.type.id === 1) {
       this.getPlayUrl();
     }
   },
-  mounted() {
+  mounted() {},
+  watch: {
+    showBack(nv) {
+      if (nv) {
+        if (this.hideTimeout) clearTimeout(this.hideTimeout)
+        this.hideTimeout = setTimeout(() => {
+          this.showBack = false;
+        }, 3e3)
+      }
+    }
   },
   methods: {
     getPlayUrl() {
       fileService.getFile(this.programmeData.resource.downloadUrl, '', 'hzmaijie-personspace').then(url => {
-        console.log(url);
-        if (this.getFileType() === 'flv') {
+        if (this.getFileType(this.programmeData.resource.downloadUrl) === 'flv') {
           this.camera.cameraHttpFlvPlayUrl = url;
         } else {
           this.camera.cameraPlayUrl = url;
@@ -101,6 +112,9 @@ export default {
       let index = url.lastIndexOf('.');
       return url.slice(index + 1);
     },
+    showBackButton() {
+      this.showBack = true;
+    }
   }
 }
 </script>

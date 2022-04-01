@@ -30,7 +30,7 @@ export default {
     mitt.on('loginSuccess', this.loginSuccess);
   },
   mounted() {
-    // this.$refs.auth.$data.title = '请通过一下任一种方式进行开门'
+    this.$refs.auth.$data.title = '请通过一下任一种方式进行开门'
     mitt.emit('hideBackButton')
   },
   beforeUnmount() {
