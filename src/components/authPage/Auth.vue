@@ -37,7 +37,7 @@
   <div class="auth-main">
     <div class="auth-title">{{ title }}</div>
     <div class="auth-content">
-      <div class="card" @click="loginSuccess">
+      <div class="card">
         <div class="login-item">
           <img src="../../assets/brush.png" alt="">
         </div>
@@ -138,7 +138,7 @@ export default {
       })
     },
     loginSuccess() {
-      setToken('6669282:61646D696E36363639323130:1652167051808:F7353F580F31DF479A3D75B0A931164A');
+      // setToken('6669282:61646D696E36363639323130:1652167051808:F7353F580F31DF479A3D75B0A931164A');
       this.getUserPermission();
     },
     icLogin(ic) {

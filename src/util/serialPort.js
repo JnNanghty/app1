@@ -12,12 +12,12 @@ class Handler {
   }
 
   handle(message) {
-    const {count, data} = message;
+    const {count, dataArray} = message;
     if(count === this.next) {
       let ic = ''
-      console.log(data);
-      console.log(typeof data);
-      data.forEach(d => {
+      console.log(dataArray);
+      console.log(typeof dataArray);
+      dataArray.forEach(d => {
         console.log(d);
         ic += d.toString(16);
       });

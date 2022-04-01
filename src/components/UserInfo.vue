@@ -30,7 +30,7 @@
 <template>
   <div class="user-info">
     <div class="user-info-top">
-      <div>{{ userInfo.label || '-' }}</div>
+      <div>{{ userInfo.extraInformation ? userInfo.extraInformation.label : '-' }}</div>
       <div class="exit-text">{{ expireTime }}s后退出</div>
     </div>
     <div class="exit-button" @click="exitUser">退出</div>
@@ -57,9 +57,9 @@ export default {
       this.expireTime = Math.floor((expires - now) / 1000);
       if (now >= expires) {
         clearInterval(this.exitInterval);
-        // this.$router.replace({
-        //   name: 'Home'
-        // });
+        this.$router.replace({
+          name: 'Home'
+        });
       }
     }, 1e3);
   },

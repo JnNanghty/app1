@@ -106,7 +106,18 @@ const routes = [
   }, {
     path: '/systemSettingHome',
     name: 'SystemSettingHome',
-    component: SystemSettingHome
+    component: SystemSettingHome,
+    beforeEnter(to, from) {
+      const permission = ls.get('permission') || {};
+      console.log(to, from)
+      if (permission.assetManagement) {
+        return true;
+      } else {
+        return {
+          name: 'NoPermission'
+        }
+      }
+    }
   }, {
     path: '/programmeMode',
     name: 'ProgrammeMode',
