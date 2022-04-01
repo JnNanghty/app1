@@ -1,5 +1,6 @@
 <style lang="stylus" scoped>
 .user-info {
+  min-width: 10rem
   get_font_color(font_color)
   display flex
   padding: 0.3rem
@@ -8,6 +9,9 @@
   .user-info-top {
     font-size .8rem;
     flex: 1;
+    white-space nowrap
+    overflow: hidden;
+    text-overflow ellipsis
 
     .exit-text {
       font-size: .4rem;
@@ -16,7 +20,6 @@
   }
 
   .exit-button {
-    margin-left: 2rem
     padding: .4rem 1.5rem;
     text-align center
     border-radius .4rem;

@@ -13,7 +13,7 @@
     padding-top: .7rem
     padding-left: 1.25rem
     position relative
-    border-radius 8px;
+    border-radius .4rem;
 
     .form-input
       max-width: 19.5rem;
@@ -52,7 +52,18 @@
       </form>
     </div>
     <div class="main-right">
-      <auth v-if="ipChecked"></auth>
+      <h3 class="form-title">登录融合平台</h3>
+      <form class="form-content">
+        <div class="form-item">
+          <div class="form-label">账号</div>
+          <input class="form-input _input" v-model="account" style="width: 19.5rem">
+        </div>
+        <div class="form-item">
+          <div class="form-label">密码</div>
+          <input class="form-input _input" v-model="password" style="width: 19.5rem">
+        </div>
+        <div class="submit-button _button" @click="login">登录</div>
+      </form>
     </div>
   </div>
 </template>
@@ -64,6 +75,7 @@ import {msg} from "@/components/message";
 import {initMqtt} from "@/util/mqttUtil";
 import Auth from "@/components/authPage/Auth";
 import mitt from "@/util/mitt";
+import {setToken} from "@/util/auth";
 
 export default {
   name: "FirstSetting",
@@ -71,7 +83,9 @@ export default {
   data() {
     return {
       serviceUrl: '',
-      ipChecked: false
+      ipChecked: false,
+      account: '',
+      password: ''
     }
   },
   computed: {},
@@ -91,21 +105,47 @@ export default {
             type: 'success'
           });
           initMqtt();
-          this.getConfig();
+          this.ipChecked = true;
         } else {
           ls.remove('serviceUrl');
           msg({
             message: '连接服务器失败!',
             type: 'wrong'
           });
+          this.ipChecked = false;
         }
+      }, () => {
+        ls.remove('serviceUrl');
+        this.ipChecked = false;
+      })
+    },
+    login() {
+      service.post('auth/login', {
+        account: this.account,
+        password: this.password
+      }).then(res => {
+        setToken(res.token);
+        ls.set('userInfo', res, 6e5);
+        this.getConfig()
+      })
+    },
+    getUserPermission() {
+      service.post('permission/getUserPermission').then(res => {
+        ls.set('permission', res, 6e5);
+        msg({
+          message: '登录成功！',
+          type: 'success'
+        })
+        this.$router.push({
+          name: 'SystemSettingHome'
+        })
       })
     },
     getConfig() {
       service.post('classCard/getConfig').then((res) => {
         if (res.message === 'success') {
           ls.set('deviceConfig', res.data);
-          this.ipChecked = true;
+          this.getUserPermission();
         } else {
           msg({
             message: '获取班牌信息失败！',

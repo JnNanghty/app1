@@ -303,6 +303,8 @@ export default {
             type: 'wrong'
           });
         }
+      }, () => {
+        ls.remove('serviceUrl');
       })
     },
     bind() {

@@ -148,7 +148,7 @@ export default {
   data() {
     return {
       config: {
-        log: ''
+        logo: ''
       },
       serviceUrl: '',
       componentName: 'BindClassroom',
@@ -164,7 +164,6 @@ export default {
         {id: 5, name: 'art', label: '功能教室'},
         {id: 6, name: 'other', label: '其他'}
       ],
-      userInfo: {}
     }
   },
   computed: {
@@ -180,8 +179,9 @@ export default {
   },
   created() {
     this.terminalInfo = ls.get('terminalInfo') || {};
-    this.userInfo = ls.get('userInfo') || {}
+    this.config = ls.get('deviceConfig') || {}
     this.serviceUrl = ls.get('serviceUrl') || '';
+
   },
   beforeUnmount() {
     if (window.banpaiTools) {
