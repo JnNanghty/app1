@@ -15,6 +15,8 @@
 </template>
 <script>
 import mitt from "@/util/mitt";
+import ls from "@/store/ls";
+import {initMqtt} from "@/util/mqttUtil";
 
 export default {
   data() {
@@ -57,7 +59,7 @@ export default {
     mitt.on('mqttRealTimeBroadcast', this.broadcast);
 
     mitt.on('mqttConfig', (data) => {
-      if(data.theme === 'dark' || data.theme === 'bright') {
+      if (data.theme === 'dark' || data.theme === 'bright') {
         window.document.documentElement.setAttribute('data-theme', data.theme);
       }
     });
@@ -71,17 +73,14 @@ export default {
     })
 
     mitt.on('mqttStatus', (data) => {
-      if(+data === 1) {
+      if (+data === 1) {
         this.$router.replace({
           name: "Home"
         });
       }
     })
   },
-  mounted() {
-
-
-  },
+  mounted() {},
   methods: {
     broadcast(data) {
       this.showNotice = true;
@@ -180,11 +179,11 @@ export default {
   bottom: 1rem;
   height: 10rem
   z-index 100
+
   img {
     height 100%
   }
 }
-
 
 
 </style>

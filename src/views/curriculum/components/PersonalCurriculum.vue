@@ -219,7 +219,7 @@ export default {
       service.post('classCard/scheduleInfo', {
         id: this.terminalId
       }).then(res => {
-        service.post('course/terminalSection', {
+        service.post('classCard/personalCurriculum', {
           id: this.terminalId
         }).then(sec => {
           let temp = {

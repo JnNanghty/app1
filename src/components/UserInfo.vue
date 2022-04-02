@@ -42,6 +42,7 @@
 
 <script>
 import ls from "@/store/ls";
+import {removeToken} from "@/util/auth";
 
 export default {
   name: "UserInfo",
@@ -73,7 +74,9 @@ export default {
   },
   methods: {
     exitUser() {
-      ls.remove('userInfo')
+      ls.remove('userInfo');
+      removeToken();
+      ls.remove('permission');
       this.$router.replace({
         name: 'Home'
       });

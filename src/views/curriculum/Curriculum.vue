@@ -60,7 +60,7 @@
 }
 
 .calendar{
-  height: 100%
+  height: 18rem;
   margin: 0 auto;
   display block
 }

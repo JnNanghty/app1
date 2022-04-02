@@ -97,7 +97,7 @@ export default {
   },
   methods: {
     checkIp() {
-      ls.set('serviceUrl', this.serviceUrl);
+      ls.set('serviceUrl', this.serviceUrl.toLowerCase());
       service.post('classCard/testLink').then(res => {
         if (res.message === 'success') {
           msg({

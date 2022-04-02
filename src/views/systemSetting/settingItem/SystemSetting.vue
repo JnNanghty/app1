@@ -181,6 +181,9 @@ export default {
     },
     exit() {
       this.showStatusBar();
+      if (window.banpaiTools) {
+        window.banpaiTools.exit()
+      }
       // 关闭灯光
       if (window.serialPortPlugin) {
         let cmd = new Uint8Array([0xAA, 0x12, 0x00, 0x00, 0x55]);
