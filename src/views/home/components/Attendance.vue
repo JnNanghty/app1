@@ -224,6 +224,7 @@ import service from "@/api/services";
 import mitt from "@/util/mitt";
 import {msg} from "@/components/message";
 import ls from "@/store/ls";
+import timeUtil from "@/util/timeUtil";
 
 export default {
   name: "Attendance",
@@ -309,7 +310,9 @@ export default {
             item.signInStatus = 1;
           }
         })
-        ls.set('attendanceInfo', this.attendanceInfo);
+        const {second, currentSource} = timeUtil.getNowTime();
+        let exp = (this.nextCourse.endSource - currentSource) * 60 * 1000 - second * 1000
+        ls.set('attendanceInfo', this.attendanceInfo, exp);
         msg({
           message: '开始签到!'
         });

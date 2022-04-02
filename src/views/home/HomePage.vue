@@ -136,13 +136,13 @@ export default {
           nextItem.endTime = timeUtil.sourceToTime(nextItem.endSource);
         }
         // 当前时间
-        const {hour, minute, second, currentSource} = timeUtil.getNowTime();
+        const {second, currentSource} = timeUtil.getNowTime();
         if (item.startSource <= currentSource && item.endSource >= currentSource) {
           // 上课中
           this.currentCourse = JSON.parse(JSON.stringify(item));
           this.nextCourse = nextItem ? JSON.parse(JSON.stringify(nextItem)) : {};
           // 减去秒数  把误差控制在1s以内
-          ls.set('currentCourse', item, (item.endSource - (hour * 60 + minute)) * 60 * 1000 - second * 1000);
+          ls.set('currentCourse', item, (item.endSource - currentSource) * 60 * 1000 - second * 1000);
           this.inCourse = true;
           break;
         } else if ((item.endSource < currentSource && currentSource < nextItem.startSource) ||
@@ -168,11 +168,12 @@ export default {
       });
     },
     scrollWindow(status) {
+      console.log(1)
       if (status === 2 || status === 4) {
         if (status === 4) {
           // 1、 在首页 进入的考勤状态 有课程id
           // 2、 从别的页面回到首页， 进入考勤 来不及计算课程id
-          let attendanceInfo = ls.get('attendanceInfo')
+          let attendanceInfo = ls.get('attendanceInfo') || {}
           if (this.nextCourse.courseId && !attendanceInfo.id) {
             mitt.emit('startSignIn')
           }

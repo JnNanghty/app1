@@ -20,35 +20,34 @@
   .back-button
     position absolute
     left: 0
-    bottom: 1rem;
+    bottom: 3rem;
     height: 10rem
     z-index 100
+    opacity 0.2
 
     img
       height 100%
 </style>
 <template>
-  <div class="main" @click="showBackButton">
+  <div class="main">
     <template v-if="programmeData.type.id === 1">
-      <!--      <video class="full" :src="playUrl"></video>-->
-      <camera-player :camera="camera"></camera-player>
+      <video-player v-if="showVideo" :camera="camera" :video="programmeData.resource.downloadUrl"></video-player>
     </template>
     <template v-else>
       <div class="full text-content" v-html="programmeData.content"></div>
     </template>
-    <div class="back-button" v-show="showBack" @click="$router.back">
+    <div class="back-button" @click="$router.back">
       <img src="../../assets/back_button.png" alt="">
     </div>
   </div>
 </template>
 
 <script>
-import ls from "@/store/ls";
 import fileService from "@/util/fileService";
-import CameraPlayer from "@/views/patrol/components/CameraPlayer";
+import VideoPlayer from "@/views/specialMode/components/VideoPlayer";
 
 export default {
-  components: {CameraPlayer},
+  components: {VideoPlayer},
   data() {
     return {
       programmeData: {
@@ -56,7 +55,7 @@ export default {
         id: -1,
         label: '节目',
         resource: {
-          downloadUrl: '',
+          downloadUrl: 'a.flv',
           id: -2,
           label: ''
         },
@@ -66,41 +65,34 @@ export default {
         }
       },
       camera: {
-        type: {id: 5},
-        workstatus: {id: 2},
         controls: false,
         muted: true,
-        cameraPlayUrl: '',
-        cameraRtmpPlayUrl: '',
-        cameraHttpFlvPlayUrl: '',
+        cameraPlayUrl: null,
+        cameraHttpFlvPlayUrl: 'https://hzmaijie-personspace.oss-cn-hangzhou.aliyuncs.com/aliyun/resource/6669282/%E4%B8%AA%E4%BA%BA%E6%96%87%E4%BB%B6%E5%A4%B9/1/test.flv?OSSAccessKeyId=STS.NSp6jHtEihPY5YvwQdzGUHU4M&Expires=1648809574&Signature=yDsxf4nOCmwGvYYI%2FnRGWG6YTQ4%3D&security-token=CAIS%2FQF1q6Ft5B2yfSjIr5DFfdD8mZpI35KyN3%2FHk1Exdsh5p5Cfrzz2IH5LdHhqA%2B4Wtfown2BW6foflqB4T5ZeXkfNd8coCgfzPJXmMeT7oMWQweEuqv%2FMQBq%2BaXPS2MvVfJ%2BKLrf0ceusbFbpjzJ6xaCAGxypQ12iN%2B%2Fi6%2FclFKN1ODO1dj1bHtxbCxJ%2FocsBTxvrOO2qLwThjxi7biMqmHIl2TIgtP7hkpzHtUOP1gej8IJP%2BdSteKrDRtJ3IZJyX%2B2y2OFLbafb2EZSkUMUq%2Fcn1vYaqWyZ4YrNXQYNvg%2F7NPHP6tB1Nwh%2FfbAzEKNfsOPmkvl1qjFmMS85GtEmGoABI39fQhPfDhS%2BbvSb2J%2BHEFTlGCsXKWdwjmyxkfVY1N53T0DNV%2FKdoggm%2FGLl%2F%2F3fM%2FZLftlMDzl8u5edQHveMprKkuWiu8ARxMF4vMZdTEXlWNxhhXBnHA0HPBnBxfcK1BpEAAqVyAzjpTtUlUx1dmeox00pAPwTa1V5GkjDajY%3D',
         cameraHasAudio: false,
         id: 1
-      },
-      showBack: false,
-      hideTimeout: null
-    }
-  },
-  created() {
-    const data = this.$route.params.data;
-    this.programmeData = JSON.parse(data);
-    if (+this.programmeData.type.id === 1) {
-      this.getPlayUrl();
-    }
-  },
-  mounted() {},
-  watch: {
-    showBack(nv) {
-      if (nv) {
-        if (this.hideTimeout) clearTimeout(this.hideTimeout)
-        this.hideTimeout = setTimeout(() => {
-          this.showBack = false;
-        }, 3e3)
       }
     }
   },
+  created() {
+    // const data = this.$route.params.data;
+    // this.programmeData = JSON.parse(data);
+    // if (this.programmeData.type.id === 1) {
+    //   this.getPlayUrl();
+    // }
+  },
+  computed: {
+    showVideo() {
+      return this.camera.cameraHttpFlvPlayUrl || this.camera.cameraPlayUrl
+    }
+  },
+  mounted() {
+  },
+  watch: {},
   methods: {
     getPlayUrl() {
       fileService.getFile(this.programmeData.resource.downloadUrl, '', 'hzmaijie-personspace').then(url => {
+        console.log(url)
         if (this.getFileType(this.programmeData.resource.downloadUrl) === 'flv') {
           this.camera.cameraHttpFlvPlayUrl = url;
         } else {
@@ -112,9 +104,6 @@ export default {
       let index = url.lastIndexOf('.');
       return url.slice(index + 1);
     },
-    showBackButton() {
-      this.showBack = true;
-    }
   }
 }
 </script>
