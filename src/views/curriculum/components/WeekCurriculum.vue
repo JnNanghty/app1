@@ -4,6 +4,8 @@
   padding-right: 30px
   box-sizing border-box
   get_font_color(font_color)
+  display flex
+  flex-direction column
 
   .change-week
     overflow-x scroll
@@ -41,9 +43,10 @@
         }
 
 .table
+  //flex: 1;
   display flex
   text-align center
-  //height: 17rem
+  height: 16rem
   border-radius .4rem;
   overflow-y: scroll;
   get_background(curriculum_table_background)
@@ -107,7 +110,11 @@
     margin-bottom: 2px
     font-size .7rem
     min-height: auto;
-    border-right: none
+    border-right: none;
+    &:nth-child(1) .table-title
+      border-top-left-radius .4rem
+    &:nth-child(8) .table-title
+      border-top-right-radius .4rem
 
   .section-row
     display flex
