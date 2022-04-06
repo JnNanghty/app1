@@ -90,6 +90,7 @@ export default {
   },
   computed: {},
   created() {
+    this.serviceUrl = ls.get('serviceUrl') || ''
   },
   mounted() {
   },
