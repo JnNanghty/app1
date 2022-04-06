@@ -283,7 +283,7 @@ export default {
     mitt.on('brushCard', this.brushCard);
     mitt.on('startSignIn', this.startSignIn)
     this.attendanceInfo = ls.get('attendanceInfo') || {students: []}
-    let config = ls.get('deviceConfig');
+    let config = ls.get('deviceConfig') || {};
     this.config = config.signInTypes ? JSON.parse(config.signInTypes) : []
   },
   beforeUnmount() {
