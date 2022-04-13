@@ -6,6 +6,7 @@ class Handler {
     this.messages = new Map();
     this.lastCount = -1;
   }
+
   get next() {
     let count = this.lastCount + 1;
     return count > 99 ? count - 100 : count;
@@ -13,21 +14,34 @@ class Handler {
 
   handle(message) {
     const {count, dataArray} = message;
-    if(count === this.next) {
-      let ic = ''
-      console.log(dataArray);
-      console.log(typeof dataArray);
-      dataArray.forEach(d => {
-        console.log(d);
-        ic += d.toString(16);
+    if (count === this.next) {
+      let arr = dataArray.map(d => {
+        return d.toString(16);
       });
-      console.log(ic);
+      console.log(arr);
+      let num = '';
+      arr.forEach(i => {
+        if (i === 'd' || i === 'a') {
+        } else {
+          i -= 30;
+          num += i;
+        }
+      });
+      console.log('num:' + num);
+      let ric = Number(num).toString(16);
+      console.log('ric:' + ric);
+      let ic = '';
+      while (ric.length > 0) {
+        ic += ric.slice(-2);
+        ric = ric.slice(0, -2);
+      }
+      console.log('ic:' + ic);
       mitt.emit('brushCard', ic);
       this.lastCount = count;
-      if(this.messages.has(count)) {
+      if (this.messages.has(count)) {
         this.messages.delete(count)
       }
-      if(this.messages.size && this.messages.has(this.next)) {
+      if (this.messages.size && this.messages.has(this.next)) {
         this.handle(this.messages.get(this.next));
       }
     } else {
