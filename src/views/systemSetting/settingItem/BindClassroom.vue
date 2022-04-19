@@ -150,7 +150,7 @@ import {initMqtt} from "@/util/mqttUtil";
 export default {
   name: "BindClassroom",
   data() {
-    let mac = 'zzzz'
+    let mac = 'cc'
     if (window.device) {
       mac = window.device.uuid;
     }
@@ -287,6 +287,7 @@ export default {
     },
     // 检查连接
     checkIp() {
+      let url = ls.get('serviceUrl');
       ls.set('serviceUrl', this.serviceUrl.toLowerCase());
       service.post('classCard/testLink').then(res => {
         if (res.message === 'success') {
@@ -297,14 +298,14 @@ export default {
           this.getTerminal();
           initMqtt();
         } else {
-          ls.remove('serviceUrl');
+          ls.set('serviceUrl', url);
           msg({
             message: '连接服务器失败!',
             type: 'wrong'
           });
         }
       }, () => {
-        ls.remove('serviceUrl');
+        ls.set('serviceUrl', url);
       })
     },
     bind() {
