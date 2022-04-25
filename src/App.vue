@@ -8,7 +8,7 @@
     <div class="notice" v-show="showNotice">
       <div ref="scrollText" class="notice-text">{{ noticeText }}</div>
     </div>
-    <div class="back-button" v-show="showBackButton" @click="$router.back">
+    <div class="app-back-button" v-show="showBackButton" @click="$router.back">
       <img src="./assets/back_button.png" alt="">
     </div>
   </div>
@@ -173,7 +173,7 @@ export default {
   letter-spacing: 3px;
 }
 
-.back-button {
+.app-back-button {
   position absolute
   left: 0
   bottom: 1rem;

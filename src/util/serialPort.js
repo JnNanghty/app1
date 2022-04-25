@@ -1,5 +1,6 @@
 // 初始化读卡器  注册回调
 import mitt from "@/util/mitt";
+import {msg} from "@/components/message";
 
 class Handler {
   constructor() {
@@ -19,24 +20,22 @@ class Handler {
         return d.toString(16);
       });
       console.log(arr);
-      let num = '';
-      arr.forEach(i => {
-        if (i === 'd' || i === 'a') {
-        } else {
-          i -= 30;
-          num += i;
-        }
-      });
-      console.log('num:' + num);
-      let ric = Number(num).toString(16);
-      console.log('ric:' + ric);
       let ic = '';
-      while (ric.length > 0) {
-        ic += ric.slice(-2);
-        ric = ric.slice(0, -2);
-      }
+      arr.forEach(i => {
+        if (i < 10) {
+          i = '0' + i;
+        }
+        ic += i;
+      });
       console.log('ic:' + ic);
-      mitt.emit('brushCard', ic);
+      if (ic === 'aabb0600000001060007') {
+        msg({
+          message: '串口初始化成功！',
+          type: 'success'
+        })
+      } else {
+        mitt.emit('brushCard', ic);
+      }
       this.lastCount = count;
       if (this.messages.has(count)) {
         this.messages.delete(count)
@@ -63,6 +62,8 @@ if (window.serialPortPlugin) {
       dataArray
     });
   })
+  let cmd = new Uint8Array([0xaa, 0xbb, 0x06, 0x00, 0x00, 0x00, 0x01, 0x06, 0x03, 0x04]);
+  window.serialPortPlugin.send(cmd, 3);
 }
 
 

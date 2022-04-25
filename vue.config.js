@@ -3,7 +3,8 @@ const path = require('path');
 function resolve(dir) {
   return path.join(__dirname, dir);
 }
-function addStyleResource (rule) {
+
+function addStyleResource(rule) {
   rule.use('style-resource')
     .loader('style-resources-loader')
     .options({
@@ -13,8 +14,10 @@ function addStyleResource (rule) {
       ],
     })
 }
+
 module.exports = {
   outputDir: 'D:\\project\\banpai\\www',
+  transpileDependencies: ['vue-router', 'minio'],
   devServer: {
     proxy: {
       '/rest': {

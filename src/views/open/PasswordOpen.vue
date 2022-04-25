@@ -1,19 +1,24 @@
 <style lang="stylus" scoped>
 .main
   get_font_color(font_color)
+
   .title
     text-align center
     font-size .8rem;
+
   .keyboard
     width: 13rem;
     margin: 2rem auto 1.5rem;
+
     .status-wrap
       padding: 2px;
       padding-bottom: 0
       border-top-left-radius .3rem
       border-top-right-radius @border-top-left-radius
+
     .wrong-status
       background-image linear-gradient(to bottom, #FD5E5E, #FF000000)
+
     .password-wrap
       border-top-left-radius .3rem
       border-top-right-radius @border-top-left-radius
@@ -24,28 +29,34 @@
       padding: 0 1rem
       line-height @height;
       get_background(open_password_background)
+
       .password
         flex: 1
         letter-spacing 1rem;
         display flex
         overflow-x scroll;
+
         .dot
           width: .5rem;
           height: @width;
           border-radius 50%;
           background: #424851
           margin-right: 1rem
+
       .clear-icon
         width: 1.2rem
         height: @width
+
         img
           width: 100%
           height 100%
           vertical-align top;
+
     .keyboard-content
       display flex
       flex-wrap wrap;
       padding: 0 2px;
+
       .number
         flex-grow: 1;
         flex-basis: 33.3%
@@ -57,10 +68,12 @@
         border 1px solid #3F3F3F
         get_background(open_number_background)
         get_border_color(open_number_border_color)
+
 .button-wrap
   display flex
   justify-content center
   font-weight 300
+
   .back-button
     margin: 0 3rem 0 0
     width: 5rem
@@ -68,6 +81,7 @@
     font-size .7rem;
     get_background(open_button_background)
     box-shadow: -7px -4px 16px -4px rgba(255, 255, 255, 0.08), 10px 10px 13px -2px rgba(0, 0, 0, 0.12);
+
   .submit-button
     width: 5rem
     margin: 0
@@ -90,7 +104,7 @@
         </div>
       </div>
       <div class="keyboard-content">
-        <div class="number" v-for="item in keys" :key="item" @click="addNum(item)">{{item}}</div>
+        <div class="number" v-for="item in keys" :key="item" @click="addNum(item)">{{ item }}</div>
       </div>
     </div>
     <div class="button-wrap">
@@ -128,7 +142,7 @@ export default {
       service.post('', {}).then()
     },
     addNum(item) {
-      if(this.password.length < 6) {
+      if (this.password.length < 6) {
         this.password += item;
       }
     },
@@ -137,7 +151,7 @@ export default {
       this.showWrong = false;
     },
     checkPassword() {
-      if(this.password === this.truePassword) {
+      if (this.password === this.truePassword) {
         msg({
           message: '密码正确',
           type: 'success'
@@ -160,7 +174,7 @@ export default {
       this.checkPassword();
     },
     senCmd() {
-      if(window.serialPortPlugin) {
+      if (window.serialPortPlugin) {
         let cmd = new Uint8Array([0xAA, 0x02, 0x00, 0x00, 0x55]);
         window.serialPortPlugin.send(cmd, 3);
       }

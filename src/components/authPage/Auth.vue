@@ -7,12 +7,13 @@
 .auth-title
   text-align center
   margin-top: 1.5rem;
-  margin-bottom: 2rem;
+  //margin-bottom: 2rem;
   font-size 1.2rem
 
 .auth-content
   display flex
   justify-content space-around
+  margin-top: 2rem;
 
 .login-item
   width: 7rem
@@ -32,30 +33,67 @@
   border-radius 50%
   border 5px solid #FFFFFF
   box-sizing border-box
+.submit-form
+  text-align center
+  margin-top: 1rem
+  .form-item
+    margin: 1rem 0;
+    font-size 1rem;
+
+    .form-input
+      height: 2rem
+
+  .submit
+    width: 30%
+    margin-top: 3rem
+.password-mode-button
+  margin: .5rem auto;
+  width: 30%
+  get_background(patrol_course_info_background)
 </style>
 <template>
   <div class="auth-main">
     <div class="auth-title">{{ title }}</div>
-    <div class="auth-content">
-      <div class="card">
-        <div class="login-item">
-          <img src="../../assets/brush.png" alt="">
+<!--    <div class="password-mode-button _button" @click="changeMode">{{ mode === 1 ? '通过账号密码登录' : '其他登录方式' }}</div>-->
+    <template v-if="mode === 1">
+      <div class="auth-content">
+        <div class="card">
+          <div class="login-item">
+            <img src="../../assets/brush.png" alt="">
+          </div>
+          <div class="login-desc">一卡通刷卡</div>
         </div>
-        <div class="login-desc">一卡通刷卡</div>
-      </div>
-      <div class="code" v-show="showQrCode">
-        <div class="login-item">
-          <img style="border-radius: 6px" :src="qrCodeUrl" alt="">
+        <div class="code" v-show="showQrCode">
+          <div class="login-item">
+            <img style="border-radius: 6px" :src="qrCodeUrl" alt="">
+          </div>
+          <div class="login-desc">微信扫码</div>
         </div>
-        <div class="login-desc">微信扫码</div>
-      </div>
-      <div class="face" v-show="showFace">
-        <div class="login-item">
-          <div class="face-box"></div>
+        <div class="face" v-show="showFace">
+          <div class="login-item">
+            <div class="face-box"></div>
+          </div>
+          <div class="login-desc">人脸识别</div>
         </div>
-        <div class="login-desc">人脸识别</div>
       </div>
-    </div>
+    </template>
+    <template v-else>
+      <form class="submit-form">
+        <div class="form-item">
+          <label for="account">
+            账号：
+            <input type="text" v-model="account" class="form-input _input" id="account">
+          </label>
+        </div>
+        <div class="form-item">
+          <label for="password">
+            密码：
+            <input type="password" v-model="password" class="form-input _input" id="password">
+          </label>
+        </div>
+        <div class="submit _button" @click="passwordLogin">确认</div>
+      </form>
+    </template>
   </div>
 </template>
 
@@ -77,7 +115,10 @@ export default {
       config: [],
       timer: null,
       key: null,
-      getTokenKey: null
+      getTokenKey: null,
+      mode: 1,
+      account: '',
+      password: ''
     }
   },
   created() {
@@ -149,13 +190,13 @@ export default {
           this.afterLogin(res);
         } else {
           msg({
-            message: '未找到该用户！',
+            message: '未找到该用户！ 卡号：' + ic,
             type: 'wrong'
           });
         }
       }, () => {
         msg({
-          message: '登录失败！',
+          message: '登录失败！ 卡号：' + ic,
           type: 'wrong'
         });
       });
@@ -180,7 +221,8 @@ export default {
           'Content-Type': 'application/json;charset=UTF-8'
         }
       }).then(res => {
-        if (JSON.stringify(res.data) === '{}' || !res.data) {} else {
+        if (JSON.stringify(res.data) === '{}' || !res.data) {
+        } else {
           this.afterLogin(res.data);
         }
       })
@@ -192,8 +234,25 @@ export default {
       msg({
         message: '登录成功！',
         type: 'success'
-      })
+      });
       this.loginSuccess();
+    },
+    passwordLogin() {
+      service.post('auth/login', {
+        account: this.account,
+        password: this.password
+      }).then(res => {
+        if (res) {
+          this.afterLogin(res);
+        }
+      })
+    },
+    changeMode() {
+      if (this.mode === 1) {
+        this.mode = 2;
+      } else {
+        this.mode = 1;
+      }
     }
   }
 }
