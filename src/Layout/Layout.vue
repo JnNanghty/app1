@@ -369,6 +369,9 @@ export default {
       if (to.name === 'Home') {
         this.activeTabName = 'Home'
       }
+      if (to.name === 'ExamMode') {
+        this.activeTabName = '';
+      }
     }
   },
   created() {
@@ -402,6 +405,8 @@ export default {
   },
   methods: {
     goItem(item) {
+      // 考试模式不能点
+      if (this.$route.name === 'ExamMode') return;
       this.activeTabName = item.path;
       if (this.$route.name === item.path) return;
       const token = getToken();
@@ -424,6 +429,8 @@ export default {
       }
     },
     goSetting() {
+      // 考试模式不能点
+      if (this.$route.name === 'ExamMode') return;
       this.loginToPath = 'SystemSettingHome';
       this.activeTabName = '';
       this.$router.push({

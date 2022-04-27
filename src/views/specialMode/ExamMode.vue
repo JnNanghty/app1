@@ -14,6 +14,7 @@
     display flex
     flex-direction column
     margin-right: 1rem
+    overflow-y auto
 
     .left-top
       margin-bottom: 1rem
@@ -112,8 +113,8 @@ export default {
     return {
       examData: {
         examRoomNo: '12考场',
-        examStartDate: 1651011135000,
-        examEndDate: 1651024663946,
+        examStartDate: Date.now(),
+        examEndDate: Date.now() + 1000 * 60 * 90,
         examSubject: '注册会计师考试',
         terminal: {
           id: 10220449,
