@@ -300,12 +300,16 @@ export default {
         } else {
           ls.set('serviceUrl', url);
           msg({
-            message: '连接服务器失败!',
+            message: '配置服务器地址失败!',
             type: 'wrong'
           });
         }
       }, () => {
         ls.set('serviceUrl', url);
+        msg({
+          message: '连接服务器失败!',
+          type: 'wrong'
+        });
       })
     },
     bind() {

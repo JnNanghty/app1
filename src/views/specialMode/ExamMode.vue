@@ -9,48 +9,62 @@
   .left, .right
     flex: 1;
     font-size .8rem;
+
   .left
     display flex
     flex-direction column
     margin-right: 1rem
+
     .left-top
       margin-bottom: 1rem
+
     .left-top, .left-bottom
       get_background(exam_background)
       flex 1
       padding: 1rem
       border-radius .4rem;
+
     .left-item
       margin-bottom: .5rem;
+
   .right
     border-radius .4rem;
     get_background(exam_background)
     overflow hidden
+
     .table-item
       text-align center
       display flex;
       font-size .7rem;
+
       .row-item
         flex: 1;
         padding: .5rem 1rem;
+
       .row-item2
         flex: 3;
+
       &:nth-child(odd)
         get_background(curriculum_section_course_item_odd_background)
+
       &:nth-child(even)
         get_background(curriculum_section_course_item_even_background)
+
     .table-title
       .row-item
         get_background(exam_background)
+
 .scroll-wrap
   overflow-y scroll;
   height: 15.7rem
   box-sizing border-box;
+
 .icon
   width: 1rem
   height: @width;
   margin-right: .5rem
   vertical-align middle
+
 .border-item
   border-right 2px solid #000000;
   get_border_color(background)
@@ -59,14 +73,14 @@
   <div class="main">
     <div class="left">
       <div class="left-top">
-        <div class="left-item" style="font-size: 1.6rem;">{{terminalInfo.label}}</div>
-        <div class="left-item"><img class="icon" :src="seat" alt="">{{terminalInfo.seatCount}}座</div>
-        <div class="left-item"><img class="icon" :src="remark" alt="">{{terminalInfo.remark || '-'}}</div>
+        <div class="left-item" style="font-size: 1.6rem;">{{ terminalInfo.label }}</div>
+        <div class="left-item"><img class="icon" :src="seat" alt="">{{ terminalInfo.seatCount }}座</div>
+        <div class="left-item"><img class="icon" :src="remark" alt="">{{ terminalInfo.remark || '-' }}</div>
       </div>
       <div class="left-bottom">
-        <div class="left-item">考 场 号：{{examData.examRoomNo}}</div>
-        <div class="left-item">考试科目：<span style="font-size: 1rem;">{{examData.examSubject}}</span></div>
-        <div class="left-item">考试时间：{{examData.examStartDate}}</div>
+        <div class="left-item">考 场 号：{{ examData.examRoomNo || examData.terminal.label }}</div>
+        <div class="left-item">考试科目：<span style="font-size: 1rem;">{{ examData.examSubject }}</span></div>
+        <div class="left-item">考试时间：{{ examDate }}</div>
       </div>
     </div>
     <div class="right">
@@ -76,7 +90,7 @@
         <div class="row-item">座位</div>
       </div>
       <div class="scroll-wrap">
-        <div class="table-item" v-for="item in students" >
+        <div class="table-item" v-for="item in students">
           <div class="row-item border-item">{{ item.label }}</div>
           <div class="row-item row-item2 border-item">{{ item.card }}</div>
           <div class="row-item">{{ item.seat }}</div>
@@ -93,20 +107,24 @@ import mitt from "@/util/mitt";
 
 export default {
   name: 'Exam-Mode',
-  components: {
-  },
+  components: {},
   data() {
     return {
       examData: {
-        examRoomNo: '注册会计师考试',
-        examStartDate: null,
-        examEndDate: null,
-        examSubject: '注册会计师考试'
+        examRoomNo: '12考场',
+        examStartDate: 1651011135000,
+        examEndDate: 1651024663946,
+        examSubject: '注册会计师考试',
+        terminal: {
+          id: 10220449,
+          label: '展厅演示区-阶梯教室'
+        }
       },
       terminalInfo: {},
       seat: '',
       remark: '',
-      students: []
+      students: [],
+      exitTimeout: null
     }
   },
   created() {
@@ -123,12 +141,28 @@ export default {
       return start + ' - ' + end;
     },
   },
-  mounted() {},
+  mounted() {
+    let exitTime = this.examData.examEndDate - Date.now();
+    // 防止有rz把考试时间设在过去
+    if (exitTime < 0) {
+      this.$router.push({
+        name: 'Home'
+      });
+    } else {
+      this.exitTimeout = setTimeout(() => {
+        this.$router.push({
+          name: 'Home'
+        });
+      }, exitTime);
+    }
+  },
   beforeUnmount() {
     mitt.off('changeTheme', this.changeTheme)
+    clearTimeout(this.exitTimeout)
   },
   methods: {
-    show() {},
+    show() {
+    },
     changeTheme() {
       let theme = window.document.documentElement.dataset.theme
       let suffix = 'dark'

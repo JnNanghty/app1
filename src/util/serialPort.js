@@ -62,6 +62,7 @@ if (window.serialPortPlugin) {
       dataArray
     });
   })
+  // 需要下发一种读卡模式命令，  不然默认的读卡模式都不一样
   let cmd = new Uint8Array([0xaa, 0xbb, 0x06, 0x00, 0x00, 0x00, 0x01, 0x06, 0x03, 0x04]);
   window.serialPortPlugin.send(cmd, 3);
 }
