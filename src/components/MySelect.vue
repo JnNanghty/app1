@@ -76,7 +76,6 @@ export default {
   },
   methods: {
     show() {
-      console.log('show')
       this.showOption = !this.showOption
     },
     hide() {
@@ -108,7 +107,6 @@ export default {
       this.position.width = this.$refs.select.offsetWidth
       let docHeight = document.documentElement.clientHeight
           || document.body.clientHeight || 0;
-      console.log(elHeight, absPos, contentHeight)
       if ((elHeight + absPos + contentHeight + 6) > docHeight) {
         this.position.pos = 'top';
         this.position.top = absPos - Math.min(contentHeight, 320) - 6

@@ -168,7 +168,6 @@ export default {
       });
     },
     scrollWindow(status) {
-      console.log(1)
       if (status === 2 || status === 4) {
         if (status === 4) {
           // 1、 在首页 进入的考勤状态 有课程id

@@ -108,6 +108,7 @@
     bottom: 8px;
     width: 6rem
     height: 1.2rem
+
     img {
       width: 100%
       height: 100%
@@ -225,7 +226,7 @@
         <div class="app-icon"
              v-for="item in appList" :key="item.path" @click="goItem(item)" v-show="item.visible">
           <div class="app-item-icon" :style="item.style"
-               :class="$router.currentRoute.value.name === item.path ? activeClass : ''">
+               :class="activeTabName === item.path ? activeClass : ''">
             <img class="app-item-icon-img" :src="item.src" alt="">
           </div>
           <span style="font-size: 0.6rem;">{{ item.label }}</span>
@@ -346,7 +347,7 @@ export default {
       settingIcon: {
         background: `url(${require('@/assets/icon/setting_dark.png')}) center/contain no-repeat`
       },
-
+      activeTabName: 'Home'
     }
   },
   computed: {
@@ -361,6 +362,13 @@ export default {
         }
       })
       return label;
+    }
+  },
+  watch: {
+    $route(to) {
+      if (to.name === 'Home') {
+        this.activeTabName = 'Home'
+      }
     }
   },
   created() {
@@ -394,13 +402,20 @@ export default {
   },
   methods: {
     goItem(item) {
+      this.activeTabName = item.path;
       if (this.$route.name === item.path) return;
       const token = getToken();
       if (item.needLogin && !token) {
         this.loginToPath = item.path;
+        // 为了在未登录的界面有切换动画
         this.$router.push({
-          name: 'Auth'
+          name: 'Blank'
         });
+        setTimeout(() => {
+          this.$router.push({
+            name: 'Auth'
+          });
+        }, 1);
       } else {
         this.loginToPath = null;
         this.$router.push({
@@ -409,12 +424,8 @@ export default {
       }
     },
     goSetting() {
-      // let t = getToken()
-      // let path = 'SystemSettingHome'
-      // if (!t) {
       this.loginToPath = 'SystemSettingHome';
-      //   path = 'Auth'
-      // }
+      this.activeTabName = '';
       this.$router.push({
         name: 'AuthAdmin'
       });
@@ -435,7 +446,6 @@ export default {
       }).then(res => {
         this.terminalInfo = res.data ? res.data : {};
         ls.set('terminalInfo', this.terminalInfo);
-        console.log('Layout: set terminalInfo')
       })
     },
     getConfig() {

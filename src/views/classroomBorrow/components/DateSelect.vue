@@ -171,7 +171,6 @@ export default {
     // this.getTimeConfig() // 查可借用的时间配置
   },
   mounted() {
-    console.log(this.cantBorrowTime)
   },
   watch: {
     cantBorrowTime() {

@@ -33,9 +33,11 @@
   border-radius 50%
   border 5px solid #FFFFFF
   box-sizing border-box
+
 .submit-form
   text-align center
   margin-top: 1rem
+
   .form-item
     margin: 1rem 0;
     font-size 1rem;
@@ -46,6 +48,7 @@
   .submit
     width: 30%
     margin-top: 3rem
+
 .password-mode-button
   margin: .5rem auto;
   width: 30%
@@ -54,7 +57,7 @@
 <template>
   <div class="auth-main">
     <div class="auth-title">{{ title }}</div>
-<!--    <div class="password-mode-button _button" @click="changeMode">{{ mode === 1 ? '通过账号密码登录' : '其他登录方式' }}</div>-->
+    <!--    <div class="password-mode-button _button" @click="changeMode">{{ mode === 1 ? '通过账号密码登录' : '其他登录方式' }}</div>-->
     <template v-if="mode === 1">
       <div class="auth-content">
         <div class="card">
@@ -124,7 +127,9 @@ export default {
   created() {
     this.getKey()
     mitt.on('brushCard', this.brushCard);
-    mitt.emit('showBackButton')
+    mitt.emit('showBackButton', () => {
+      this.$router.push({name: 'Home'})
+    })
     let config = ls.get('deviceConfig');
     this.config = config.signInTypes ? JSON.parse(config.signInTypes) : []
     this.timer = setInterval(this.getQrToken, 1e3);

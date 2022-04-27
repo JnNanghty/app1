@@ -18,6 +18,7 @@ import InformationDetail from "@/views/information/InformationDetail";
 import AuthAdmin from "@/components/authPage/AuthAdmin";
 import FirstSetting from "@/views/systemSetting/settingItem/FirstSetting";
 import SignAuth from "@/components/authPage/SignAuth";
+import Blank from "@/views/Blank";
 
 const routes = [
   {
@@ -37,9 +38,8 @@ const routes = [
       path: 'patrol',
       name: 'Patrol',
       component: Patrol,
-      beforeEnter(to, from) {
+      beforeEnter() {
         const permission = ls.get('permission') || {};
-        console.log(to, from)
         if (permission.supervisoryPatrol) {
           return true;
         } else {
@@ -56,9 +56,8 @@ const routes = [
       path: '/repair',
       name: 'Repair',
       component: Repair,
-      beforeEnter(to, from) {
+      beforeEnter() {
         const permission = ls.get('permission') || {};
-        console.log(to, from)
         if (permission.faultHanding) {
           return true;
         } else {
@@ -71,6 +70,10 @@ const routes = [
       path: '/auth',
       name: 'Auth',
       component: Auth
+    }, {
+      path: '/blank',
+      name: 'Blank',
+      component: Blank
     }, {
       path: '/signAuth',
       name: 'SignAuth',
@@ -112,9 +115,8 @@ const routes = [
     path: '/systemSettingHome',
     name: 'SystemSettingHome',
     component: SystemSettingHome,
-    beforeEnter(to, from) {
+    beforeEnter() {
       const permission = ls.get('permission') || {};
-      console.log(to, from)
       if (permission.assetManagement) {
         return true;
       } else {

@@ -116,12 +116,8 @@ export default {
       }
       this.$nextTick(() => {
         if (this.camera.cameraHttpFlvPlayUrl) {
-          console.log('this.camera.cameraHttpFlvPlayUrl')
-          console.log(this.camera.cameraHttpFlvPlayUrl)
           this.initFlvPlayer();
         } else if (this.camera.cameraRtmpPlayUrl || this.camera.cameraPlayUrl) {
-          console.log('this.camera.cameraPlayUrl')
-          console.log(this.camera.cameraPlayUrl)
           this.initVideoPlay();
         }
       });

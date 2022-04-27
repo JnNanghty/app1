@@ -268,7 +268,6 @@ export default {
             }]
           }]
         }).then(res => {
-          console.log(res);
           this.campus = res.list;
           if(this.terminalId) {
             this.setCurrentTerminal();
@@ -326,7 +325,6 @@ export default {
         terminal: this.schoolInfo.terminal.value,
         mac: this.mac
       }).then(res => {
-        console.log(res);
         ls.set('companyId', res.data);
         if (res.message === 'success') {
           ls.set('terminalId', this.schoolInfo.terminal.value);

@@ -54,7 +54,11 @@ export default {
   },
   computed: {},
   created() {
-    mitt.emit('showBackButton')
+    mitt.emit('showBackButton', () => {
+      this.$router.push({
+        name: 'Home'
+      });
+    })
   },
   mounted() {
   },

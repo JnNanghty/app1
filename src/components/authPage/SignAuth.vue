@@ -60,9 +60,7 @@
 </template>
 
 <script>
-import QRCode from 'qrcode'
 import mitt from "@/util/mitt";
-import {setToken} from "@/util/auth";
 import service from "@/api/services";
 import ls from "@/store/ls";
 import {msg} from "@/components/message";

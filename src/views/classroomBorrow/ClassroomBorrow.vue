@@ -249,7 +249,6 @@ export default {
       })
     },
     addBorrowTime(item) {
-      console.log(item)
       this.borrowTime.push(item)
     },
     removeBorrowTime(item) {

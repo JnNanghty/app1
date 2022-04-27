@@ -6,6 +6,7 @@
   display flex
   padding: 0.65rem;
   box-sizing border-box
+
   .main-left,
   .main-right
     flex: 1;
@@ -21,8 +22,10 @@
 
   .main-left
     margin-right: 0.75rem
+
 .form-item
   margin-bottom: 0.85rem
+
 .form-label
   margin-bottom: 0.35rem
   font-size 0.7rem;
@@ -125,9 +128,16 @@ export default {
         account: this.account,
         password: this.password
       }).then(res => {
-        setToken(res.token);
-        ls.set('userInfo', res, 6e5);
-        this.getConfig()
+        if (res) {
+          setToken(res.token);
+          ls.set('userInfo', res, 6e5);
+          this.getConfig()
+        }
+      }, () => {
+        msg({
+          message: '登录失败',
+          type: 'wrong'
+        });
       })
     },
     getUserPermission() {

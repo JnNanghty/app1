@@ -64,7 +64,6 @@ router.isReady().then(() => app.mount('#app'));
 
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
-  console.log('device ready')
   const serviceUrl = ls.get('serviceUrl');
   if (serviceUrl) {
     initMqtt();

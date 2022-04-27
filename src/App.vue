@@ -8,7 +8,7 @@
     <div class="notice" v-show="showNotice">
       <div ref="scrollText" class="notice-text">{{ noticeText }}</div>
     </div>
-    <div class="app-back-button" v-show="showBackButton" @click="$router.back">
+    <div class="app-back-button" v-show="showBackButton" @click="handleBack">
       <img src="./assets/back_button.png" alt="">
     </div>
   </div>
@@ -23,7 +23,8 @@ export default {
     return {
       showNotice: false,
       noticeText: '',
-      showBackButton: false
+      showBackButton: false,
+      backButtonCallBack: null
     }
   },
   created() {
@@ -64,12 +65,14 @@ export default {
       }
     });
 
-    mitt.on('showBackButton', () => {
+    mitt.on('showBackButton', (cb) => {
+      this.backButtonCallBack = cb;
       this.showBackButton = true;
     })
 
     mitt.on('hideBackButton', () => {
       this.showBackButton = false;
+      this.backButtonCallBack = null;
     })
 
     mitt.on('mqttStatus', (data) => {
@@ -80,8 +83,16 @@ export default {
       }
     })
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
+    handleBack() {
+      if (this.backButtonCallBack) {
+        this.backButtonCallBack();
+      } else {
+        this.$router.back();
+      }
+    },
     broadcast(data) {
       this.showNotice = true;
       this.noticeText = data.content;

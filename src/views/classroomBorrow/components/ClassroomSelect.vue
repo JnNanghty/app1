@@ -76,7 +76,6 @@ export default {
     terminal() {
       let t = [], r = []
       this.building.forEach(i => i.id === this.schoolInfo.building.value && (t = i.children))
-      console.log(t)
       t.forEach(i => {
         i.children.forEach(j => {
           r.push(j)

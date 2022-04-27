@@ -47,6 +47,7 @@
 
   .first-info-desc
     font-size .7rem;
+    flex: 1;
 
     .first-info-time
       color #FDA45E
