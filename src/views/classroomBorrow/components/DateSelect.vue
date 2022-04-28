@@ -122,7 +122,11 @@
       <div class="time-line-item" v-for="(timeItem, index1) in timeConfig" :key="index1">
         <div class="time-line">{{ index1 === 'morning' ? '上午' : index1 === 'afternoon' ? '下午' : '晚上' }}</div>
         <div class="time-item" v-for="(item, index) in timeItem" :key="index">
-          <div><span style="font-size: .8rem;">第{{ index + 1 }}节</span><span style="margin-left: 1.5rem">{{ item.start }}</span> <span style="font-size:.3rem;vertical-align:middle;margin: 0 0.6rem">-</span> <span>{{ item.end }}</span></div>
+          <div><span style="font-size: .8rem;">第{{ index + 1 }}节</span><span style="margin-left: 1.5rem">{{
+              item.start
+            }}</span> <span style="font-size:.3rem;vertical-align:middle;margin: 0 0.6rem">-</span> <span>{{
+              item.end
+            }}</span></div>
           <template v-if="item.status === 1">
             <div class="status1 _button" @click="borrow(item)">预约</div>
           </template>
@@ -163,7 +167,16 @@ export default {
   computed: {
     currentTime() {
       return timeUtil.formatDate(this.date, '-') + '  (' + timeUtil.getCurrentDay(this.date) + ')';
-    }
+    },
+    isToday() {
+      let date = new Date(this.date);
+      let y = date.getFullYear();
+      let m = date.getMonth() + 1;
+      let d = date.getDate();
+
+      let {year, month, day} = timeUtil.getNowTime()
+      return (y === year) && (m === month) && (d === day);
+    },
   },
   created() {
     this.terminalId = ls.get('terminalId')
@@ -180,9 +193,17 @@ export default {
   methods: {
     changeDate(name) {
       if (name === 'pre') {
-        this.date -= 24 * 60 * 60 * 1000
+        let d = this.date - 24 * 60 * 60 * 1000;
+        if (d < Date.now() - 24 * 60 * 60 * 1000) {
+          d = this.date;
+        }
+        this.date = d;
       } else {
-        this.date += 24 * 60 * 60 * 1000
+        let d = this.date + 24 * 60 * 60 * 1000
+        if (d > Date.now() + 6 * 24 * 60 * 60 * 1000) {
+          d = Date.now() + 6 * 24 * 60 * 60 * 1000
+        }
+        this.date = d;
       }
       mitt.emit('changeDate', this.date)
     },
@@ -210,6 +231,15 @@ export default {
             let cha = max - min;
             return cha >= (itemDuration + duration);
           });
+
+          // 如果是当天， 那么还要禁用已经逝去的时间
+          if (this.isToday) {
+            let {currentSource} = timeUtil.getNowTime()
+            if (currentSource >= startSource) {
+              can = false;
+            }
+          }
+
           // 1 可预约  2 已被预约 3不可预约
           let timeItem = {
             start,
@@ -239,7 +269,7 @@ export default {
       return h * 60 + m;
     },
     reset() {
-      for(let key in this.timeConfig) {
+      for (let key in this.timeConfig) {
         this.timeConfig[key].forEach(item => {
           let startSource = this.calcSource(item.start)
           let endSource = this.calcSource(item.end)
@@ -252,6 +282,14 @@ export default {
             return cha >= (itemDuration + duration);
           });
           item.status = can ? 1 : 3
+
+          // 如果是当天， 那么还要禁用已经逝去的时间
+          if (this.isToday) {
+            let {currentSource} = timeUtil.getNowTime()
+            if (currentSource >= startSource) {
+              item.status = 3;
+            }
+          }
         })
       }
     }

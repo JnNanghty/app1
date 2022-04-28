@@ -194,7 +194,8 @@ export default {
   provide() {
     return {
       reasonText: computed(() => this.formData.reason),
-      cantBorrowTime: computed(() => this.cantBorrowDuration)
+      cantBorrowTime: computed(() => this.cantBorrowDuration),
+      selectedTerminalId: computed(() => this.formData.terminal.id)
     }
   },
   computed: {

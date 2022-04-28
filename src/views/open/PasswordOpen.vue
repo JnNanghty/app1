@@ -117,6 +117,7 @@
 <script>
 import {msg} from "@/components/message";
 import service from "@/api/services";
+import mitt from "@/util/mitt";
 
 export default {
   name: "PasswordOpen",
@@ -134,8 +135,10 @@ export default {
   created() {
   },
   mounted() {
+    mitt.emit('showBackButton');
   },
   beforeUnmount() {
+    mitt.emit('hideBackButton');
   },
   methods: {
     getPassword() {

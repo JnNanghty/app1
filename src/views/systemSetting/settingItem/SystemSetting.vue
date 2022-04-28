@@ -165,6 +165,8 @@ export default {
   created() {
     if (window.banpaiTools) {
       window.banpaiTools.ipConfig(res => {
+        console.log('ipConfig');
+        console.log(res);
         this.systemInfo = res;
         if (res.mode === 'DHCP') {
           this.modeLabel = 'DHCP'

@@ -20,6 +20,7 @@
   margin-top: .5rem
   display flex
   flex-wrap wrap
+
   .terminal-item
     font-size .6rem
     white-space nowrap
@@ -30,23 +31,29 @@
     get_background(input_background)
     border-radius 8px
     padding: .5rem;
+
+  .terminal-active
+    background: #FDA45E !important;
 </style>
 <template>
   <div class="cs-warp">
     <div class="cs-select">
       <my-select class="select-item _select" :len="campus.length" :value="schoolInfo.campus.label">
         <my-option @select="campusSelected" value="-1" label="选择校区"></my-option>
-        <my-option @select="campusSelected" v-for="item in campus" :key="item.id" :value="item.id" :label="item.label"></my-option>
+        <my-option @select="campusSelected" v-for="item in campus" :key="item.id" :value="item.id"
+                   :label="item.label"></my-option>
       </my-select>
       <my-select class="select-item _select" :len="building.length" :value="schoolInfo.building.label">
         <my-option @select="buildingSelected" value="-1" label="选择教学楼"></my-option>
-        <my-option @select="buildingSelected" v-for="item in building" :key="item.id" :value="item.id" :label="item.label"></my-option>
+        <my-option @select="buildingSelected" v-for="item in building" :key="item.id" :value="item.id"
+                   :label="item.label"></my-option>
       </my-select>
     </div>
     <span style="font-size: .6rem;opacity: 0.5;font-weight: 200;">全部教室</span>
     <div class="cs-content">
-      <div class="terminal-item" v-for="item in terminal" :key="item.id" @click="selectTerminal(item)">
-        {{item.label}}
+      <div class="terminal-item" :class="terminalId === item.id ? 'terminal-active' : ''" v-for="item in terminal"
+           :key="item.id" @click="selectTerminal(item)">
+        {{ item.label }}
       </div>
     </div>
   </div>
@@ -65,6 +72,7 @@ export default {
         campus: {label: '请选择校区', value: -1},
         building: {label: '请选择教学楼', value: -1},
       },
+      terminalId: null
     }
   },
   computed: {
@@ -84,7 +92,9 @@ export default {
       return r;
     }
   },
+  inject: ['selectedTerminalId'],
   created() {
+    this.terminalId = this.selectedTerminalId;
     this.getInfo();
   },
   methods: {
@@ -119,11 +129,26 @@ export default {
         }]
       }).then(res => {
         this.campus = res.list;
+        this.setDefaultSelect();
       })
     },
     selectTerminal(item) {
       this.terminalId = item.id;
       mitt.emit('updateSelect', item);
+    },
+    setDefaultSelect() {
+      this.campus.forEach(camp => {
+        camp.children.forEach(building => {
+          building.children.forEach(floor => {
+            floor.children.forEach(terminal => {
+              if(terminal.id === this.terminalId) {
+                this.schoolInfo.campus = {label: camp.label, value: camp.id};
+                this.schoolInfo.building = {label: building.label, value: building.id};
+              }
+            })
+          })
+        })
+      })
     }
   }
 }

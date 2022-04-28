@@ -13,7 +13,7 @@
 <template>
   <div class="main">
     <auth ref="auth"></auth>
-    <div class="open-button _button" @click="goPasswordOpen">输入账号密码开门</div>
+    <div class="open-button _button" @click="goPasswordOpen">密码开门</div>
   </div>
 </template>
 

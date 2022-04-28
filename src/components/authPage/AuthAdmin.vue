@@ -75,7 +75,10 @@ export default {
           name = 'Auth'
         }
         this.$router.push({
-          name: name
+          name: name,
+          params: {
+            showChangeLoginModeButton: true
+          }
         });
       } else {
         msg({

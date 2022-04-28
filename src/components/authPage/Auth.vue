@@ -57,7 +57,6 @@
 <template>
   <div class="auth-main">
     <div class="auth-title">{{ title }}</div>
-    <!--    <div class="password-mode-button _button" @click="changeMode">{{ mode === 1 ? '通过账号密码登录' : '其他登录方式' }}</div>-->
     <template v-if="mode === 1">
       <div class="auth-content">
         <div class="card">
@@ -97,6 +96,7 @@
         <div class="submit _button" @click="passwordLogin">确认</div>
       </form>
     </template>
+    <div class="password-mode-button _button" @click="changeMode">{{ mode === 1 ? '通过账号密码登录' : '其他登录方式' }}</div>
   </div>
 </template>
 
@@ -121,7 +121,8 @@ export default {
       getTokenKey: null,
       mode: 1,
       account: '',
-      password: ''
+      password: '',
+      showChangeLoginModeButton: false
     }
   },
   created() {
@@ -133,6 +134,9 @@ export default {
     let config = ls.get('deviceConfig');
     this.config = config.signInTypes ? JSON.parse(config.signInTypes) : []
     this.timer = setInterval(this.getQrToken, 1e3);
+    let params = this.$route.params;
+    console.log(this.$route);
+    this.showChangeLoginModeButton = params.showChangeLoginModeButton && JSON.parse(params.showChangeLoginModeButton) || false;
   },
   computed: {
     showQrCode() {
@@ -250,6 +254,11 @@ export default {
         if (res) {
           this.afterLogin(res);
         }
+      }, () => {
+        msg({
+          message: '登录失败！',
+          type: 'wrong'
+        })
       })
     },
     changeMode() {

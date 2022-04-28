@@ -5,11 +5,14 @@
   box-sizing border-box
   get_font_color(font_color)
   display flex
-  flex-direction column
+  //flex-direction column
+  flex-wrap: wrap;
 
   .change-week
     overflow-x scroll
     margin-bottom: .5rem;
+    flex: 1;
+    margin-right: .5rem
 
     &::-webkit-scrollbar
       height: 0
@@ -43,7 +46,7 @@
         }
 
 .table
-  //flex: 1;
+  width: 100%;
   display flex
   text-align center
   height: 16rem
@@ -151,10 +154,11 @@
         </div>
       </div>
     </div>
+    <user-info></user-info>
     <div class="table">
       <div class="table-col" style="flex: 1.2">
         <div class="table-row table-title">课节时间</div>
-        <div class="table-row section-row" v-for="(item, index, c) in sectionTime" :key="index">
+        <div class="table-row section-row" v-for="(item, index) in sectionTime" :key="index">
           <div class="time-line" :style="index === 'afternoon' ? {margin: '3px 0'} : {}">{{ index === 'morning' ? '上午' : index === 'afternoon' ? '下午' : '晚上' }}</div>
           <div class="section-wrap">
             <div v-for="(time, i) in item" :key="i" style="min-height: 1rem;box-sizing: border-box;">
@@ -186,8 +190,10 @@ import ls from "@/store/ls";
 import {msg} from "@/components/message";
 import service from "@/api/services";
 import timeUtil from "@/util/timeUtil";
+import UserInfo from "@/components/UserInfo";
 
 export default {
+  components: {UserInfo},
   data() {
     return {
       terminalId: null,
