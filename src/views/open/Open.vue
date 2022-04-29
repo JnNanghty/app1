@@ -12,27 +12,24 @@
 </style>
 <template>
   <div class="main">
-    <auth ref="auth"></auth>
+    <open-auth></open-auth>
     <div class="open-button _button" @click="goPasswordOpen">密码开门</div>
   </div>
 </template>
 
 <script>
-import Auth from "@/components/authPage/Auth";
 import mitt from "@/util/mitt";
+import OpenAuth from "@/views/open/components/OpenAuth";
 export default {
   name: "Open",
-  components: {Auth},
+  components: {OpenAuth},
   data() {
     return {}
   },
   created() {
     mitt.on('loginSuccess', this.loginSuccess);
   },
-  mounted() {
-    this.$refs.auth.$data.title = '请通过一下任一种方式进行开门'
-    mitt.emit('hideBackButton')
-  },
+  mounted() {},
   beforeUnmount() {
     mitt.off('loginSuccess', this.loginSuccess);
   },

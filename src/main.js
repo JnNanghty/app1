@@ -55,6 +55,7 @@ app.component(UserInfo.name, UserInfo);
 import MySelect from "@/components/MySelect";
 app.component(MySelect.name, MySelect);
 import MyOption from "@/components/MyOption";
+import {removeToken} from "@/util/auth";
 app.component(MyOption.name, MyOption);
 
 
@@ -64,6 +65,11 @@ router.isReady().then(() => app.mount('#app'));
 
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
+  // 刚开启时 清空登录状态
+  ls.remove('userInfo');
+  removeToken();
+  ls.remove('permission');
+
   const serviceUrl = ls.get('serviceUrl');
   if (serviceUrl) {
     initMqtt();

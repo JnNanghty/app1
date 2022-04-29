@@ -29,6 +29,12 @@
         font-size .7rem;
         line-height @height
         text-align center
+        position relative
+      .current-week-tip
+        position absolute
+        bottom: -0.75rem;
+        width: 100%;
+        text-align center;
 
       .week-item-active
         position relative;
@@ -151,6 +157,7 @@
         <div class="week-item" :class="currentWeek === item ? 'week-item-active' : ''"
              v-for="item in 19" :ref="'week-item-' + item" @click="changeWeek(item)">
           第{{ simplifyNum[item - 1] }}周 <span style="margin-left: 10px;">{{ getTimeRange(item) }}</span>
+          <div v-if="nowWeek === item" class="current-week-tip">当前周</div>
         </div>
       </div>
     </div>
@@ -204,7 +211,8 @@ export default {
       simplifyNum: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九'],
       closeTimeout: null,
       firstWeek: null,
-      terminalSectionTime: []
+      terminalSectionTime: [],
+      nowWeek: 1
     }
   },
   mounted() {
@@ -248,6 +256,7 @@ export default {
             }
           })
           this.currentWeek = this.calcCurrentWeek(res.data.firstWeek);
+          this.nowWeek = this.calcCurrentWeek(res.data.firstWeek);
           this.firstWeek = res.data.firstWeek;
           this.scrollLeft()
           this.sectionTime = temp;

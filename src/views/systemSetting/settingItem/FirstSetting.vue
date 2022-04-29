@@ -130,7 +130,7 @@ export default {
       }).then(res => {
         if (res) {
           setToken(res.token);
-          ls.set('userInfo', res, 6e5);
+          ls.set('userInfo', res, 3e5);
           this.getConfig()
         }
       }, () => {
@@ -142,7 +142,7 @@ export default {
     },
     getUserPermission() {
       service.post('permission/getUserPermission').then(res => {
-        ls.set('permission', res, 6e5);
+        ls.set('permission', res, 3e5);
         msg({
           message: '登录成功！',
           type: 'success'

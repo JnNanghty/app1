@@ -99,7 +99,7 @@
           <div class="form-label">迈杰云平台</div>
           <input class="form-input _input" v-model="serviceUrl" style="width: 19.5rem">
         </div>
-        <div class="submit-button _button" @click="checkIp">保存</div>
+        <div class="submit-button _button" @click="checkIp" v-if="!offline">保存</div>
       </form>
     </div>
     <div class="ss-main-right">
@@ -133,7 +133,7 @@
             </my-select>
           </div>
 <!--        </div>-->
-        <div class="submit-button _button" @click="bind">切换绑定</div>
+        <div class="submit-button _button" @click="bind" v-if="!offline">切换绑定</div>
       </form>
     </div>
   </div>
@@ -178,12 +178,14 @@ export default {
       campus: [],
       mac,
       message: '',
-      terminalId: null
+      terminalId: null,
+      offline: false
     }
   },
   created() {
     this.serviceUrl = ls.get('serviceUrl') || '';
     this.terminalId = +ls.get('terminalId')
+    this.offline = !!ls.get('userInfo').offline;
   },
   computed: {
     category() {
@@ -204,7 +206,9 @@ export default {
   },
   mounted() {
     if (this.serviceUrl) {
-      this.getTerminal();
+      if(this.offline) {
+        this.getTerminal();
+      }
       // this.getSchool();
     }
   },

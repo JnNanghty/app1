@@ -6,7 +6,7 @@ export function getToken() {
 }
 
 export function setToken(token) {
-  ls.set(TokenKey, token, 6e5); // 10分钟 600000
+  ls.set(TokenKey, token, 3e5); // 10分钟 600000  改为5分钟
 }
 
 export function removeToken() {

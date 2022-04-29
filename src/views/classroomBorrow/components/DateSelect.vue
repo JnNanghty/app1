@@ -114,7 +114,7 @@
 <template>
   <div class="ds-main">
     <div class="ds-top">
-      <div class="icon " @click="changeDate('pre')"><img src="../../../assets/left_arrow.png" alt=""></div>
+      <div class="icon " @click="changeDate('pre')" v-if="!isToday"><img src="../../../assets/left_arrow.png" alt=""></div>
       <div class="time">{{ currentTime }}</div>
       <div class="icon " @click="changeDate('next')"><img src="../../../assets/right_arrow.png" alt=""></div>
     </div>

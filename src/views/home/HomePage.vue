@@ -66,7 +66,6 @@ export default {
       endOfClassText: '空闲中',
       terminalInfo: {},
       countDownInterval: null,
-      flag: false,
       windowStyle: {
         transform: 'translateX(0)'
       },
@@ -92,6 +91,15 @@ export default {
       msg({
         message: '请先在设置中绑定班级！'
       });
+    }
+  },
+  watch: {
+    'windowStyle.transform'(nv){
+      if (nv === 'translateX(0)') {
+        this.emit('hideHeader');
+      } else {
+        this.emit('showHeader');
+      }
     }
   },
   beforeUnmount() {

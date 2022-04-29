@@ -57,65 +57,41 @@
 <template>
   <div class="auth-main">
     <div class="auth-title">{{ title }}</div>
-    <template v-if="mode === 1">
-      <div class="auth-content">
-        <div class="card">
-          <div class="login-item">
-            <img src="../../assets/brush.png" alt="">
-          </div>
-          <div class="login-desc">一卡通刷卡</div>
+    <div class="auth-content">
+      <div class="card">
+        <div class="login-item">
+          <img src="@/assets/brush.png" alt="">
         </div>
-        <div class="code" v-show="showQrCode">
-          <div class="login-item">
-            <img style="border-radius: 6px" :src="qrCodeUrl" alt="">
-          </div>
-          <div class="login-desc">微信扫码</div>
-        </div>
-        <div class="face" v-show="showFace">
-          <div class="login-item">
-            <div class="face-box"></div>
-          </div>
-          <div class="login-desc">人脸识别</div>
-        </div>
+        <div class="login-desc">一卡通刷卡</div>
       </div>
-    </template>
-    <template v-else>
-      <form class="submit-form">
-        <div class="form-item">
-          <label for="account">
-            账号：
-            <input type="text" v-model="account" class="form-input _input" id="account">
-          </label>
+      <div class="code" v-show="showQrCode">
+        <div class="login-item">
+          <img style="border-radius: 6px" :src="qrCodeUrl" alt="">
         </div>
-        <div class="form-item">
-          <label for="password">
-            密码：
-            <input type="password" v-model="password" class="form-input _input" id="password">
-          </label>
+        <div class="login-desc">微信扫码</div>
+      </div>
+      <div class="face" v-show="showFace">
+        <div class="login-item">
+          <div class="face-box"></div>
         </div>
-        <div class="submit _button" @click="passwordLogin">确认</div>
-      </form>
-    </template>
-    <div class="password-mode-button _button" v-if="showChangeLoginModeButton" @click="changeMode">
-      {{ mode === 1 ? '通过账号密码登录' : '其他登录方式' }}
+        <div class="login-desc">人脸识别</div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import QRCode from 'qrcode'
 import mitt from "@/util/mitt";
-import {setToken} from "@/util/auth";
 import service from "@/api/services";
 import ls from "@/store/ls";
 import {msg} from "@/components/message";
 import axios from "axios";
 
 export default {
-  name: "Auth",
+  name: "OpenAuth",
   data() {
     return {
-      title: '请通过以下方式进行身份验证',
+      title: '请通过一下任一种方式进行开门',
       qrCodeUrl: '',
       config: [],
       timer: null,
@@ -130,18 +106,12 @@ export default {
   created() {
     this.getKey()
     mitt.on('brushCard', this.brushCard);
-    mitt.emit('showBackButton', () => {
-      this.$router.push({name: 'Home'})
-    })
     let config = ls.get('deviceConfig');
     this.config = config.signInTypes ? JSON.parse(config.signInTypes) : []
     this.timer = setInterval(this.getQrToken, 1e3);
     let params = this.$route.params;
     console.log(this.$route);
     this.showChangeLoginModeButton = params.showChangeLoginModeButton && JSON.parse(params.showChangeLoginModeButton) || false;
-    if (this.showChangeLoginModeButton) {
-      this.mode = 2;
-    }
   },
   computed: {
     showQrCode() {
@@ -165,7 +135,6 @@ export default {
   },
   beforeUnmount() {
     mitt.off('brushCard', this.brushCard);
-    mitt.emit('hideBackButton')
     clearInterval(this.timer)
   },
   methods: {
@@ -192,10 +161,6 @@ export default {
         this.qrCodeUrl = 'data:;base64,' + res.data.buffer;
       })
     },
-    loginSuccess() {
-      // setToken('6669282:61646D696E36363639323130:1652167051808:F7353F580F31DF479A3D75B0A931164A');
-      this.getUserPermission();
-    },
     icLogin(ic) {
       service.post('auth/icLogin', {
         ic: ic
@@ -210,19 +175,13 @@ export default {
         }
       }, () => {
         msg({
-          message: '登录失败！ 卡号：' + ic,
+          message: '身份验证失败！ 卡号：' + ic,
           type: 'wrong'
         });
       });
     },
     brushCard(res) {
       this.icLogin(res);
-    },
-    getUserPermission() {
-      service.post('permission/getUserPermission').then(res => {
-        ls.set('permission', res, 3e5);
-        mitt.emit('loginSuccess');
-      })
     },
     getQrToken() {
       let para = {
@@ -241,65 +200,12 @@ export default {
         }
       })
     },
-    afterLogin(res) {
-      setToken(res.token);
-      this.$cookies.set('token', res.token, 3e5);
-      ls.set('userInfo', res, 3e5);
+    afterLogin() {
       msg({
-        message: '登录成功！',
+        message: '门已开启！',
         type: 'success'
       });
-      this.loginSuccess();
-    },
-    passwordLogin() {
-      if (this.account === 'admin' && this.password === '090402') {
-        let userInfo = {
-          extraInformation: {
-            label: "系统管理员(离线)"
-          },
-          offline: true
-        };
-        let permission = {
-          "terminalControl": true,
-          "assetManagement": true,
-          "courseLive": true,
-          "listenTeaching": true,
-          "course": true,
-          "faultHanding": true,
-          "guardControl": true,
-          "educationalData": true,
-          "supervisoryPatrol": true,
-          "dataCentre": true
-        }
-        ls.set('userInfo', userInfo, 3e5);
-        ls.set('permission', permission, 3e5);
-        msg({
-          message: '登录成功！',
-          type: 'success'
-        });
-        mitt.emit('loginSuccess');
-        return;
-      }
-      service.post('auth/login', {
-        account: this.account,
-        password: this.password
-      }).then(res => {
-        if (res) {
-          this.afterLogin(res);
-        }
-      }, () => {
-        msg({
-          message: '登录失败！',
-          type: 'wrong'
-        });
-      })
-    },
-    changeMode() {
-      if (this.mode === 1) {
-        this.mode = 2;
-      } else {
-        this.mode = 1;
-      }
+      mitt.emit('loginSuccess');
     }
   }
 }

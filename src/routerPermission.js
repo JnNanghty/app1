@@ -2,7 +2,7 @@ import router from './router'
 
 let goHomeTimeout = null;
 document.addEventListener('click', () => {
-  if (router.currentRoute.value.name !== 'ExamMode' && router.currentRoute.value.name !== 'ProgrammeMode') {
+  if (router.currentRoute.value.name !== 'ExamMode' && router.currentRoute.value.name !== 'ProgrammeMode' && router.currentRoute.value.name !== 'Home') {
     console.log('set goHomeTimeout');
     if (goHomeTimeout) {
       clearTimeout(goHomeTimeout);

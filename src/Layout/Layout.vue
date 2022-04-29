@@ -347,13 +347,11 @@ export default {
       settingIcon: {
         background: `url(${require('@/assets/icon/setting_dark.png')}) center/contain no-repeat`
       },
-      activeTabName: 'Home'
+      activeTabName: 'Home',
+      showHeader: true
     }
   },
   computed: {
-    showHeader() {
-      return true;
-    },
     terminalType() {
       let label = ''
       this.terminalTypeList.forEach(i => {
@@ -381,10 +379,16 @@ export default {
     // auth page 登录成功
     mitt.on('loginSuccess', this.loginSuccess);
     // 切换主题
-    mitt.on('changeTheme', this.changeTheme)
+    mitt.on('changeTheme', this.changeTheme);
     mitt.on('showBgLogo', (v) => {
       this.bgHasLogo = v
     })
+    mitt.on('showHeader', () => {
+      this.showHeader = true;
+    });
+    mitt.on('hideHeader', () => {
+      this.showHeader = false;
+    });
     this.refresh();
     let time = Date.now();
     this.timeInterval = setInterval(() => {
@@ -433,9 +437,24 @@ export default {
       if (this.$route.name === 'ExamMode') return;
       this.loginToPath = 'SystemSettingHome';
       this.activeTabName = '';
-      this.$router.push({
-        name: 'AuthAdmin'
-      });
+      const companyId = ls.get('companyId')
+      let name = 'AuthAdmin'
+      if (companyId) {
+        name = 'Auth'
+      }
+      if (this.$route.name === 'Auth') {
+        this.$router.push({
+          name: 'Blank'
+        });
+      }
+      setTimeout(() => {
+        this.$router.push({
+          name: name,
+          params: {
+            showChangeLoginModeButton: true
+          }
+        });
+      }, 1);
     },
     refresh() {
       this.terminalId = ls.get('terminalId');

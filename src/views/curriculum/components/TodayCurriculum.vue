@@ -1,11 +1,12 @@
 <style scoped lang="stylus">
 @import "~@/theme/mixin.styl";
 .tab-content {
-  overflow-y: scroll;
   height: 100%;
   get_font_color(font_color)
   padding-right: 30px
   box-sizing border-box
+  display flex
+  flex-direction column
 }
 
 .table-title {
@@ -26,6 +27,11 @@
   .table-title-item {
     flex: 1
   }
+}
+
+.table-content {
+  overflow-y: auto;
+  flex: 1;
 }
 
 .table-item {
@@ -206,17 +212,17 @@ export default {
           }
           let j = 0
           for (let i = 0; i < sec['morning']; i++) {
-            if(this.list[j]){
+            if (this.list[j]) {
               temp['morning'].push(this.list[j++]);
             }
           }
           for (let i = 0; i < sec['afternoon']; i++) {
-            if(this.list[j]){
+            if (this.list[j]) {
               temp['afternoon'].push(this.list[j++]);
             }
           }
           for (let i = 0; i < sec['evening']; i++) {
-            if(this.list[j]){
+            if (this.list[j]) {
               temp['evening'].push(this.list[j++]);
             }
           }

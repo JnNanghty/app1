@@ -90,8 +90,8 @@
           <div class="course-info-course-name">{{ currentCourse.courseName }}</div>
           <div class="course-info-item">上课时间：{{ currentCourse.startTime }}-{{ currentCourse.endTime }}</div>
           <div class="course-info-item">任课老师：{{ currentCourse.teacherName }}</div>
-          <div class="course-info-item">上课班级：{{ currentCourse.courseClass }}</div>
           <div class="course-info-item">开课学院：{{ currentCourse.college }}</div>
+          <div class="course-info-item">上课班级：{{ currentCourse.courseClass }}</div>
         </div>
       </div>
     </div>

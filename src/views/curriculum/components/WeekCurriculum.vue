@@ -26,12 +26,19 @@
         font-size .7rem;
         line-height @height
         text-align center
+        position relative
+
+        .current-week-tip
+          position absolute
+          bottom: -0.75rem;
+          width: 100%;
+          text-align center;
 
       .week-item-active
         position relative;
         border-bottom 1px solid #FDA45E;
 
-        &::after {
+        &::after
           content: '';
           position absolute;
           top: 0
@@ -40,7 +47,6 @@
           height: 100%
           background: linear-gradient(180deg, rgba(51, 57, 65, 0.0001) 11.53%, rgba(123, 96, 77, 0.5) 53.32%, #FDA45E 100%);
           opacity: 0.26;
-        }
 
 .table
   //flex: 1;
@@ -50,10 +56,12 @@
   border-radius .4rem;
   overflow-y: scroll;
   get_background(curriculum_table_background)
+
 .table-col
   flex: 1;
   border-right: 1px solid #2f333a;
   get_border_color(curriculum_table_col)
+
   .table-row
     min-height: 1rem;
     box-sizing: border-box;
@@ -111,8 +119,10 @@
     font-size .7rem
     min-height: auto;
     border-right: none;
+
     &:nth-child(1) .table-title
       border-top-left-radius .4rem
+
     &:nth-child(8) .table-title
       border-top-right-radius .4rem
 
@@ -131,6 +141,7 @@
       get_background(curriculum_section_background)
       get_border_color(curriculum_timeline_border_color)
       get_font_color(font_color)
+
     .section-wrap
       flex: 1
       get_background(curriculum_section_background)
@@ -149,6 +160,7 @@
         <div class="week-item" :class="currentWeek === item ? 'week-item-active' : ''"
              v-for="item in 19" :ref="'week-item-' + item" @click="changeWeek(item)">
           第{{ simplifyNum[item - 1] }}周 <span style="margin-left: 10px;">{{ getTimeRange(item) }}</span>
+          <div v-if="nowWeek === item" class="current-week-tip">当前周</div>
         </div>
       </div>
     </div>
@@ -156,7 +168,9 @@
       <div class="table-col" style="flex: 1.2">
         <div class="table-row table-title">课节时间</div>
         <div class="table-row section-row" v-for="(item, index, c) in sectionTime" :key="index">
-          <div class="time-line" :style="index === 'afternoon' ? {margin: '3px 0'} : {}">{{ index === 'morning' ? '上午' : index === 'afternoon' ? '下午' : '晚上' }}</div>
+          <div class="time-line" :style="index === 'afternoon' ? {margin: '3px 0'} : {}">
+            {{ index === 'morning' ? '上午' : index === 'afternoon' ? '下午' : '晚上' }}
+          </div>
           <div class="section-wrap">
             <div v-for="(time, i) in item" :key="i" style="min-height: 1rem;box-sizing: border-box;">
               <span class="section-label">第{{ simplifyNum[i] }}节</span>
@@ -173,7 +187,8 @@
           {{ course && course.courseName }}
           <div class="course-detail" v-if="course.courseName && course.showDetail">
             <div style="font-size: .9rem;">{{ course.courseName }}</div>
-            <div>{{ course.teacherName }} <span style="margin-left: 1rem;">{{ calcTime(course.startSession, course.endSession) }}</span></div>
+            <div>{{ course.teacherName }} <span
+                style="margin-left: 1rem;">{{ calcTime(course.startSession, course.endSession) }}</span></div>
             <div style="margin-bottom: 10px;">{{ course.college }}</div>
             <div>{{ course.courseClass }}</div>
           </div>
@@ -199,7 +214,8 @@ export default {
       simplifyNum: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九'],
       closeTimeout: null,
       firstWeek: null,
-      terminalSectionTime: []
+      terminalSectionTime: [],
+      nowWeek: 1
     }
   },
   mounted() {
@@ -243,6 +259,7 @@ export default {
             }
           })
           this.currentWeek = this.calcCurrentWeek(res.data.firstWeek);
+          this.nowWeek = this.calcCurrentWeek(res.data.firstWeek);
           this.firstWeek = res.data.firstWeek;
           this.scrollLeft()
           this.sectionTime = temp;
