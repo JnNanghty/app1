@@ -122,7 +122,7 @@
       <div class="table-title-item">上课班级</div>
       <div class="table-title-item">开课学院</div>
     </div>
-    <div class="table-content">
+    <div class="table-content" ref="tableContent">
       <div class="table-item" v-for="(tItem, idx) in section">
         <div class="time-line">{{ idx === 'morning' ? '上午' : idx === 'afternoon' ? '下午' : '晚上' }}</div>
         <div style="flex: 1;">
@@ -132,7 +132,7 @@
               <div class="section-time">{{ item.startTime }}-{{ item.endTime }}</div>
             </div>
             <div class="course-item"
-                 :class="[activeItemStartSource === item.startSource ? 'course-item-active' : '', currentSource > item.endSource ? 'section-item-not-active' : '']">
+                 :class="[activeItemStartSource.source === item.startSource ? 'course-item-active' : '', currentSource > item.endSource ? 'section-item-not-active' : '']">
               <div class="course-item-desc">{{ item.courseName }}</div>
               <div class="course-item-desc">{{ item.teacherName }}</div>
               <div class="course-item-desc course-class">{{ item.courseClass }}</div>
@@ -184,12 +184,14 @@ export default {
     activeItemStartSource() {
       const {currentSource} = timeUtil.getNowTime();
       let source = null;
+      let index = 0;
       this.list.forEach((item, i) => {
         if (currentSource >= item.startSource && currentSource <= item.endSource) {
           source = item.startSource;
+          index = i;
         }
       });
-      return source;
+      return {source, index};
     },
   },
   methods: {
@@ -228,7 +230,14 @@ export default {
           }
 
           this.section = temp;
-        })
+
+          this.setDefaultScroll();
+        });
+      });
+    },
+    setDefaultScroll() {
+      this.$nextTick(() => {
+        this.$refs.tableContent.scrollTop = this.activeItemStartSource.index * 2.35 * window.rem;
       });
     }
   },

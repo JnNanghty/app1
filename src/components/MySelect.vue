@@ -61,13 +61,19 @@ export default {
         top: 0,
         left: 0,
         width: 280
-      }
+      },
+      cpTimeout: null
     }
   },
   mounted() {
-    setTimeout(() => {
+    this.cpTimeout = setTimeout(() => {
       this.computePos()
     }, 501)
+  },
+  beforeUnmount() {
+    if (this.cpTimeout) {
+      clearTimeout(this.cpTimeout);
+    }
   },
   watch: {
     len() {
@@ -90,7 +96,7 @@ export default {
       }
       return actualTop;
     },
-    getElementLeft(e){
+    getElementLeft(e) {
       let left = e.offsetLeft;
       let current = e.offsetParent;
       while (current !== null) {

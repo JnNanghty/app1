@@ -48,12 +48,33 @@
           background: linear-gradient(180deg, rgba(51, 57, 65, 0.0001) 11.53%, rgba(123, 96, 77, 0.5) 53.32%, #FDA45E 100%);
           opacity: 0.26;
 
+.table-title-wrap
+  display flex;
+  width: 100%
+  .table-title
+    flex: 1;
+    border-right: 1px solid #2f333a;
+    text-align center
+    get_background(curriculum_section_background)
+    padding: .3rem 0;
+    margin-bottom: 2px
+    font-size .7rem
+    min-height: auto;
+    border-right: none;
+
+    &:nth-child(1)
+      border-top-left-radius .4rem
+
+    &:nth-child(8)
+      border-top-right-radius .4rem
+
 .table
   //flex: 1;
   display flex
   text-align center
-  height: 16rem
-  border-radius .4rem;
+  height: 15rem
+  border-bottom-right-radius .4rem;
+  border-bottom-left-radius .4rem;
   overflow-y: scroll;
   get_background(curriculum_table_background)
 
@@ -112,19 +133,6 @@
         border-left-color: transparent;
         border-right-color: transparent;
 
-  .table-title
-    get_background(curriculum_section_background)
-    padding: .3rem 0;
-    margin-bottom: 2px
-    font-size .7rem
-    min-height: auto;
-    border-right: none;
-
-    &:nth-child(1) .table-title
-      border-top-left-radius .4rem
-
-    &:nth-child(8) .table-title
-      border-top-right-radius .4rem
 
   .section-row
     display flex
@@ -164,10 +172,13 @@
         </div>
       </div>
     </div>
+    <div class="table-title-wrap">
+      <div class="table-row table-title" style="flex: 1.2">课节时间</div>
+      <div class="table-row table-title" v-for="(item, index) in curriculum">星期{{ simplifyNumberArray[index] }}</div>
+    </div>
     <div class="table">
       <div class="table-col" style="flex: 1.2">
-        <div class="table-row table-title">课节时间</div>
-        <div class="table-row section-row" v-for="(item, index, c) in sectionTime" :key="index">
+        <div class="table-row section-row" v-for="(item, index) in sectionTime" :key="index">
           <div class="time-line" :style="index === 'afternoon' ? {margin: '3px 0'} : {}">
             {{ index === 'morning' ? '上午' : index === 'afternoon' ? '下午' : '晚上' }}
           </div>
@@ -180,7 +191,6 @@
         </div>
       </div>
       <div class="table-col" v-for="(item, index) in curriculum" :key="item">
-        <div class="table-row table-title">星期{{ simplifyNumberArray[index] }}</div>
         <div class="table-row" :class="!!course.courseName ? 'course-item' : ''"
              v-for="(course, courseIndex) in curriculum[index]"
              :key="courseIndex" :style="course && course.style" @click="selectItem(course)">
@@ -201,7 +211,6 @@
 import ls from "@/store/ls";
 import {msg} from "@/components/message";
 import service from "@/api/services";
-import timeUtil from "@/util/timeUtil";
 
 export default {
   data() {

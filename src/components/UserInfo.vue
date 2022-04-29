@@ -27,6 +27,9 @@
     font-size .7rem;
     height fit-content
     white-space nowrap
+    &:active {
+      background #FDA45E !important
+    }
   }
 }
 </style>

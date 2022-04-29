@@ -51,19 +51,22 @@ app.directive('clickoutside', {
 });
 
 import UserInfo from "@/components/UserInfo";
+
 app.component(UserInfo.name, UserInfo);
 import MySelect from "@/components/MySelect";
+
 app.component(MySelect.name, MySelect);
 import MyOption from "@/components/MyOption";
 import {removeToken} from "@/util/auth";
+
 app.component(MyOption.name, MyOption);
 
 
 router.isReady().then(() => app.mount('#app'));
 
 
-
 document.addEventListener("deviceready", onDeviceReady, false);
+
 function onDeviceReady() {
   // 刚开启时 清空登录状态
   ls.remove('userInfo');
@@ -80,5 +83,16 @@ function onDeviceReady() {
   }
   if (window.banpaiTools) {
     window.banpaiTools.setSystemBar(true)
+  }
+  if (window.mayflower) {
+    window.mayflower.AndroidScrollbar.toggleVerticalScrollbarVisibility(true)
+      .then(
+        function () {
+          console.log('Vertical scrollbar enabled');
+        },
+        function (error) {
+          console.log('error', error);
+        }
+      );
   }
 }

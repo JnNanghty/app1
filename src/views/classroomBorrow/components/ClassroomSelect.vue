@@ -31,6 +31,8 @@
     get_background(input_background)
     border-radius 8px
     padding: .5rem;
+    &:active
+      background: #FDA45E !important;
 
   .terminal-active
     background: #FDA45E !important;

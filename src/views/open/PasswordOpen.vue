@@ -90,6 +90,8 @@
     get_background(open_button_background)
     color #F3A568;
     box-shadow: -7px -4px 16px -4px rgba(255, 255, 255, 0.08), 10px 10px 13px -2px rgba(0, 0, 0, 0.12);
+    &:active
+      color #fff;
 </style>
 <template>
   <div class="main">

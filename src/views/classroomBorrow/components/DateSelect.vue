@@ -114,14 +114,15 @@
 <template>
   <div class="ds-main">
     <div class="ds-top">
-      <div class="icon " @click="changeDate('pre')" v-if="!isToday"><img src="../../../assets/left_arrow.png" alt=""></div>
+      <div class="icon " @click="changeDate('pre')" v-if="!isToday"><img src="../../../assets/left_arrow.png" alt="">
+      </div>
       <div class="time">{{ currentTime }}</div>
       <div class="icon " @click="changeDate('next')"><img src="../../../assets/right_arrow.png" alt=""></div>
     </div>
-    <div class="ds-content">
+    <div class="ds-content" ref="dateSelectContent">
       <div class="time-line-item" v-for="(timeItem, index1) in timeConfig" :key="index1">
         <div class="time-line">{{ index1 === 'morning' ? '上午' : index1 === 'afternoon' ? '下午' : '晚上' }}</div>
-        <div class="time-item" v-for="(item, index) in timeItem" :key="index">
+        <div class="time-item" v-for="(item, index) in timeItem" :key="index" :ref="item.hasRef ? 'timeItem' : ''">
           <div><span style="font-size: .8rem;">第{{ index + 1 }}节</span><span style="margin-left: 1.5rem">{{
               item.start
             }}</span> <span style="font-size:.3rem;vertical-align:middle;margin: 0 0.6rem">-</span> <span>{{
@@ -181,7 +182,6 @@ export default {
   created() {
     this.terminalId = ls.get('terminalId')
     this.getSectionConfig() // 查上午下午晚上有几节
-    // this.getTimeConfig() // 查可借用的时间配置
   },
   mounted() {
   },
@@ -232,11 +232,14 @@ export default {
             return cha >= (itemDuration + duration);
           });
 
+          let hasRef = false
           // 如果是当天， 那么还要禁用已经逝去的时间
           if (this.isToday) {
             let {currentSource} = timeUtil.getNowTime()
             if (currentSource >= startSource) {
               can = false;
+            } else {
+              hasRef = true;
             }
           }
 
@@ -245,7 +248,8 @@ export default {
             start,
             end,
             status: can ? 1 : 3,
-            id: index + 1
+            id: index + 1,
+            hasRef
           }
           if (index < res.morning) {
             temp.morning.push(timeItem)
@@ -256,6 +260,7 @@ export default {
           }
         })
         this.timeConfig = temp;
+        this.setDefaultScroll();
       })
     },
     borrow(item) {
@@ -282,16 +287,30 @@ export default {
             return cha >= (itemDuration + duration);
           });
           item.status = can ? 1 : 3
-
+          item.hasRef = false;
           // 如果是当天， 那么还要禁用已经逝去的时间
           if (this.isToday) {
             let {currentSource} = timeUtil.getNowTime()
             if (currentSource >= startSource) {
               item.status = 3;
+            } else {
+              item.hasRef = true;
             }
           }
         })
       }
+      this.setDefaultScroll();
+    },
+    setDefaultScroll() {
+      this.$nextTick(() => {
+        if (this.$refs.timeItem) {
+          let current = this.$refs.timeItem[0]
+          let top = current.offsetTop;
+          current = current.offsetParent;
+          top += current.offsetTop;
+          this.$refs.dateSelectContent.scrollTop = top;
+        }
+      })
     }
   }
 }

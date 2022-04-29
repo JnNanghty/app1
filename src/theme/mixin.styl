@@ -42,7 +42,7 @@ get_background_image($name)
       background-image: item[$name];
     }
 
-._input{
+._input {
   font-size .8rem;
   get_background(input_background)
   get_font_color(font_color)
@@ -51,7 +51,8 @@ get_background_image($name)
   border: none
   outline none
 }
-._button{
+
+._button {
   text-align center;
   background-color: #FDA45E;
   border-radius .4rem
@@ -61,8 +62,13 @@ get_background_image($name)
   margin: 0 auto;
   get_font_color(font_color)
   font-size .8rem;
+
+  &:active {
+    background #FDA45E !important;
+  }
 }
-._select{
+
+._select {
   font-size .8rem;
   border-radius .4rem
   width 100%
@@ -73,15 +79,17 @@ get_background_image($name)
   get_font_color(font_color)
   appearance: none;
   outline none
-  option{
+
+  option {
     get_background(select_background)
   }
-  &:focus{
+
+  &:focus {
     get_background(select_background_focus)
   }
 }
 
-.__message-content{
+.__message-content {
   get_font_color(font_color)
   position: absolute;
   top: 50%;
@@ -101,7 +109,7 @@ get_background_image($name)
   font-size: 1rem;
 }
 
-.__confirm-shadow{
+.__confirm-shadow {
   position absolute
   top: 0
   bottom: 0
@@ -110,6 +118,7 @@ get_background_image($name)
   background: rgba(0, 0, 0, 0.5)
   z-index: 3000;
   color #fff;
+
   .__confirm-wrap {
     position absolute
     top: 50%
@@ -124,25 +133,30 @@ get_background_image($name)
     display flex
     flex-direction column
     font-size .8rem
-    .__confirm-content{
+
+    .__confirm-content {
       padding: 2rem 1rem
       flex: 1;
     }
-    .__confirm-button-wrap{
+
+    .__confirm-button-wrap {
       display flex
       border-top: 1px solid #1C1D1E
-      .__confirm-ok{
+
+      .__confirm-ok {
         flex: 1;
         padding: 1rem 0;
-        border-right:  1px solid #1C1D1E
+        border-right: 1px solid #1C1D1E
         color: #FDA45E;
       }
-      .__confirm-cancel{
+
+      .__confirm-cancel {
         flex: 1;
         padding: 1rem 0;
       }
     }
-    .__confirm-close{
+
+    .__confirm-close {
       position absolute
       top: .5rem
       right: .75rem

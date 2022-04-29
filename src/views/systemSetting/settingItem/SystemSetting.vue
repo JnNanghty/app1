@@ -67,6 +67,10 @@
 .form-input {
   width: 16.45rem
   height: 1.7rem
+  line-height 1.7rem;
+  font-size .8rem;
+  border-radius .4rem;
+  padding-left: 0.6rem
 }
 
 .submit-button {
@@ -107,23 +111,28 @@
         </div>
         <div class="form-item-inline">
           <div class="form-label">ip地址</div>
-          <input :readonly="ipReadOnly" class="form-input _input" v-model="systemInfo.ip">
+          <div v-if="ipReadOnly" class="form-input">{{ systemInfo.ip }}</div>
+          <input v-else class="form-input _input" v-model="systemInfo.ip">
         </div>
         <div class="form-item-inline">
           <div class="form-label">子网掩码</div>
-          <input :readonly="ipReadOnly" class="form-input _input" v-model="systemInfo.mask">
+          <div v-if="ipReadOnly" class="form-input">{{ systemInfo.mask }}</div>
+          <input v-else class="form-input _input" v-model="systemInfo.mask">
         </div>
         <div class="form-item-inline">
           <div class="form-label">网关</div>
-          <input :readonly="ipReadOnly" class="form-input _input" v-model="systemInfo.gateWay">
+          <div v-if="ipReadOnly" class="form-input">{{ systemInfo.gateWay }}</div>
+          <input v-else class="form-input _input" v-model="systemInfo.gateWay">
         </div>
         <div class="form-item-inline">
           <div class="form-label">首选DNS</div>
-          <input :readonly="ipReadOnly" class="form-input _input" v-model="systemInfo.dns1">
+          <div v-if="ipReadOnly" class="form-input">{{ systemInfo.dns1 }}</div>
+          <input v-else class="form-input _input" v-model="systemInfo.dns1">
         </div>
         <div class="form-item-inline">
           <div class="form-label">备用DNS</div>
-          <input :readonly="ipReadOnly" class="form-input _input" v-model="systemInfo.dns2">
+          <div v-if="ipReadOnly" class="form-input">{{ systemInfo.dns2 }}</div>
+          <input v-else class="form-input _input" v-model="systemInfo.dns2">
         </div>
         <div class="submit-button">
           <div class="_button cancel-button" @click="cancel">取消</div>
@@ -197,7 +206,7 @@ export default {
     },
     cancel() {
       for (let i in this.systemInfo) {
-        this.systemInfo[i] = ''
+        i !== 'mode' && (this.systemInfo[i] = '')
       }
     },
     save() {

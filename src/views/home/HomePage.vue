@@ -96,9 +96,9 @@ export default {
   watch: {
     'windowStyle.transform'(nv){
       if (nv === 'translateX(0)') {
-        this.emit('hideHeader');
+        mitt.emit('hideHeader');
       } else {
-        this.emit('showHeader');
+        mitt.emit('showHeader');
       }
     }
   },
