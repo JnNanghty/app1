@@ -1,4 +1,5 @@
 import router from './router'
+import ls from "@/store/ls";
 
 let goHomeTimeout = null;
 document.addEventListener('click', () => {
@@ -8,7 +9,12 @@ document.addEventListener('click', () => {
       clearTimeout(goHomeTimeout);
     }
     goHomeTimeout = setTimeout(() => {
-      router.push({name: 'Home'});
+      let isExamMode = ls.get('isExamMode');
+      if (isExamMode) {
+        router.push({name: 'ExamMode'})
+      } else {
+        router.push({name: 'Home'});
+      }
       clearTimeout(goHomeTimeout);
       goHomeTimeout = null;
     }, 18e4);
@@ -21,18 +27,22 @@ document.addEventListener('click', () => {
   }
 })
 router.beforeEach((to, from, next) => {
-  // 非首页状态（及从首页离开） 3分钟回到首页  考试模式和节目模式除外！！！ 3 * 60 * 1,000 = 180,000
-  if (from.name === 'Home' && to.name !== 'ExamMode' && to.name !== 'ProgrammeMode') {
+  // 只要去的不是 首页 考试 节目 就3分钟回来 3 * 60 * 1,000 = 180,000
+  if (to.name !== 'Home' && to.name !== 'ExamMode' && to.name !== 'ProgrammeMode') {
     if (goHomeTimeout) {
       clearTimeout(goHomeTimeout);
     }
     goHomeTimeout = setTimeout(() => {
-      router.push({name: 'Home'});
+      let isExamMode = ls.get('isExamMode');
+      if (isExamMode) {
+        router.push({name: 'ExamMode'})
+      } else {
+        router.push({name: 'Home'});
+      }
       clearTimeout(goHomeTimeout);
       goHomeTimeout = null;
     }, 18e4);
-  }
-  if (to.name === 'Home') {
+  } else {
     if (goHomeTimeout) clearTimeout(goHomeTimeout);
     goHomeTimeout = null;
   }

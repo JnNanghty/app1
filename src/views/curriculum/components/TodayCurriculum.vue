@@ -162,7 +162,8 @@ export default {
       updateInterval: null,
     }
   },
-  created() {
+  created() {},
+  mounted() {
     this.terminalId = ls.get('terminalId');
     if (this.terminalId) {
       this.getDailyCurriculum();
@@ -171,8 +172,6 @@ export default {
         message: '请先在设置中绑定班级！'
       });
     }
-  },
-  mounted() {
     this.updateInterval = setInterval(() => {
       this.currentSource = timeUtil.getNowTime().currentSource;
     }, 1e4);
