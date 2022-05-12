@@ -195,8 +195,8 @@ export default {
       this.systemInfo.mode = item.value;
     },
     exit() {
-      this.showStatusBar();
       if (window.banpaiTools) {
+        window.banpaiTools.setSystemBar(false);
         window.banpaiTools.exit()
       }
       // 关闭灯光

@@ -318,12 +318,13 @@ export default {
       })
     },
     bind() {
-      const terminalId = ls.get('terminalId');
-      if (terminalId) {
-        this.changeBind()
-      } else {
-        this.bindTerminal()
-      }
+      this.bindTerminal()
+      // const terminalId = ls.get('terminalId');
+      // if (terminalId) {
+      //   this.changeBind()
+      // } else {
+      //   this.bindTerminal()
+      // }
     },
     // 绑定教室
     bindTerminal() {
@@ -346,6 +347,7 @@ export default {
         });
       })
     },
+    // 改了， 不要了
     changeBind() {
       service.post('classCard/changeBinding', {
         terminal: this.schoolInfo.terminal.value,

@@ -21,8 +21,8 @@ module.exports = {
   devServer: {
     proxy: {
       '/rest': {
-        target: 'http://testc.hzmaijie.com',
-        // target: 'http://192.168.1.140:80',
+        // target: 'http://testc.hzmaijie.com',
+        target: 'http://192.168.1.140:80',
         changeOrigin: true
       }
     }
