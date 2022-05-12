@@ -129,21 +129,31 @@ export default {
     }
   },
   created() {
-    const data = this.$route.params.data;
-    this.examData = JSON.parse(data);
-    this.terminalInfo = ls.get('terminalInfo')
-    this.changeTheme();
-    mitt.on('changeTheme', this.changeTheme)
+    const data = this.$route.params.data || ls.get('examData');
+    if (data) {
+      this.examData = JSON.parse(data);
+      this.terminalInfo = ls.get('terminalInfo')
+      this.changeTheme();
+      mitt.on('changeTheme', this.changeTheme);
+    } else {
+      this.$router.push({
+        name: 'Home'
+      });
+    }
   },
   computed: {
     examDate() {
       let start = timeUtil.formatTime(this.examData.examStartDate || Date.now());
-      let end = timeUtil.formatTime(this.examData.examEndDate)
+      let end = timeUtil.formatTime(this.examData.examEndDate);
       return start + ' - ' + end;
     },
   },
   mounted() {
     let exitTime = this.examData.examEndDate - Date.now();
+    if (!ls.get('isExamMode')) {
+      ls.set('isExamMode', true, exitTime);
+      ls.set('examData', this.$route.params.data, exitTime);
+    }
     // 防止有rz把考试时间设在过去
     if (exitTime < 0) {
       this.$router.push({

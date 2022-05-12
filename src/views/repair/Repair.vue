@@ -124,6 +124,7 @@ import mitt from "@/util/mitt";
 import {myConfirm} from "@/components/confirm";
 import {msg} from "@/components/message";
 import QRCode from 'qrcode'
+import {computed} from "vue";
 export default {
   components: {ClassroomSelect},
   data() {
@@ -168,6 +169,11 @@ export default {
       terminalInfo: {},
       showChangeTerminal: false,
       code: null
+    }
+  },
+  provide() {
+    return {
+      selectedTerminalId: computed(() => this.terminalInfo.id)
     }
   },
   created() {

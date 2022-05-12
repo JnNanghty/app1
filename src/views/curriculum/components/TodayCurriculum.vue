@@ -237,7 +237,7 @@ export default {
     },
     setDefaultScroll() {
       this.$nextTick(() => {
-        this.$refs.tableContent.scrollTop = this.activeItemStartSource.index * 2.35 * window.rem;
+        this.$refs.tableContent && (this.$refs.tableContent.scrollTop = this.activeItemStartSource.index * 2.35 * window.rem);
       });
     }
   },

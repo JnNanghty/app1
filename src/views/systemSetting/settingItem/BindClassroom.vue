@@ -39,6 +39,7 @@
 
 .form-item {
   margin-bottom: 0.85rem
+
   .form-input {
     max-width: 19.5rem;
     height: 2rem
@@ -57,10 +58,12 @@
     line-height 2rem;
     text-align right
   }
+
   .form-select {
     height: 2rem
     width: 16rem;
   }
+
   .form-input {
     max-width: 19.5rem;
     height: 2rem
@@ -72,8 +75,6 @@
   margin-bottom: 0.35rem
   font-size 0.7rem;
 }
-
-
 
 
 .submit-button {
@@ -105,34 +106,36 @@
     <div class="ss-main-right">
       <h2 class="form-title">当前绑定教室信息</h2>
       <form class="form-content">
-<!--        <div class="form-row">-->
-          <div class="form-item-inline">
-            <div class="form-label">当前校区</div>
-            <my-select class="form-select _select" :len="campus.length + 1" :value="schoolInfo.campus.label">
-              <my-option @select="campusSelected" v-for="item in campus" :value="item.id" :label="item.label"></my-option>
-            </my-select>
-          </div>
-          <div class="form-item-inline">
-            <div class="form-label">教学楼</div>
-            <my-select class="form-select _select" :len="category.length" :value="schoolInfo.category.label">
-              <my-option @select="categorySelected" v-for="item in category" :value="item.id" :label="item.label"></my-option>
-            </my-select>
-          </div>
-<!--        </div>-->
-<!--        <div class="form-row">-->
-          <div class="form-item-inline">
-            <div class="form-label">当前楼层</div>
-            <my-select class="form-select _select" :len="floor.length" :value="schoolInfo.floor.label">
-              <my-option @select="floorSelected" v-for="item in floor" :value="item.id" :label="item.label"></my-option>
-            </my-select>
-          </div>
-          <div class="form-item-inline">
-            <div class="form-label">当前教室</div>
-            <my-select class="form-select _select" :len="terminal.length" :value="schoolInfo.terminal.label">
-              <my-option @select="terminalSelected" v-for="item in terminal" :value="item.id" :label="item.label"></my-option>
-            </my-select>
-          </div>
-<!--        </div>-->
+        <!--        <div class="form-row">-->
+        <div class="form-item-inline">
+          <div class="form-label">当前校区</div>
+          <my-select class="form-select _select" :len="campus.length + 1" :value="schoolInfo.campus.label">
+            <my-option @select="campusSelected" v-for="item in campus" :value="item.id" :label="item.label"></my-option>
+          </my-select>
+        </div>
+        <div class="form-item-inline">
+          <div class="form-label">教学楼</div>
+          <my-select class="form-select _select" :len="category.length" :value="schoolInfo.category.label">
+            <my-option @select="categorySelected" v-for="item in category" :value="item.id"
+                       :label="item.label"></my-option>
+          </my-select>
+        </div>
+        <!--        </div>-->
+        <!--        <div class="form-row">-->
+        <div class="form-item-inline">
+          <div class="form-label">当前楼层</div>
+          <my-select class="form-select _select" :len="floor.length" :value="schoolInfo.floor.label">
+            <my-option @select="floorSelected" v-for="item in floor" :value="item.id" :label="item.label"></my-option>
+          </my-select>
+        </div>
+        <div class="form-item-inline">
+          <div class="form-label">当前教室</div>
+          <my-select class="form-select _select" :len="terminal.length" :value="schoolInfo.terminal.label">
+            <my-option @select="terminalSelected" v-for="item in terminal" :value="item.id"
+                       :label="item.label"></my-option>
+          </my-select>
+        </div>
+        <!--        </div>-->
         <div class="submit-button _button" @click="bind" v-if="!offline">切换绑定</div>
       </form>
     </div>
@@ -185,7 +188,6 @@ export default {
   created() {
     this.serviceUrl = ls.get('serviceUrl') || '';
     this.terminalId = +ls.get('terminalId')
-    this.offline = !!ls.get('userInfo').offline;
   },
   computed: {
     category() {
@@ -205,11 +207,11 @@ export default {
     }
   },
   mounted() {
+    this.offline = !!ls.get('userInfo').offline;
     if (this.serviceUrl) {
-      if(this.offline) {
+      if (!this.offline) {
         this.getTerminal();
       }
-      // this.getSchool();
     }
   },
   methods: {
@@ -273,7 +275,7 @@ export default {
           }]
         }).then(res => {
           this.campus = res.list;
-          if(this.terminalId) {
+          if (this.terminalId) {
             this.setCurrentTerminal();
           }
           resolve();
@@ -369,7 +371,7 @@ export default {
         cam.children.forEach(cat => {
           cat.children.forEach(flo => {
             flo.children.forEach(ter => {
-              if(ter.id === this.terminalId) {
+              if (ter.id === this.terminalId) {
                 this.schoolInfo.campus = {
                   label: cam.label,
                   value: cam.id

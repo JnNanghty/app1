@@ -143,7 +143,7 @@
     <div class="main-right">
       <h2 class="form-title">系统操作</h2>
       <div class="option-button cancel-button  _button" @click="exit">退出应用</div>
-      <div class="option-button _button" @click="showStatusBar">显示状态栏</div>
+      <div class="option-button _button" @click="showStatusBar">{{ isHide ? '显示' : '隐藏' }}状态栏</div>
     </div>
   </div>
 </template>
@@ -163,7 +163,8 @@ export default {
         dns2: '',
         mask: '',
         gateWay: ''
-      }
+      },
+      isHide: true
     }
   },
   computed: {
@@ -183,6 +184,9 @@ export default {
           this.modeLabel = '静态';
         }
       });
+      this.isHide = window.banpaiTools.getNavBarHideStatus();
+      console.log(this.isHide);
+      console.log(typeof this.isHide);
     }
   },
   methods: {
@@ -221,7 +225,9 @@ export default {
     },
     showStatusBar() {
       if (window.banpaiTools) {
-        window.banpaiTools.setSystemBar(false)
+        this.isHide = !this.isHide;
+        // false 显示  true  隐藏
+        window.banpaiTools.setSystemBar(this.isHide);
       }
     }
   }

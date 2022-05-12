@@ -348,7 +348,7 @@ export default {
         background: `url(${require('@/assets/icon/setting_dark.png')}) center/contain no-repeat`
       },
       activeTabName: 'Home',
-      showHeader: true
+      showHeader: false
     }
   },
   computed: {
@@ -368,7 +368,7 @@ export default {
         this.activeTabName = 'Home'
       }
       if (to.name === 'ExamMode') {
-        this.activeTabName = '';
+        this.activeTabName = 'Home';
       }
     }
   },
@@ -409,8 +409,6 @@ export default {
   },
   methods: {
     goItem(item) {
-      // 考试模式不能点
-      if (this.$route.name === 'ExamMode') return;
       this.activeTabName = item.path;
       if (this.$route.name === item.path) return;
       const token = getToken();
@@ -427,14 +425,20 @@ export default {
         }, 1);
       } else {
         this.loginToPath = null;
-        this.$router.push({
-          name: item.path
-        });
+        // 这里判断一下， 如果是考试模式， 那么点首页就去考试模式
+        let isExamMode = ls.get('isExamMode');
+        if (isExamMode && item.path === 'Home') {
+          this.$router.push({
+            name: 'ExamMode'
+          })
+        } else {
+          this.$router.push({
+            name: item.path
+          });
+        }
       }
     },
     goSetting() {
-      // 考试模式不能点
-      if (this.$route.name === 'ExamMode') return;
       this.loginToPath = 'SystemSettingHome';
       this.activeTabName = '';
       const companyId = ls.get('companyId')

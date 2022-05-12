@@ -79,13 +79,16 @@ export default {
     if (this.terminalId) {
       this.getDailyCurriculum();
       mitt.emit('showBgLogo', true)
+      mitt.emit('hideHeader');
+
       this.countDownInterval = setInterval(() => {
         this.resolveData()
         if (this.currentCourse.courseId) {
           mitt.emit('showBgLogo', false)
+          mitt.emit('showHeader');
           this.windowStyle.transform = 'translateX(-50vw)';
         }
-      }, 2e3);
+      }, 1e3);
       this.getTerminalInfo();
     } else {
       msg({
@@ -93,17 +96,9 @@ export default {
       });
     }
   },
-  watch: {
-    'windowStyle.transform'(nv){
-      if (nv === 'translateX(0)') {
-        mitt.emit('hideHeader');
-      } else {
-        mitt.emit('showHeader');
-      }
-    }
-  },
   beforeUnmount() {
     mitt.emit('showBgLogo', false)
+    mitt.emit('showHeader');
     mitt.off('courseStatus', this.scrollWindow)
     if (this.countDownInterval !== null) {
       clearInterval(this.countDownInterval)
@@ -186,10 +181,13 @@ export default {
           }
         }
         mitt.emit('showBgLogo', false)
+        mitt.emit('showHeader');
+
         this.windowStyle.transform = 'translateX(-50vw)';
       } else {
         this.windowStyle.transform = 'translateX(0)';
         mitt.emit('showBgLogo', true)
+        mitt.emit('hideHeader');
       }
     }
   }

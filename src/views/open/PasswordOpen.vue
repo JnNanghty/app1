@@ -68,6 +68,8 @@
         border 1px solid #3F3F3F
         get_background(open_number_background)
         get_border_color(open_number_border_color)
+        &:active
+          background #FDA45E !important
 
 .button-wrap
   display flex

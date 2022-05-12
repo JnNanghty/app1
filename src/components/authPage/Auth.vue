@@ -131,13 +131,16 @@ export default {
     this.getKey()
     mitt.on('brushCard', this.brushCard);
     mitt.emit('showBackButton', () => {
-      this.$router.push({name: 'Home'})
+      if (ls.get('isExamMode')) {
+        this.$router.push({name: 'ExamMode'})
+      } else {
+        this.$router.push({name: 'Home'})
+      }
     })
     let config = ls.get('deviceConfig');
     this.config = config.signInTypes ? JSON.parse(config.signInTypes) : []
     this.timer = setInterval(this.getQrToken, 1e3);
     let params = this.$route.params;
-    console.log(this.$route);
     this.showChangeLoginModeButton = params.showChangeLoginModeButton && JSON.parse(params.showChangeLoginModeButton) || false;
     if (this.showChangeLoginModeButton) {
       this.mode = 2;
@@ -182,13 +185,11 @@ export default {
         page: 'pages/qrLogin/qrLogin',
         scene: this.key
       };
-      axios.post(url + '/rest/weChatApp/getWxAppQrCode', JSON.stringify(para), {
+      axios.post(url + '/rest/weChatApp/getWxAppQrCode', para, {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8'
         }
       }).then(res => {
-        this.key = res.data.key;
-        this.getTokenKey = res.data.getTokenKey
         this.qrCodeUrl = 'data:;base64,' + res.data.buffer;
       })
     },
@@ -216,7 +217,9 @@ export default {
       });
     },
     brushCard(res) {
-      this.icLogin(res);
+      if (this.mode === 1) {
+        this.icLogin(res);
+      }
     },
     getUserPermission() {
       service.post('permission/getUserPermission').then(res => {
@@ -225,12 +228,11 @@ export default {
       })
     },
     getQrToken() {
-      let para = {
+      let url = ls.get('serviceUrl')
+      axios.post(url + '/rest/device/getQrLoginToken', {
         getTokenKey: this.getTokenKey,
         key: this.key
-      }
-      let url = ls.get('serviceUrl')
-      axios.post(url + '/rest/device/getQrLoginToken', JSON.stringify(para), {
+      }, {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8'
         }

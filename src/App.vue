@@ -77,6 +77,9 @@ export default {
 
     mitt.on('mqttStatus', (data) => {
       if (+data === 1) {
+        // 空闲模式
+        ls.remove('isExamMode');
+        ls.remove('examData');
         this.$router.replace({
           name: "Home"
         });

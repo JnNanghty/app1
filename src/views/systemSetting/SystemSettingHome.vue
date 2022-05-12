@@ -12,16 +12,18 @@ header {
   padding-right: 1.5rem
   box-sizing border-box
 
-  .logo{
+  .logo {
     width: 9.65rem;
     height: 2.75rem;
   }
+
   .right-content {
     position relative
     padding-top: 0.5rem
     padding-left: 1rem;
     box-sizing border-box
-    &::after{
+
+    &::after {
       content: '';
       position absolute
       top: 0
@@ -31,6 +33,7 @@ header {
       background-image: linear-gradient(#17191A00, #232323)
     }
   }
+
   .back-home-button {
     width: 1rem
     height @width
@@ -45,6 +48,7 @@ header {
     text-align: center;
     font-size: 0.9rem;
     padding-top: .5rem;
+
     &::before {
       content: ''
       display block
@@ -73,7 +77,7 @@ main {
     font-size 0.7rem;
     box-sizing border-box;
 
-    .tab-title-item{
+    .tab-title-item {
       float left;
       width: 10rem;
       text-align center
@@ -81,9 +85,11 @@ main {
       border-bottom 1px solid;
       border-bottom-color rgba(0, 0, 0, 0)
     }
-    .tab-title-item-active{
+
+    .tab-title-item-active {
       position relative;
       border-bottom 1px solid #FDA45E;
+
       &::after {
         content: '';
         position absolute;
@@ -98,7 +104,7 @@ main {
   }
 
 
-  .tab-pane{
+  .tab-pane {
     height: calc(100% - 2.4rem);
     padding: 0.65rem;
     box-sizing border-box;
@@ -114,7 +120,9 @@ main {
       </div>
       <div class="header-center">
         <div style="font-weight: 300">{{ terminalInfo.label }}</div>
-        <div v-show="terminalId" style="font-size: .6rem;font-weight: 200">{{ terminalType }} / {{ terminalInfo.seatCount }}座</div>
+        <div v-show="terminalId" style="font-size: .6rem;font-weight: 200">{{ terminalType }} /
+          {{ terminalInfo.seatCount }}座
+        </div>
       </div>
       <div class="user-info">
         <user-info></user-info>
@@ -125,8 +133,12 @@ main {
     </header>
     <main>
       <div class="tab-title">
-        <div class="tab-title-item" :class="activeTabIndex === 0 ? 'tab-title-item-active' : ''" @click="changeTab(0)">教室绑定</div>
-        <div class="tab-title-item" :class="activeTabIndex === 1 ? 'tab-title-item-active' : ''" @click="changeTab(1)">系统设置</div>
+        <div class="tab-title-item" :class="activeTabIndex === 0 ? 'tab-title-item-active' : ''" @click="changeTab(0)">
+          教室绑定
+        </div>
+        <div class="tab-title-item" :class="activeTabIndex === 1 ? 'tab-title-item-active' : ''" @click="changeTab(1)">
+          系统设置
+        </div>
       </div>
       <div class="tab-pane">
         <component :is="componentName"></component>
@@ -184,15 +196,19 @@ export default {
 
   },
   beforeUnmount() {
-    if (window.banpaiTools) {
-      window.banpaiTools.setSystemBar(true)
-    }
+    // if (window.banpaiTools) {
+    //   window.banpaiTools.setSystemBar(true)
+    // }
   },
   methods: {
     goHome() {
-      this.$router.replace({
-        name: "Home"
-      })
+      if (ls.get('isExamMode')) {
+        this.$router.replace({name: 'ExamMode'})
+      } else {
+        this.$router.replace({
+          name: "Home"
+        })
+      }
     },
     changeTab(index) {
       this.activeTabIndex = index;

@@ -334,7 +334,7 @@ export default {
         })
       }, () => {
         msg({
-          message: '签到失败',
+          message: '您不在考勤名单中！',
           type: 'wrong'
         })
       })
