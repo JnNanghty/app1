@@ -153,7 +153,7 @@ import {initMqtt} from "@/util/mqttUtil";
 export default {
   name: "BindClassroom",
   data() {
-    let mac = 'aa'
+    let mac = 'aacc'
     if (window.device) {
       mac = window.device.uuid;
     }
