@@ -275,7 +275,7 @@ export default {
         {
           src: require('../assets/icon/curriculum_dark.png'),
           icon: 'curriculum',
-          label: '课程表',
+          label: '课程',
           name: 'timetable',
           path: 'Curriculum',
           needLogin: false,
